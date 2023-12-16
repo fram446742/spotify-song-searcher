@@ -1,0 +1,45 @@
+/* Example Cup Specification for Spotify Query Language Parser */
+
+/* Define Terminals */
+terminal NUMBER, SELECT, FROM, WHERE, AND, OR, ORDER, BY, SONG_NAME, ARTIST, ALBUM, MILLION_STREAMS, RELEASE_DATE, STRING, LESS_THAN, GREATER_THAN, LESS_THAN_OR_EQUAL, GREATER_THAN_OR_EQUAL, SEMICOLON, ID, LPAREN, RPAREN;
+
+/* Define Non-terminals */
+non terminal Start, Statement, Expression, Condition;
+
+/* Define Precedence and Associativity */
+precedence left OR;
+precedence left AND;
+precedence nonassoc LESS_THAN, GREATER_THAN, LESS_THAN_OR_EQUAL, GREATER_THAN_OR_EQUAL;
+
+/* Define Grammar Rules */
+Start ::= Statement SEMICOLON;
+
+Statement ::= SELECT Expression FROM ID WHERE Condition
+            | SELECT Expression FROM ID ORDER BY ID;
+
+Expression ::= SONG_NAME
+            | ARTIST
+            | ALBUM
+            | MILLION_STREAMS
+            | RELEASE_DATE
+            | NUMBER
+            | STRING
+            | ID;
+
+Condition ::= Condition AND Condition
+            | Condition OR Condition
+            | Expression LESS_THAN Expression
+            | Expression GREATER_THAN Expression
+            | Expression LESS_THAN_OR_EQUAL Expression
+            | Expression GREATER_THAN_OR_EQUAL Expression
+            | LPAREN Condition RPAREN
+            | Expression;
+
+/* Define Token Values */
+terminal LPAREN, RPAREN;
+
+/* Define Actions */
+init with {: lexer = new SpotifyLexer(new StringReader(yytext())); :};
+
+/* Error Handling */
+parse error { System.err.println("Syntax error at line " + lexer.getLine() + ", column " + lexer.getCharPositionInLine()); }

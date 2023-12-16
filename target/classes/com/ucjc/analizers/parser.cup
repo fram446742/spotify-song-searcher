@@ -1,0 +1,91 @@
+/*--------------------1. Codigo del Usuario---------------------*/
+
+//------> Paquetes e importaciones
+package com.ucjc.compiled.generated;
+
+import java_cup.runtime.*;
+import java.util.LinkedList;
+import com.ucjc.utils.TError;
+
+/*--------------------2. Opciones y declaraciones--------------------*/
+
+parser code {:
+    // Import necessary packages and define additional code if needed
+
+    public String resultado="";
+    public static LinkedList<TError> TablaES = new LinkedList<TError>();
+
+    //Metodo al que se llama automaticamente ante algun error sintactico
+    public void syntax_error(Symbol s)
+    {
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+
+        System.out.println("!!!!!!! Error Sintactico Recuperado !!!!!!!");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+
+        TError datos = new TError(lexema,fila,columna,"Error Sintactico","Caracter no esperado");
+        TablaES.add(datos);
+    }
+
+    //Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+
+        System.out.println("!!!!!!! Error Sintactico, Panic Mode !!!!!!! ");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+
+        TError datos = new TError(lexema,fila,columna,"Error Sintactico","Caracter no esperado");
+        TablaES.add(datos);
+    }
+
+    private int yycolumn = 1;
+    private int yyline = 1;
+
+    private void newline() {
+        yycolumn = 1;
+        yyline++;
+    }
+
+    public int error_count() {
+        return TablaES.size();
+    }
+
+    // Define your data structures and methods here
+:};
+
+/* Define terminal and non-terminal symbols */
+terminal NUMBER, SONG_NAME, ARTIST, ALBUM, MILLION_STREAMS, RELEASE_DATE, WORD, COMMA, SLASH, NUM, STRING, MORE_THAN, LESS_THAN_EQUAL, SEARCH;
+non terminal SongEntry, FieldList, Field;
+
+/* Define the start symbol */
+start with SongEntry;
+
+/* Define the grammar rules */
+SongEntry ::= FieldList
+            | SEARCH;
+
+FieldList ::= Field
+           | FieldList Field;
+
+Field ::= NUMBER
+        | SONG_NAME
+        | ARTIST
+        | ALBUM
+        | MILLION_STREAMS
+        | RELEASE_DATE
+        | WORD
+        | COMMA
+        | SLASH
+        | NUM
+        | STRING
+        | MORE_THAN
+        | LESS_THAN_EQUAL;
