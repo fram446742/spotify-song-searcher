@@ -1,3 +1,5 @@
+#Spotify song searcher#
+
 The purpose of this project is to demonstrate how to use lexical and syntactic analysis tools to create a simple query language for searching songs on Spotify. The project consists of the following components:
 
 A Spotify API wrapper that connects to the Spotify Web API and retrieves song information from a given playlist ID.
