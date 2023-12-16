@@ -1,2 +1,0 @@
-SONG_NAME = "Binding"
-SEARCH

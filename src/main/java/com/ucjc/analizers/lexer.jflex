@@ -43,6 +43,7 @@ import com.ucjc.utils.*;
 
 //------> Expresiones Regulares
 // Define the {NUM} macro
+LENGUAGE = [a-zA-Z]
 DIGIT = [0-9]
 NUM = {DIGIT}+
 
@@ -54,6 +55,7 @@ NUM = {DIGIT}+
 //------> Simbolos
 
 <YYINITIAL> SEARCH { return new Symbol(Sym.SEARCH, yytext()); }
+<YYINITIAL> {LENGUAGE}+ { return new Symbol(Sym.LENGUAGE, yytext()); }
 <YYINITIAL> {NUM}+ { return new Symbol(Sym.NUM, yytext()); }
 <YYINITIAL> , { return new Symbol(Sym.COMMA, yytext()); }
 <YYINITIAL> "/" { return new Symbol(Sym.SLASH, yytext()); }

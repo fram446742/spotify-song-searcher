@@ -1,36 +1,35 @@
 package com.ucjc;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Logger;
 
 import com.ucjc.compiled.generated.Lexer;
 import com.ucjc.compiled.generated.Parser;
 
 import java_cup.runtime.ComplexSymbolFactory;
 
-/**
- * Spotify song search engine
- *
- */
 public class App {
-    public static void main(String[] args) {
-        try {
-            if (args.length != 1) {
-                System.out.println("Usage: java App <inputFilePath>");
-                System.exit(1);
-            }
+    private static final Logger logger = Logger.getLogger(App.class.getName());
 
-            String inputFilePath = args[0];
-            System.out.println("Input File Path: " + inputFilePath);
+    public static void main(String[] args) {
+        Lexer lexer = null;
+        try {
+            // Use the class loader to load the file as a resource
+            BufferedReader reader = new BufferedReader(new InputStreamReader(App.class.getResourceAsStream("/input.txt")));
+
+            logger.info("Input File Path: /input.txt");
 
             // Create a ComplexSymbolFactory for CUP
             ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
 
             // Create a JFlex lexer
-            Lexer lexer = new Lexer(new FileReader(inputFilePath));
+            lexer = new Lexer(reader);
 
             // Create a CUP parser
             Parser parser = new Parser(lexer, complexSymbolFactory);
@@ -40,18 +39,30 @@ public class App {
 
             // Check for parsing errors
             if (parser.error_count() == 0) {
-                System.out.println("Parsing completed without errors.");
+                logger.info("Parsing completed without errors.");
 
                 // Assuming you have the logic to get the SQL file path
-                String sqlFilePath = "..\\database\\Spotify.sql";
+                String sqlFilePath = "/database/Spotify.sql";
 
                 // Call the method to execute the SQL file
                 executeSqlFile(sqlFilePath);
             } else {
-                System.out.println("Parsing completed with errors. Error count: " + parser.error_count());
+                logger.severe("Parsing completed with errors. Error count: " + parser.error_count());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.severe("An error occurred: " + e.getMessage());
+            // Optionally, log the entire stack trace for debugging purposes
+            // logger.log(Level.SEVERE, "An error occurred", e);
+        } finally {
+            // Close the lexer in the finally block to ensure proper cleanup
+            if (lexer != null) {
+                try {
+                    lexer.yyclose();
+                } catch (IOException e) {
+                    // Handle the IOException if necessary
+                    logger.severe("Error closing lexer: " + e.getMessage());
+                }
+            }
         }
     }
 
@@ -59,30 +70,27 @@ public class App {
         try {
             // Read the SQL file
             StringBuilder queryBuilder = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new FileReader(sqlFilePath))) {
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(App.class.getResourceAsStream(sqlFilePath)))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     queryBuilder.append(line).append("\n");
                 }
             }
 
-            // Execute the SQL query without establishing a direct connection
-            try (Connection connection = DriverManager.getConnection("jdbc:dummy")) {
-                try (Statement statement = connection.createStatement()) {
-                    String sqlQuery = queryBuilder.toString();
-                    boolean hasResults = statement.execute(sqlQuery);
+            // Process the SQL query based on your needs (e.g., log it)
+            String sqlQuery = queryBuilder.toString();
+            logger.info("SQL Query to be executed:\n" + sqlQuery);
 
-                    if (hasResults) {
-                        // Process the result set (customize this part based on your needs)
-                        // Note: This assumes the SQL query returns a result set
-                        // If the query is an update or insert, use statement.executeUpdate() instead
-                    } else {
-                        System.out.println("No results returned.");
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // Handle the exception appropriately in a real-world scenario
+            // Note: You can customize this part based on your needs.
+            // For example, you might log the SQL query, write it to a file, or perform
+            // other operations.
+
+        } catch (IOException e) {
+            logger.severe("An error occurred while reading the SQL file: " + e.getMessage());
+            // Optionally, log the entire stack trace for debugging purposes
+            // logger.log(Level.SEVERE, "An error occurred", e);
         }
     }
+
 }
