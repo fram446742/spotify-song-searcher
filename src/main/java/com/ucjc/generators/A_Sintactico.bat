@@ -38,53 +38,48 @@ echo Current Directory: %CD%
 REM Execute the Java Cup command in the current location
 java -jar "%LIB_DIR%\java-cup-11b-2015.03.26.jar" -parser Parser -symbols Sym "parser.cup"
 
-REM Check if Parser.java and Sym.java files were created before attempting to move them
+REM Check if Parser.java file was created before attempting to move it
 if exist "Parser.java" (
     if exist "..\compiled\generated\Parser.java"  (
         REM Check and move Parser.java to the new location with ~
-        set "counter="
-        :CheckCounter
-        if exist "..\compiled\generated\Parser%counter%.java" (
-            set /a "counter+=1"
-            goto CheckCounter
+        choice /C YN /M "Destination file 'Parser.java' already exists. Do you want to replace it? (Y/N) "
+        if errorlevel 2 (
+            echo File not replaced.
+        ) else (
+            move /Y "Parser.java" "..\compiled\generated\" > nul
+            echo File replaced and moved to: ..\compiled\generated
         )
-
-        REM Rename the existing file before moving the new one
-        ren "..\compiled\generated\Parser%counter%.java" "Parser%counter%.java"
-        move "Parser.java" "..\compiled\generated\" > nul
     ) else (
-        REM If the destination file doesn't exist, simply move Lexer.java
+        REM If the destination file doesn't exist, simply move Parser.java
         move "Parser.java" "..\compiled\generated\" > nul
         echo File moved to: ..\compiled\generated
     )
 ) else (
-        echo Error: Parser.java was not created.
-        echo The generation process may have failed.
+    echo Error: Parser.java was not created.
+    echo The generation process may have failed.
 )
 
-
+REM Check if Sym.java file was created before attempting to move it
 if exist "Sym.java" (
     if exist "..\compiled\generated\Sym.java" (
         REM Check and move Sym.java to the new location with ~
-        set "counterS="
-        :CheckCounterSym
-        if exist "..\compiled\generated\Sym%counterS%.java" (
-            set /a "counterS+=1"
-            goto CheckCounterSym
+        choice /C YN /M "Destination file 'Sym.java' already exists. Do you want to replace it? (Y/N) "
+        if errorlevel 2 (
+            echo File not replaced.
+        ) else (
+            move /Y "Sym.java" "..\compiled\generated\" > nul
+            echo File replaced and moved to: ..\compiled\generated
         )
-
-        REM Rename the existing file before moving the new one
-        ren "..\compiled\generated\Sym%counterS%.java" "Sym%counterS%.java"
-        move "Sym.java" "..\compiled\generated\" > nul
     ) else (
-        REM If the destination file doesn't exist, simply move Lexer.java
+        REM If the destination file doesn't exist, simply move Sym.java
         move "Sym.java" "..\compiled\generated\" > nul
         echo File moved to: ..\compiled\generated
     )
 ) else (
-        echo Error: Sym.java was not created.
-        echo The generation process may have failed.
+    echo Error: Sym.java was not created.
+    echo The generation process may have failed.
 )
+
 
 
 echo Files moved to: ..\compiled\generated

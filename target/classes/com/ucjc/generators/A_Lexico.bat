@@ -38,26 +38,17 @@ echo Current directory: %CD%
 REM Execute the JFlex command in the current location
 java -jar "%LIB_DIR%\jflex\jflex-full-1.9.1.jar" lexer.jflex
 
-setlocal
-
 REM Verify if the file Lexer.java was created before attempting to move it
 if exist "Lexer.java" (
     REM Verify if the destination file already exists
     if exist "..\compiled\generated\Lexer.java" (
-        REM Rename existing Lexer.java in the destination folder, adding a number
-        set "counter="
-        :CheckCounterLexer
-        if exist "..\compiled\generated\Lexer%counter%.java" (
-            set /a "counter+=1"
-            goto CheckCounterLexer
+        choice /C YN /M "Destination file already exists. Do you want to replace it? (Y/N) "
+        if errorlevel 2 (
+            echo File not replaced.
+        ) else (
+            move /Y "Lexer.java" "..\compiled\generated\" > nul
+            echo File replaced and moved to: ..\compiled\generated
         )
-
-        REM Rename existing Lexer.java before moving the new file
-        ren "..\compiled\generated\Lexer.java" "Lexer%counter%.java"
-
-        move "Lexer.java" "..\compiled\generated\" > nul
-
-        echo File moved to: ..\compiled\generated
     ) else (
         REM If the destination file doesn't exist, simply move Lexer.java
         move "Lexer.java" "..\compiled\generated\" > nul
@@ -68,7 +59,6 @@ if exist "Lexer.java" (
     echo The generation process may have failed.
 )
 
-endlocal
 
 REM Return to the original directory
 cd %~dp0

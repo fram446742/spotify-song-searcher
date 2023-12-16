@@ -63,7 +63,7 @@ parser code {:
 :};
 
 /* Define terminal and non-terminal symbols */
-terminal NUMBER, SONG_NAME, ARTIST, ALBUM, MILLION_STREAMS, RELEASE_DATE, WORD, COMMA, SLASH, NUM, STRING, MORE_THAN, LESS_THAN_EQUAL, SEARCH;
+terminal NUMBER, SONG_NAME, ARTIST, ALBUM, MILLION_STREAMS, RELEASE_DATE, WORD, COMMA, SLASH, NUM, LENGUAGE, STRING, MORE_THAN, LESS_THAN_EQUAL, SEARCH;
 non terminal SongEntry, FieldList, Field;
 
 /* Define the start symbol */
