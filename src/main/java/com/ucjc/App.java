@@ -2,8 +2,6 @@ package com.ucjc;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -20,10 +18,12 @@ import java_cup.runtime.ComplexSymbolFactory;
 public class App {
     public static void main(String[] args) {
         try {
-            // Replace "input.txt" with your actual input file
-            Path projectBaseDirectory = Paths.get("").toAbsolutePath();
-            String inputFilePath = projectBaseDirectory + "/spotify-song-searcher/src/test/java/com/ucjc/input.txt";
-            System.out.println("Project Base Directory: " + projectBaseDirectory);
+            if (args.length != 1) {
+                System.out.println("Usage: java YourClassName <inputFilePath>");
+                System.exit(1);
+            }
+
+            String inputFilePath = args[0];
             System.out.println("Input File Path: " + inputFilePath);
 
             // Create a ComplexSymbolFactory for CUP
