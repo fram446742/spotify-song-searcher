@@ -19,7 +19,7 @@ public class App {
     public static void main(String[] args) {
         try {
             if (args.length != 1) {
-                System.out.println("Usage: java YourClassName <inputFilePath>");
+                System.out.println("Usage: java App <inputFilePath>");
                 System.exit(1);
             }
 

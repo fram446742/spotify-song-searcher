@@ -1,0 +1,155 @@
+/*--------------- 1ra Area: Codigo de Usuario -----------------------*/
+//-------> importaciones, paquetes
+package com.ucjc.analizers;
+
+import java_cup.runtime.Symbol;
+import java.io.*;
+import java.util.LinkedList;
+
+//------> Codigo para el parser,variables, metodos
+parser code
+{:
+    public String resultado="";
+    public static LinkedList<TError> TablaES = new LinkedList<TError>();
+
+    //Metodo al que se llama automaticamente ante algun error sintactico
+    public void syntax_error(Symbol s)
+    {
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+
+        System.out.println("!!!!!!! Error Sintactico Recuperado !!!!!!!");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+
+        TError datos = new TError(lexema,fila,columna,"Error Sintactico","Caracter no esperado");
+        TablaES.add(datos);
+
+
+    }
+
+    //Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+
+        System.out.println("!!!!!!! Error Sintactico, Panic Mode !!!!!!! ");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+
+        TError datos = new TError(lexema,fila,columna,"Error Sintactico","Caracter no esperado");
+        TablaES.add(datos);
+
+    }
+:}
+
+/*------> Codigo para las acciones gramaticales
+action code
+{:
+    // Placeholder for database connection (you need to replace it with actual code)
+    Connection dbConnection = YourDatabaseConnector.getConnection();
+
+    // Placeholder action for the INICIO rule
+    public void inicio_action() {
+        try {
+            // Extract values from the parsed query
+            String searchTerm = ((Symbol)val_peek(2).value).value.toString();
+            String field = val_peek(0);
+            String stringValue = ((Symbol)val_peek(1).value).value.toString();
+
+            // Execute a database query based on the parsed values
+            String query = "SELECT * FROM Songs WHERE " + field + " = '" + stringValue + "'";
+            Statement statement = dbConnection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            // Process and display the results (you can customize this part)
+            while (resultSet.next()) {
+                System.out.println("Song ID: " + resultSet.getInt("ID"));
+                System.out.println("Song Name: " + resultSet.getString("SongName"));
+                // Add more fields as needed
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Placeholder action for the STRING rule
+    public void string_action() {
+        resultado = ((Symbol)val_peek(0).value).value.toString();
+    }
+:}
+
+/*--------------- 2da Area: Declaraciones -----------------------*/
+//------> declaracion de terminales
+terminal plus, minus, star, slash, parI, parD, comma;
+terminal String num, song_name, artist, album, million_streams, release_date;
+
+//------> declaracion de no terminales
+non terminal String INICIO, E, SEARCH, FIELD, STRING;
+
+//----> precedencia de menor a mayor
+precedence left plus, minus;
+precedence left star, slash;
+
+start with INICIO;
+
+/*--------------- 3ra Area: Reglas Semanticas -----------------------*/
+INICIO ::= SEARCH ':' FIELD '=' STRING ';';
+
+SEARCH ::= 'search';
+
+FIELD ::= 'NUMBER'
+         | 'SONG_NAME'
+         | 'ARTIST'
+         | 'ALBUM'
+         | 'MILLION_STREAMS'
+         | 'RELEASE_DATE';
+
+STRING ::= [^;\n\r]+;
+
+E ::= plus
+     | minus
+     | star
+     | slash
+     | parI
+     | parD
+     | comma
+     | num
+     | song_name
+     | artist
+     | album
+     | million_streams
+     | release_date;
+
+%whitespace ::= [\t\r\n];
+
+
+
+
+
+
+// INICIO::=E:a {: resultado=a; :};
+
+// E::= E:a mas E:b {: int val1= Integer.parseInt(a);
+//                     int val2= Integer.parseInt(b);
+//                     int r = val1+val2;
+//                     RESULT = String.valueOf(r); :}
+//     |E:a menos E:b {: int val1= Integer.parseInt(a);
+//                     int val2= Integer.parseInt(b);
+//                     int r = val1-val2;
+//                     RESULT = String.valueOf(r); :}
+//     |E:a div E:b {: int val1= Integer.parseInt(a);
+//                     int val2= Integer.parseInt(b);
+//                     int r = val1/val2;
+//                     RESULT = String.valueOf(r); :}
+//     |E:a por E:b {: int val1= Integer.parseInt(a);
+//                     int val2= Integer.parseInt(b);
+//                     int r = val1*val2;
+//                     RESULT = String.valueOf(r); :}
+//     |para E:a {: RESULT = a; :} parc
+//     |num:a {: RESULT = a; :};
