@@ -31,9 +31,9 @@ jobs:
 
   trigger-snapshot:
     runs-on: ubuntu-latest
-
+    
     needs: build
-
+    
     steps:
       - name: Trigger Dependency Graph Snapshot
         run: |
@@ -44,9 +44,6 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/fram446742/spotify-song-searcher/dependency-graph/snapshots \
             -d '{"version":0,"sha":"ce587453ced02b1526dfb4cb910479d431683101","ref":"refs/heads/main","job":{"correlator":"java-ci-maven-snapshot","id":"${{ github.run_id }}"},"detector":{"name":"octo-detector","version":"0.0.1","url":"https://github.com/octo-org/octo-repo"},"scanned":"2022-06-14T20:25:00Z","manifests":{"package-lock.json":{"name":"package-lock.json","file":{"source_location":"src/package-lock.json"},"resolved":{"@actions/core":{"package_url":"pkg:/npm/%40actions/core@1.1.9","dependencies":["@actions/http-client"]},"@actions/http-client":{"package_url":"pkg:/npm/%40actions/http-client@1.0.7","dependencies":["tunnel"]},"tunnel":{"package_url":"pkg:/npm/tunnel@0.0.6"}}}}}'
-
-      - name: Update dependency graph
-        run: |
-          cd $GITHUB_WORKSPACE
-          curl -sSL https://github.com/advanced-security/maven-dependency-submission-action/releases/latest/download/dependency-submission.sh | sh -s -- -r $GITHUB_REPOSITORY -t ${{ secrets.GITHUB_TOKEN }} -i ${{ github.run_id }} -f "target/dependency-graph.json"
-
+      
+      # - name: Update dependency graph
+      #   uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
