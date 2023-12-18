@@ -73,6 +73,7 @@ NULL_TEXT = ""
 <YYINITIAL> "<" { return new Symbol(Sym.LESS_THAN, yytext()); }
 <YYINITIAL> "<=" { return new Symbol(Sym.LESS_THAN_EQUAL, yytext()); }
 <YYINITIAL> ">=" { return new Symbol(Sym.MORE_THAN_EQUAL, yytext()); }
+// <YYINITIAL> "/" { return new Symbol(Sym.SLASH, yyline, yycolumn, yytext()); }
 // <YYINITIAL> "(" { return new Symbol(Sym.PARI, yytext()); }
 // <YYINITIAL> ")" { return new Symbol(Sym.PARD, yytext()); }
 // <YYINITIAL>"AND" { return new Symbol(Sym.AND, yytext()); }

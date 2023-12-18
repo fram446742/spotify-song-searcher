@@ -71,7 +71,6 @@ NULL_TEXT = ""
 
 //--------> Operadores y Símbolos
 <YYINITIAL> , { return new Symbol(Sym.COMMA, yyline, yycolumn, yytext()); }
-<YYINITIAL> "/" { return new Symbol(Sym.SLASH, yyline, yycolumn, yytext()); }
 <YYINITIAL> "=" { return new Symbol(Sym.EQUALS, yyline, yycolumn, yytext()); }
 <YYINITIAL> ">" { return new Symbol(Sym.MORE_THAN, yyline, yycolumn, yytext()); }
 <YYINITIAL> "<" { return new Symbol(Sym.LESS_THAN, yyline, yycolumn, yytext()); }

@@ -57,7 +57,7 @@ parser code {:
 
 
 /* Define terminal and non-terminal symbols */
-terminal NUMBER, SONG_NAME, ARTIST, ALBUM, MILLION_STREAMS, RELEASE_DATE, WORD, COMMA, SLASH, NUM, STRING, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS, SEARCH, WHITE_SPACE;
+terminal NUMBER, SONG_NAME, ARTIST, ALBUM, MILLION_STREAMS, RELEASE_DATE, WORD, COMMA, NUM, STRING, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS, SEARCH, WHITE_SPACE;
 non terminal Field, Search, NumberField, SongNameField, ArtistField, AlbumField, MillionStreamsField, ComparisonOperator, ReleaseDateField;
 
 /* Grammar */
@@ -70,12 +70,10 @@ start with Search;
 /* Define the grammar rules */
 /* Search Statement */
 Search ::= Field
+         | Field Field
          | Field SEARCH
          | Field SEARCH WHITE_SPACE
          ;
-/* Fields */
-Field ::= NumberField
-        | SongNameField
 
 /* Fields */
 Field ::= NumberField
@@ -85,7 +83,6 @@ Field ::= NumberField
         | MillionStreamsField
         | ReleaseDateField
         | COMMA
-        | SLASH
         | STRING
         ;
 
