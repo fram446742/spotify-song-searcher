@@ -86,3 +86,19 @@ E::= E:a mas E:b {: int val1= Integer.parseInt(a);
                     RESULT = String.valueOf(r); :}
     |para E:a {: RESULT = a; :} parc
     |num:a {: RESULT = a; :};
+
+
+
+    
+/* Fields */
+Field ::= NUMBER:NumberField
+        | SONG_NAME:SongNameField
+        | ARTIST:ArtistField
+        | ALBUM:AlbumField
+        | MILLION_STREAMS:MillionStreamsField
+        | RELEASE_DATE:ReleaseDateField
+        | WORD
+        | COMMA
+        | SLASH
+        | STRING
+        ;

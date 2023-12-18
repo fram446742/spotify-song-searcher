@@ -40,50 +40,56 @@ import com.ucjc.utils.*;
 %full
 %ignorecase
 %line
+STRING_LITERAL = \"([^\"\n]*(\\\"|\\\\.)*[^\"\n]*)\"
 
 //------> Expresiones Regulares
 // Define the {NUM} macro
-LENGUAGE = [a-zA-Z]
+// LENGUAGE = [a-zA-Z]
 DIGIT = [0-9]
 NUM = {DIGIT}+
-
+NULL_TEXT = ""
 //------> Estados
-%state YYINITIAL, STRING
+%state YYINITIAL
 
 %%
 /*--------------------3. Reglas lexicas--------------------*/
 //------> Simbolos
+//--------> Números
+<YYINITIAL> {NUM}+ { return new Symbol(Sym.NUM, yyline, yycolumn, yytext()); }
 
-<YYINITIAL> SEARCH { return new Symbol(Sym.SEARCH, yytext()); }
-<YYINITIAL> {LENGUAGE}+ { return new Symbol(Sym.LENGUAGE, yytext()); }
-<YYINITIAL> {NUM}+ { return new Symbol(Sym.NUM, yytext()); }
-<YYINITIAL> , { return new Symbol(Sym.COMMA, yytext()); }
-<YYINITIAL> "/" { return new Symbol(Sym.SLASH, yytext()); }
-<YYINITIAL> \n { newline(); }
+//--------> Cadenas de Texto
+<YYINITIAL> {STRING_LITERAL} { return new Symbol(Sym.STRING, yyline, yycolumn, yytext()); }
 
-<STRING> "," { yybegin(YYINITIAL); return new Symbol(Sym.STRING, yytext()); }
-<STRING> \n { yybegin(YYINITIAL); newline(); }
+//--------> Palabras Clave
+<YYINITIAL> SEARCH { return new Symbol(Sym.SEARCH, yyline, yycolumn, yytext()); }
+<YYINITIAL> [Ss][Oo][Nn][Gg]_[Nn][Aa][Mm][Ee] { return new Symbol(Sym.SONG_NAME, yyline, yycolumn, yytext()); }
+<YYINITIAL> [Aa][Rr][Tt][Ii][Ss][Tt] { return new Symbol(Sym.ARTIST, yyline, yycolumn, yytext()); }
+<YYINITIAL> [Aa][Ll][Bb][Uu][Mm] { return new Symbol(Sym.ALBUM, yyline, yycolumn, yytext()); }
+<YYINITIAL> [Mm][Ii][Ll][Ll][Ii][Oo][Nn]_[Ss][Tt][Rr][Ee][Aa][Mm][Ss] { return new Symbol(Sym.MILLION_STREAMS, yyline, yycolumn, yytext()); }
+<YYINITIAL> [Rr][Ee][Ll][Ee][Aa][Ss][Ee]_[Dd][Aa][Tt][Ee] { return new Symbol(Sym.RELEASE_DATE, yyline, yycolumn, yytext()); }
+<YYINITIAL> [Nn][Uu][Mm][Bb][Ee][Rr] { return new Symbol(Sym.NUMBER, yyline, yycolumn, yytext()); }
 
-<STRING> [^,\n] {
-    System.out.println("Unassigned character in string: " + yytext() + ", linea: " + yyline + ", columna: " + yycolumn);
-}
+//--------> Operadores y Símbolos
+<YYINITIAL> , { return new Symbol(Sym.COMMA, yyline, yycolumn, yytext()); }
+<YYINITIAL> "/" { return new Symbol(Sym.SLASH, yyline, yycolumn, yytext()); }
+<YYINITIAL> "=" { return new Symbol(Sym.EQUALS, yyline, yycolumn, yytext()); }
+<YYINITIAL> ">" { return new Symbol(Sym.MORE_THAN, yyline, yycolumn, yytext()); }
+<YYINITIAL> "<" { return new Symbol(Sym.LESS_THAN, yyline, yycolumn, yytext()); }
+<YYINITIAL> "<=" { return new Symbol(Sym.LESS_THAN_EQUAL, yyline, yycolumn, yytext()); }
+<YYINITIAL> ">=" { return new Symbol(Sym.MORE_THAN_EQUAL, yyline, yycolumn, yytext()); }
 
-<YYINITIAL> [\+\-]([0-9]+)(M)? {
-    int numMillionStreams = Integer.parseInt(yytext().substring(1));
-    if (yytext().startsWith("+")) {
-        System.out.println("Symbol: " + yytext() + " (more than " + numMillionStreams + " million streams)");
-        return new Symbol(Sym.MORE_THAN, yycolumn, yyline, yytext());
-    } else if (yytext().startsWith("-")) {
-        System.out.println("Symbol: " + yytext() + " (less than or equal to " + numMillionStreams + " million streams)");
-        return new Symbol(Sym.LESS_THAN_EQUAL, yycolumn, yyline, yytext());
-    }
-}
+//--------> Espacios en Blanco
+<YYINITIAL> [\t\r\n\f]+ { /*Espacios en blanco, se ignoran*/ return new Symbol(Sym.WHITE_SPACE, yyline, yycolumn, yytext()); }
 
-//------> Errores lexicos
+//--------> Ignorar Null Text
+<YYINITIAL> NULL_TEXT { /*Ignorar null text*/ System.err.println("Error: Texto nulo encontrado"); }
 
-. {
+//--------> Errores Lexicos
+<YYINITIAL> . {
     System.out.println("Error lexico: " + yytext() + ", linea: " + yyline + ", columna: " + yycolumn);
     TError data = new TError(yytext(), yyline, yycolumn, "Error lexico", "Simbolo no existe en el lenguaje");
     TablaErroresLexicos.add(data);
-}
 
+    // Cambiar a un estado diferente para ignorar caracteres hasta el final de la línea
+    yybegin(YYINITIAL);
+}

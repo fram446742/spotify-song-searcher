@@ -4,6 +4,7 @@
 package com.ucjc.compiled.generated;
 
 import java_cup.runtime.*;
+import java_cup.runtime.Symbol;
 import java.util.LinkedList;
 import com.ucjc.utils.TError;
 
@@ -12,80 +13,100 @@ import com.ucjc.utils.TError;
 parser code {:
     // Import necessary packages and define additional code if needed
 
-    public String resultado="";
-    public static LinkedList<TError> TablaES = new LinkedList<TError>();
+    // public String resultado="";
+    // public static LinkedList<TError> TablaES = new LinkedList<TError>();
 
-    //Metodo al que se llama automaticamente ante algun error sintactico
-    public void syntax_error(Symbol s)
-    {
-        String lexema = s.value.toString();
-        int fila = s.right;
-        int columna = s.left;
+    // //Metodo al que se llama automaticamente ante algun error sintactico
+    // public void syntax_error(Symbol s) {
+    // Object value = s.value;
+    // String lexema = (value != null) ? value.toString() : "null";
+    // int fila = s.right;
+    // int columna = s.left;
 
-        System.out.println("!!!!!!! Error Sintactico Recuperado !!!!!!!");
-        System.out.println("\t\tLexema: "+lexema);
-        System.out.println("\t\tFila: "+fila);
-        System.out.println("\t\tColumna: "+columna);
+    // System.out.println("!!!!!!! Error Sintactico Recuperado !!!!!!!");
+    // System.out.println("\t\tLexema: " + lexema);
+    // System.out.println("\t\tFila: " + fila);
+    // System.out.println("\t\tColumna: " + columna);
 
-        TError datos = new TError(lexema,fila,columna,"Error Sintactico","Caracter no esperado");
-        TablaES.add(datos);
-    }
+    // TError datos = new TError(lexema, fila, columna, "Error Sintactico", "Caracter no esperado");
+    // TablaES.add(datos);
+    // }
 
-    //Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
-    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
-    {
-        String lexema = s.value.toString();
-        int fila = s.right;
-        int columna = s.left;
+    // public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception {
+    // Object value = s.value;
+    // String lexema = (value != null) ? value.toString() : "null";
+    // int fila = s.right;
+    // int columna = s.left;
 
-        System.out.println("!!!!!!! Error Sintactico, Panic Mode !!!!!!! ");
-        System.out.println("\t\tLexema: "+lexema);
-        System.out.println("\t\tFila: "+fila);
-        System.out.println("\t\tColumna: "+columna);
+    // System.out.println("!!!!!!! Error Sintactico, Panic Mode !!!!!!!");
+    // System.out.println("\t\tLexema: " + lexema);
+    // System.out.println("\t\tFila: " + fila);
+    // System.out.println("\t\tColumna: " + columna);
 
-        TError datos = new TError(lexema,fila,columna,"Error Sintactico","Caracter no esperado");
-        TablaES.add(datos);
-    }
+    // TError datos = new TError(lexema, fila, columna, "Error Sintactico", "Caracter no esperado");
+    // TablaES.add(datos);
+    // }
 
-    private int yycolumn = 1;
-    private int yyline = 1;
-
-    private void newline() {
-        yycolumn = 1;
-        yyline++;
-    }
-
-    public int error_count() {
-        return TablaES.size();
-    }
+    // public int error_count() {
+    //     return TablaES.size();
+    // }
 
     // Define your data structures and methods here
 :};
 
+
+
 /* Define terminal and non-terminal symbols */
-terminal NUMBER, SONG_NAME, ARTIST, ALBUM, MILLION_STREAMS, RELEASE_DATE, WORD, COMMA, SLASH, NUM, LENGUAGE, STRING, MORE_THAN, LESS_THAN_EQUAL, SEARCH;
-non terminal SongEntry, FieldList, Field;
+terminal NUMBER, SONG_NAME, ARTIST, ALBUM, MILLION_STREAMS, RELEASE_DATE, WORD, COMMA, SLASH, NUM, STRING, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS, SEARCH, WHITE_SPACE;
+non terminal Field, Search, NumberField, SongNameField, ArtistField, AlbumField, MillionStreamsField, ComparisonOperator, ReleaseDateField;
+
+/* Grammar */
+precedence left EQUALS;
+precedence left MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL;
 
 /* Define the start symbol */
-start with SongEntry;
+start with Search;
 
 /* Define the grammar rules */
-SongEntry ::= FieldList
-            | SEARCH;
+/* Search Statement */
+Search ::= Field
+         | Field SEARCH
+         | Field SEARCH WHITE_SPACE
+         ;
+/* Fields */
+Field ::= NumberField
+        | SongNameField
 
-FieldList ::= Field
-           | FieldList Field;
-
-Field ::= NUMBER
-        | SONG_NAME
-        | ARTIST
-        | ALBUM
-        | MILLION_STREAMS
-        | RELEASE_DATE
-        | WORD
+/* Fields */
+Field ::= NumberField
+        | SongNameField
+        | ArtistField
+        | AlbumField
+        | MillionStreamsField
+        | ReleaseDateField
         | COMMA
         | SLASH
-        | NUM
         | STRING
-        | MORE_THAN
-        | LESS_THAN_EQUAL;
+        ;
+
+/* Specific Fields */
+NumberField ::= NUMBER EQUALS NUM;
+
+SongNameField ::= SONG_NAME EQUALS STRING;
+
+ArtistField ::= ARTIST EQUALS STRING;
+
+AlbumField ::= ALBUM EQUALS STRING;
+
+MillionStreamsField ::= MILLION_STREAMS ComparisonOperator NUM;
+
+ReleaseDateField ::= RELEASE_DATE EQUALS STRING;
+
+ComparisonOperator ::= MORE_THAN
+                     | LESS_THAN
+                     | MORE_THAN_EQUAL
+                     | LESS_THAN_EQUAL
+                     | EQUALS
+                     ;
+
+
