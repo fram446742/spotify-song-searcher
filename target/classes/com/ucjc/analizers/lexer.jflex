@@ -32,7 +32,6 @@ import com.ucjc.utils.*;
 //------> Directivas
 %public
 %class Lexer
-//%class SimpleSongLexer
 %cupsym Sym
 %cup
 %char
@@ -40,14 +39,31 @@ import com.ucjc.utils.*;
 %full
 %ignorecase
 %line
-STRING_LITERAL = \"([^\"\n]*(\\\"|\\\\.)*[^\"\n]*)\"
+
+%{
+    /*  Generamos un java_cup.Symbol para guardar el tipo de token
+        encontrado */
+    private Symbol symbol(int type) {
+        return new Symbol(type, yyline, yycolumn);
+    }
+
+    /* Generamos un Symbol para el tipo de token encontrado
+       junto con su valor */
+    private Symbol symbol(int type, Object value) {
+        return new Symbol(type, yyline, yycolumn, value);
+    }
+%}
+
 
 //------> Expresiones Regulares
 // Define the {NUM} macro
-// LENGUAGE = [a-zA-Z]
-DIGIT = [0-9]
 NUM = {DIGIT}+
+DIGIT = [0-9]
 NULL_TEXT = ""
+JUMP = \r|\n|\r\n
+WHITE_SPACE = {JUMP} | [ \t\f]
+STRING_LITERAL = \"([^\"\n]*(\\\"|\\\\.)*[^\"\n]*)\"
+
 //------> Estados
 %state YYINITIAL
 
@@ -82,6 +98,7 @@ NULL_TEXT = ""
 
 //--------> Ignorar Null Text
 <YYINITIAL> NULL_TEXT { /*Ignorar null text*/ System.err.println("Error: Texto nulo encontrado"); }
+<YYINITIAL> WHITE_SPACE { /*Ignorar espacios en blanco*/ System.err.println("Error: Texto nulo encontrado"); }
 
 //--------> Errores Lexicos
 <YYINITIAL> . {
