@@ -102,3 +102,51 @@ Field ::= NUMBER:NumberField
         | SLASH
         | STRING
         ;
+
+NumberField ::= NUMBER:a CompareNum:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+              | NUMBER:a Space CompareNum:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+              ;
+
+SongNameField ::=
+    SONG_NAME:a CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  | SONG_NAME:a Space CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  ;
+
+ArtistField ::=
+    ARTIST:a CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  | ARTIST:a Space CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  ;
+
+AlbumField ::=
+    ALBUM:a CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  | ALBUM:a Space CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  ;
+
+MillionStreamsField ::=
+    MILLION_STREAMS:a ComparisonOperator:b NUM:c {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b) + "\u0020" + String.valueOf(c); :}
+  | MILLION_STREAMS:a Space ComparisonOperator:b Space NUM:c {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b) + "\u0020" + String.valueOf(c); :}
+  ;
+
+ReleaseDateField ::=
+    RELEASE_DATE:a CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  | RELEASE_DATE:a Space CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  ;
+
+ComparisonOperator ::= MORE_THAN
+                     | LESS_THAN
+                     | MORE_THAN_EQUAL
+                     | LESS_THAN_EQUAL
+                     | EQUALS
+                     ;
+
+CompareString ::= EQUALS STRING
+                | Space EQUALS Space STRING
+                ;
+
+CompareNum ::= EQUALS NUM
+             | Space EQUALS Space NUM
+             ;
+
+Space ::= WHITE_SPACE
+        |
+        ;

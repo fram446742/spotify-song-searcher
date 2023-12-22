@@ -23,6 +23,7 @@ public class Lexer implements java_cup.runtime.Scanner {
 
   // Lexical states.
   public static final int YYINITIAL = 0;
+  public static final int STRING = 2;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -31,22 +32,22 @@ public class Lexer implements java_cup.runtime.Scanner {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = {
-     0, 0
+     0,  0,  1, 1
   };
 
   /**
    * Translates characters to character classes
    */
   private static final char [] ZZ_CMAP = {
-     0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  2,  3,  4,  4,  0,  0, 
+     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  1,  1,  0,  0, 
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
-     0,  0,  5,  0,  0,  0,  0,  0,  0,  0,  0,  0,  6,  0,  0,  0, 
-     7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  0,  0,  8,  9, 10,  0, 
-     0, 11, 12, 13, 14, 15,  0, 16, 17, 18,  0,  0, 19, 20, 21, 22, 
-    23,  0, 24, 25, 26, 27,  0, 28, 29,  0,  0,  0, 30,  0,  0, 31, 
-     0, 11, 12, 13, 14, 15,  0, 16, 17, 18,  0,  0, 19, 20, 21, 22, 
-    23,  0, 24, 25, 26, 27,  0, 28, 29,  0,  0,  0,  0,  0,  0,  0, 
-     0,  0,  0,  0,  0,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
+     2,  0,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0, 
+     5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  0,  0,  6,  7,  8,  0, 
+     0,  9, 10, 11, 12, 13,  0, 14, 15, 16,  0,  0, 17, 18, 19, 20, 
+    21,  0, 22, 23, 24, 25,  0, 26, 27,  0,  0,  0,  0,  0,  0, 28, 
+     0,  9, 10, 11, 12, 13,  0, 14, 15, 16,  0,  0, 17, 18, 19, 20, 
+    21,  0, 22, 23, 24, 25,  0, 26, 27,  0,  0,  0,  0,  0,  0,  0, 
+     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
@@ -62,14 +63,13 @@ public class Lexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\0\1\1\1\2\1\1\1\3\1\4\1\5\1\6"+
-    "\1\7\6\1\1\0\1\10\1\0\1\11\1\12\10\0"+
-    "\1\10\25\0\1\13\11\0\1\14\2\0\1\15\1\0"+
-    "\1\16\15\0\1\17\1\0\1\20\6\0\1\21\1\0"+
-    "\1\22\2\0\1\23";
+    "\2\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7"+
+    "\1\10\6\1\1\11\1\12\1\13\32\0\1\14\10\0"+
+    "\1\15\2\0\1\16\1\0\1\17\15\0\1\20\1\0"+
+    "\1\21\7\0\1\22\2\0\1\23";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[94];
+    int [] result = new int[87];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -94,21 +94,20 @@ public class Lexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\40\0\100\0\140\0\40\0\200\0\240\0\40"+
-    "\0\300\0\340\0\u0100\0\u0120\0\u0140\0\u0160\0\u0180\0\140"+
-    "\0\40\0\u01a0\0\40\0\40\0\u01c0\0\u01e0\0\u0200\0\u0220"+
-    "\0\u0240\0\u0260\0\u0280\0\u02a0\0\u02c0\0\u02e0\0\u0300\0\u0320"+
-    "\0\u0340\0\u0360\0\u0380\0\u03a0\0\u03c0\0\u03e0\0\u0400\0\u0420"+
-    "\0\u0440\0\u0460\0\u0480\0\u04a0\0\u04c0\0\u04e0\0\u0500\0\u0520"+
-    "\0\u0540\0\u0560\0\40\0\u0580\0\u05a0\0\u05c0\0\u05e0\0\u0600"+
-    "\0\u0620\0\u0640\0\u0660\0\u02c0\0\40\0\u0680\0\u06a0\0\40"+
-    "\0\u06c0\0\40\0\u06e0\0\u0700\0\u0720\0\u0740\0\u0760\0\u0780"+
-    "\0\u07a0\0\u07c0\0\u07e0\0\u0800\0\u0820\0\u0840\0\u0860\0\40"+
-    "\0\u0880\0\40\0\u08a0\0\u08c0\0\u08e0\0\u0900\0\u0920\0\u0940"+
-    "\0\40\0\u0960\0\40\0\u0980\0\u09a0\0\40";
+    "\0\0\0\35\0\72\0\72\0\72\0\72\0\127\0\164"+
+    "\0\72\0\221\0\256\0\313\0\350\0\u0105\0\u0122\0\u013f"+
+    "\0\72\0\72\0\72\0\u015c\0\u0179\0\u0196\0\u01b3\0\u01d0"+
+    "\0\u01ed\0\u020a\0\u0227\0\u0244\0\u0261\0\u027e\0\u029b\0\u02b8"+
+    "\0\u02d5\0\u02f2\0\u030f\0\u032c\0\u0349\0\u0366\0\u0383\0\u03a0"+
+    "\0\u03bd\0\u03da\0\u03f7\0\u0414\0\u0431\0\72\0\u044e\0\u046b"+
+    "\0\u0488\0\u04a5\0\u04c2\0\u04df\0\u04fc\0\u0519\0\72\0\u0536"+
+    "\0\u0553\0\72\0\u0570\0\72\0\u058d\0\u05aa\0\u05c7\0\u05e4"+
+    "\0\u0601\0\u061e\0\u063b\0\u0658\0\u0675\0\u0692\0\u06af\0\u06cc"+
+    "\0\u06e9\0\72\0\u0706\0\72\0\u0723\0\u0740\0\u075d\0\u077a"+
+    "\0\u0797\0\u07b4\0\u07d1\0\72\0\u07ee\0\u080b\0\72";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[94];
+    int [] result = new int[87];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -131,36 +130,30 @@ public class Lexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\2\2\3\1\0\1\3\1\4\1\5\1\6\1\7"+
-    "\1\10\1\11\1\12\10\2\1\13\1\14\2\2\1\15"+
-    "\1\16\2\2\1\17\3\2\41\0\2\3\1\0\1\3"+
-    "\33\0\2\20\1\0\2\20\1\21\30\20\1\22\1\20"+
-    "\7\0\1\6\41\0\1\23\37\0\1\24\51\0\1\25"+
-    "\4\0\1\26\31\0\1\27\50\0\1\30\23\0\1\31"+
-    "\37\0\1\32\6\0\1\33\32\0\1\34\16\0\2\20"+
-    "\1\0\2\20\1\35\30\20\1\22\1\20\14\0\1\36"+
-    "\55\0\1\37\30\0\1\40\37\0\1\41\1\42\36\0"+
-    "\1\43\27\0\1\44\51\0\1\45\34\0\1\46\15\0"+
-    "\2\47\1\0\2\47\1\21\30\47\1\50\1\47\33\0"+
-    "\1\51\26\0\1\52\40\0\1\53\37\0\1\54\30\0"+
-    "\1\55\42\0\1\56\50\0\1\57\27\0\1\60\51\0"+
-    "\1\61\5\0\2\47\1\0\2\47\1\21\34\47\1\0"+
-    "\2\47\1\35\30\47\1\62\1\47\24\0\1\63\44\0"+
-    "\1\64\30\0\1\65\54\0\1\66\17\0\1\67\33\0"+
-    "\1\70\41\0\1\71\61\0\1\72\17\0\1\73\20\0"+
-    "\2\74\1\0\2\47\1\35\32\74\32\0\1\75\33\0"+
-    "\1\76\43\0\1\77\35\0\1\100\40\0\1\101\27\0"+
-    "\1\102\43\0\1\103\51\0\1\104\25\0\1\105\31\0"+
-    "\1\106\37\0\1\107\33\0\1\110\55\0\1\111\45\0"+
-    "\1\112\35\0\1\113\41\0\1\114\24\0\1\115\42\0"+
-    "\1\116\41\0\1\117\40\0\1\120\23\0\1\121\40\0"+
-    "\1\122\33\0\1\123\56\0\1\124\20\0\1\125\41\0"+
-    "\1\126\52\0\1\127\41\0\1\130\24\0\1\131\37\0"+
-    "\1\132\37\0\1\133\33\0\1\134\50\0\1\135\44\0"+
-    "\1\136\6\0";
+    "\1\3\1\0\1\4\1\5\1\6\1\7\1\10\1\11"+
+    "\1\12\1\13\10\3\1\14\1\15\2\3\1\16\1\17"+
+    "\2\3\1\20\2\3\3\0\1\21\73\0\1\7\36\0"+
+    "\1\22\34\0\1\23\46\0\1\24\4\0\1\25\26\0"+
+    "\1\26\45\0\1\27\20\0\1\30\34\0\1\31\6\0"+
+    "\1\32\27\0\1\33\27\0\1\34\52\0\1\35\25\0"+
+    "\1\36\34\0\1\37\1\40\33\0\1\41\24\0\1\42"+
+    "\46\0\1\43\31\0\1\44\45\0\1\45\23\0\1\46"+
+    "\35\0\1\47\34\0\1\50\25\0\1\51\37\0\1\52"+
+    "\45\0\1\53\24\0\1\54\46\0\1\55\26\0\1\56"+
+    "\41\0\1\57\25\0\1\60\50\0\1\61\15\0\1\62"+
+    "\30\0\1\63\36\0\1\64\55\0\1\65\15\0\1\66"+
+    "\47\0\1\67\30\0\1\70\40\0\1\71\32\0\1\72"+
+    "\35\0\1\73\24\0\1\74\40\0\1\75\45\0\1\76"+
+    "\23\0\1\77\26\0\1\100\34\0\1\101\30\0\1\102"+
+    "\52\0\1\103\41\0\1\104\33\0\1\105\35\0\1\106"+
+    "\22\0\1\107\37\0\1\110\36\0\1\111\35\0\1\112"+
+    "\20\0\1\113\35\0\1\114\30\0\1\115\53\0\1\116"+
+    "\15\0\1\117\36\0\1\120\47\0\1\121\36\0\1\122"+
+    "\21\0\1\4\34\0\1\123\34\0\1\124\30\0\1\125"+
+    "\45\0\1\126\41\0\1\127\5\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[2496];
+    int [] result = new int[2088];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -203,13 +196,12 @@ public class Lexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\11\2\1\1\11\2\1\1\11\7\1\1\0"+
-    "\1\11\1\0\2\11\10\0\1\1\25\0\1\11\11\0"+
-    "\1\11\2\0\1\11\1\0\1\11\15\0\1\11\1\0"+
-    "\1\11\6\0\1\11\1\0\1\11\2\0\1\11";
+    "\2\0\4\11\2\1\1\11\7\1\3\11\32\0\1\11"+
+    "\10\0\1\11\2\0\1\11\1\0\1\11\15\0\1\11"+
+    "\1\0\1\11\7\0\1\11\2\0\1\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[94];
+    int [] result = new int[87];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -751,82 +743,83 @@ public class Lexer implements java_cup.runtime.Scanner {
           // fall through
           case 20: break;
           case 2:
-            { /*Espacios en blanco, se ignoran*/ return new Symbol(Sym.WHITE_SPACE, yyline, yycolumn, yytext());
+            { /*Ignorar espacios en blanco*/ return new Symbol(Sym.WHITE_SPACE, yyline, yycolumn, yytext());
             }
           // fall through
           case 21: break;
           case 3:
-            { return new Symbol(Sym.COMMA, yyline, yycolumn, yytext());
+            { yybegin(STRING);
             }
           // fall through
           case 22: break;
           case 4:
-            { return new Symbol(Sym.NUM, yyline, yycolumn, yytext());
+            { return new Symbol(Sym.COMMA, yyline, yycolumn, yytext());
             }
           // fall through
           case 23: break;
           case 5:
-            { return new Symbol(Sym.LESS_THAN, yyline, yycolumn, yytext());
+            { return new Symbol(Sym.NUM, yyline, yycolumn, yytext());
             }
           // fall through
           case 24: break;
           case 6:
-            { return new Symbol(Sym.EQUALS, yyline, yycolumn, yytext());
+            { return new Symbol(Sym.LESS_THAN, yyline, yycolumn, yytext());
             }
           // fall through
           case 25: break;
           case 7:
-            { return new Symbol(Sym.MORE_THAN, yyline, yycolumn, yytext());
+            { return new Symbol(Sym.EQUALS, yyline, yycolumn, yytext());
             }
           // fall through
           case 26: break;
           case 8:
-            { return new Symbol(Sym.STRING, yyline, yycolumn, yytext());
+            { return new Symbol(Sym.MORE_THAN, yyline, yycolumn, yytext());
             }
           // fall through
           case 27: break;
           case 9:
-            { return new Symbol(Sym.LESS_THAN_EQUAL, yyline, yycolumn, yytext());
+            { yybegin(YYINITIAL);
+  return new Symbol(Sym.STRING, yytext());
             }
           // fall through
           case 28: break;
           case 10:
-            { return new Symbol(Sym.MORE_THAN_EQUAL, yyline, yycolumn, yytext());
+            { return new Symbol(Sym.LESS_THAN_EQUAL, yyline, yycolumn, yytext());
             }
           // fall through
           case 29: break;
           case 11:
-            { return new Symbol(Sym.ALBUM, yyline, yycolumn, yytext());
+            { return new Symbol(Sym.MORE_THAN_EQUAL, yyline, yycolumn, yytext());
             }
           // fall through
           case 30: break;
           case 12:
-            { return new Symbol(Sym.ARTIST, yyline, yycolumn, yytext());
+            { return new Symbol(Sym.ALBUM, yyline, yycolumn, yytext());
             }
           // fall through
           case 31: break;
           case 13:
-            { return new Symbol(Sym.NUMBER, yyline, yycolumn, yytext());
+            { return new Symbol(Sym.ARTIST, yyline, yycolumn, yytext());
             }
           // fall through
           case 32: break;
           case 14:
-            { return new Symbol(Sym.SEARCH, yyline, yycolumn, yytext());
+            { return new Symbol(Sym.NUMBER, yyline, yycolumn, yytext());
             }
           // fall through
           case 33: break;
           case 15:
-            { /*Ignorar null text*/ System.err.println("Error: Texto nulo encontrado");
+            { return new Symbol(Sym.SEARCH, yyline, yycolumn, yytext());
             }
           // fall through
           case 34: break;
           case 16:
-            { return new Symbol(Sym.SONG_NAME, yyline, yycolumn, yytext());
+            { /*Ignorar null text*/ System.err.println("Error: Texto nulo encontrado");
             }
           // fall through
           case 35: break;
           case 17:
-            { /*Ignorar espacios en blanco*/ System.err.println("Error: Texto nulo encontrado");
+            { return new Symbol(Sym.SONG_NAME, yyline, yycolumn, yytext());
             }
           // fall through
           case 36: break;

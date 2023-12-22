@@ -80,6 +80,7 @@ NULL_TEXT = ""
 // <YYINITIAL>"OR"  { return new Symbol(Sym.OR, yytext()); }
 // <YYINITIAL>"&&"  { return new Symbol(Sym.AND, yytext()); }
 // <YYINITIAL>"||"  { return new Symbol(Sym.OR, yytext()); }
+<YYINITIAL> [\t\r\n\f]+ { /*Espacios en blanco, se ignoran*/ return new Symbol(Sym.WHITE_SPACE, yyline, yycolumn, yytext()); }
 
 // <YYINITIAL> [\r\n]+  { /*Skip new line*/ ;}
 <YYINITIAL> [\t\r\n\f]+ { /*Skip whitespace*/ return new Symbol(Sym.WHITE_SPACE, yytext()); }

@@ -13,8 +13,8 @@ import java.io.FileReader;
 
 parser code {:
     // Import necessary packages and define additional code if needed
+    public  String resultado="";
 
-    public String resultado="";
     public static LinkedList<TError> TablaES = new LinkedList<TError>();
 
     /* Reporte de error encontrado. */
@@ -89,27 +89,40 @@ parser code {:
         return TablaES.size();
     }
 
+    public LinkedList getTabla(){
+      return TablaES;
+    }
+
+    public String modificarString(Object input) {
+    // Realiza las modificaciones deseadas
+    resultado = input.toString(); // Ejemplo: convierte a mayúsculas
+    return resultado;
+
+    }
+
     // Define your data structures and methods here
 :};
 
-
+action code
+{:
+    public String res;
+:}
 
 /* Define terminal and non-terminal symbols */
 terminal SONG_NAME, ARTIST, ALBUM, RELEASE_DATE, NUMBER, MILLION_STREAMS, NUM, COMMA, STRING, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS, SEARCH, WHITE_SPACE;
-non terminal Field, Search, SongNameField, ArtistField, AlbumField, ComparisonOperator, ReleaseDateField, NumberField, MillionStreamsField;
+non terminal Field, Search, SongNameField, ArtistField, AlbumField, ComparisonOperator, ReleaseDateField, NumberField, MillionStreamsField, CompareString, CompareNum, Space;
 
 /* Grammar */
-precedence left EQUALS;
-precedence left MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL;
+precedence left EQUALS,
+               MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL;
 
 /* Define the start symbol */
 start with Search;
 
 /* Define the grammar rules */
 /* Search Statement */
-Search ::= Field
-         | Field Search
-         | Field SEARCH
+Search ::= Space Field:a Space SEARCH Space{:RESULT = a.toString();:}
+         | Field:a SEARCH {:RESULT = a.toString();:}
          ;
 
 /* Fields */
@@ -119,22 +132,20 @@ Field ::= NumberField
         | AlbumField
         | MillionStreamsField
         | ReleaseDateField
-        | COMMA
-        | STRING
         ;
 
 /* Specific Fields */
-NumberField ::= NUMBER:a EQUALS:b NUM:c {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b) + "\u0020" + String.valueOf(c); :};
+NumberField ::= NUMBER:a CompareNum:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :};
 
-SongNameField ::= SONG_NAME:a EQUALS:b STRING:c {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b) + "\u0020" + String.valueOf(c); :};
+SongNameField ::= SONG_NAME:a CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :};
 
-ArtistField ::= ARTIST:a EQUALS:b STRING:c {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b) + "\u0020" + String.valueOf(c); :};
+ArtistField ::= ARTIST:a CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :};
 
-AlbumField ::= ALBUM:a EQUALS:b STRING:c {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b) + "\u0020" + String.valueOf(c); :};
+AlbumField ::= ALBUM:a CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :};
 
 MillionStreamsField ::= MILLION_STREAMS:a ComparisonOperator:b NUM:c {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b) + "\u0020" + String.valueOf(c); :};
 
-ReleaseDateField ::= RELEASE_DATE:a EQUALS:b STRING:c {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b) + "\u0020" + String.valueOf(c); :};
+ReleaseDateField ::= RELEASE_DATE:a CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :};
 
 
 ComparisonOperator ::= MORE_THAN
@@ -144,4 +155,14 @@ ComparisonOperator ::= MORE_THAN
                      | EQUALS
                      ;
 
+CompareString ::= EQUALS STRING
+                | Space EQUALS Space STRING
+                ;
+
+CompareNum ::= EQUALS NUM
+             | Space EQUALS Space NUM
+             ;
+
+Space ::= WHITE_SPACE
+        ;
 

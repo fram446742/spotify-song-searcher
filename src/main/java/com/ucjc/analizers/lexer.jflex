@@ -62,10 +62,9 @@ DIGIT = [0-9]
 NULL_TEXT = ""
 JUMP = \r|\n|\r\n
 WHITE_SPACE = {JUMP} | [ \t\f]
-STRING_LITERAL = \"([^\"\n]*(\\\"|\\\\.)*[^\"\n]*)\"
 
 //------> Estados
-%state YYINITIAL
+%state YYINITIAL, STRING
 
 %%
 /*--------------------3. Reglas lexicas--------------------*/
@@ -74,7 +73,14 @@ STRING_LITERAL = \"([^\"\n]*(\\\"|\\\\.)*[^\"\n]*)\"
 <YYINITIAL> {NUM}+ { return new Symbol(Sym.NUM, yyline, yycolumn, yytext()); }
 
 //--------> Cadenas de Texto
-<YYINITIAL> {STRING_LITERAL} { return new Symbol(Sym.STRING, yyline, yycolumn, yytext()); }
+<YYINITIAL>\" {
+  yybegin(STRING);
+}
+
+<STRING>\" {
+  yybegin(YYINITIAL);
+  return new Symbol(Sym.STRING, yytext());
+}
 
 //--------> Palabras Clave
 <YYINITIAL> SEARCH { return new Symbol(Sym.SEARCH, yyline, yycolumn, yytext()); }
@@ -86,22 +92,21 @@ STRING_LITERAL = \"([^\"\n]*(\\\"|\\\\.)*[^\"\n]*)\"
 <YYINITIAL> [Nn][Uu][Mm][Bb][Ee][Rr] { return new Symbol(Sym.NUMBER, yyline, yycolumn, yytext()); }
 
 //--------> Operadores y Símbolos
-<YYINITIAL> , { return new Symbol(Sym.COMMA, yyline, yycolumn, yytext()); }
+<YYINITIAL> "," { return new Symbol(Sym.COMMA, yyline, yycolumn, yytext()); }
 <YYINITIAL> "=" { return new Symbol(Sym.EQUALS, yyline, yycolumn, yytext()); }
 <YYINITIAL> ">" { return new Symbol(Sym.MORE_THAN, yyline, yycolumn, yytext()); }
 <YYINITIAL> "<" { return new Symbol(Sym.LESS_THAN, yyline, yycolumn, yytext()); }
 <YYINITIAL> "<=" { return new Symbol(Sym.LESS_THAN_EQUAL, yyline, yycolumn, yytext()); }
 <YYINITIAL> ">=" { return new Symbol(Sym.MORE_THAN_EQUAL, yyline, yycolumn, yytext()); }
 
-//--------> Espacios en Blanco
-<YYINITIAL> [\t\r\n\f]+ { /*Espacios en blanco, se ignoran*/ return new Symbol(Sym.WHITE_SPACE, yyline, yycolumn, yytext()); }
-
 //--------> Ignorar Null Text
-<YYINITIAL> NULL_TEXT { /*Ignorar null text*/ System.err.println("Error: Texto nulo encontrado"); }
-<YYINITIAL> WHITE_SPACE { /*Ignorar espacios en blanco*/ System.err.println("Error: Texto nulo encontrado"); }
+<YYINITIAL> NULL_TEXT  { /*Ignorar null text*/ System.err.println("Error: Texto nulo encontrado"); }
+
+//--------> Espacios en Blanco
+<YYINITIAL> WHITE_SPACE | " " { /*Ignorar espacios en blanco*/ return new Symbol(Sym.WHITE_SPACE, yyline, yycolumn, yytext()); }
 
 //--------> Errores Lexicos
-<YYINITIAL> . {
+<YYINITIAL> . | [^ \t\n\r\f] {
     System.out.println("Error lexico: " + yytext() + ", linea: " + yyline + ", columna: " + yycolumn);
     TError data = new TError(yytext(), yyline, yycolumn, "Error lexico", "Simbolo no existe en el lenguaje");
     TablaErroresLexicos.add(data);
