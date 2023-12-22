@@ -4,11 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Field;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.ucjc.compiled.generated.Lexer;
 import com.ucjc.compiled.generated.Parser;
 import com.ucjc.compiled.generated.Sym;
+import com.ucjc.utils.TError;
 
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.Scanner;
@@ -29,26 +32,49 @@ public class App {
             ScannerBuffer buffer = new ScannerBuffer(scanner);
             Parser p = new Parser(buffer, new ComplexSymbolFactory());
             p.parse();
-            System.out.println(p.getTabla().toString());
+
+            // Printing the table to see the errors
+            LinkedList<TError> table = p.getTable();
+            System.out.println("\nErrors encountered\n");
+            for (TError error : table) {
+                System.out.println("Lexeme: " + error.getLexeme());
+                System.out.println("Type: " + error.getType());
+                System.out.println("Description: " + error.getDescription());
+                System.out.println("Line: " + error.getLine());
+                System.out.println("Column: " + error.getColumn());
+                System.out.println("------------------------");
+            }
+
             System.out.println("Query analyzed successfully.");
-            System.out.println(buffer.getBuffered().get(0));
+
+            //Buffered values stored are printed for debugging purposes
+            List<Symbol> bufferedValues = buffer.getBuffered();
+
+            System.out.println("Valores almacenados en el buffer:");
+
+            for (Symbol value : bufferedValues) {
+                System.out.println(value);
+            }
+
+            System.out.println("Result: " + p.result);
+
         } catch (Exception e) {
             System.err.println("Error analyzing the query: " + e.getMessage());
         }
 
-        try {
-            // Second attempt to obtain the parser output with a Symbol class
-            Lexer lexer = new Lexer(new BufferedReader(new FileReader(inputFilePath)));
-            Parser parser = new Parser(lexer);
-            Symbol symbol = parser.parse();
-            System.out.println("Query analyzed successfully.");
-            System.out.println(symbol.toString());
-        } catch (Exception e) {
-            System.err.println("Error analyzing the query: " + e.getMessage());
-        }
+        // try {
+        //     // Second attempt to obtain the parser output with a Symbol class
+        //     Lexer lexer = new Lexer(new BufferedReader(new FileReader(inputFilePath)));
+        //     Parser parser = new Parser(lexer);
+        //     Symbol symbol = parser.parse();
+        //     System.out.println("Query analyzed successfully.");
+        //     System.out.println(String.valueOf(symbol));
+        // } catch (Exception e) {
+        //     System.err.println("Error analyzing the query: " + e.getMessage());
+        // }
 
         // Debugging for symbols
-        getSymbols();
+        getFields(Sym.class);
     }
 
     private static String getInputFilePath() {
@@ -69,18 +95,25 @@ public class App {
         return relativePath;
     }
 
-    private static void getSymbols() {
-        Class<Sym> symClass = Sym.class;
-
+    private static void getFields(Class<?> targetClass) {
         // Get all fields of the Sym class
-        Field[] fields = symClass.getDeclaredFields();
+        Field[] fields = targetClass.getDeclaredFields();
 
         for (Field field : fields) {
             try {
                 // Print the name and value of each constant
                 String name = field.getName();
-                int value = field.getInt(null); // The second parameter is null because constants are static
-                System.out.println(name + " = " + value);
+                Object value = field.get(null); // Use get method for arrays
+                if (value instanceof String[]) {
+                    String[] arrayValue = (String[]) value;
+                    System.out.print(name + " = [");
+                    for (String element : arrayValue) {
+                        System.out.print("\"" + element + "\", ");
+                    }
+                    System.out.println("]");
+                } else {
+                    System.out.println(name + " = " + value);
+                }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }

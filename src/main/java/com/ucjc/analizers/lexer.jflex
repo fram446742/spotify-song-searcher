@@ -12,7 +12,7 @@ import com.ucjc.utils.*;
 
 //------> Codigo de usuario en sintaxis java
 
-    public static LinkedList<TError> TablaErroresLexicos = new LinkedList<TError>();
+    public static LinkedList<TError> LexicalErrorTable = new LinkedList<TError>();
 
     // newline function declaracion
     private void newline() {
@@ -20,13 +20,10 @@ import com.ucjc.utils.*;
         yycolumn = 1;
     }
 
-    // processString function declaracion
-    private StringBuilder stringBuffer = new StringBuilder();
+    public LinkedList getTable(){
+      return LexicalErrorTable;
+    }
 
-    private void processString() {
-        stringBuffer.append(yytext());
-
-}
 %}
 
 //------> Directivas
@@ -40,27 +37,13 @@ import com.ucjc.utils.*;
 %ignorecase
 %line
 
-%{
-    /*  Generamos un java_cup.Symbol para guardar el tipo de token
-        encontrado */
-    private Symbol symbol(int type) {
-        return new Symbol(type, yyline, yycolumn);
-    }
-
-    /* Generamos un Symbol para el tipo de token encontrado
-       junto con su valor */
-    private Symbol symbol(int type, Object value) {
-        return new Symbol(type, yyline, yycolumn, value);
-    }
-%}
-
 
 //------> Expresiones Regulares
 // Define the {NUM} macro
 NUM = [0-9]+
 NULL_TEXT = ""
 JUMP = \r|\n|\r\n
-WHITE_SPACE = {JUMP} | [ \t\f]
+WHITE_SPACE = {JUMP} | [\t\f]
 
 //------> Estados
 %state YYINITIAL, STRING
@@ -77,7 +60,7 @@ WHITE_SPACE = {JUMP} | [ \t\f]
 }
 
 <STRING>[^\n]* {
-  // Puedes manejar aquí los caracteres dentro de la cadena
+  // You can manage the characters inside the string here
 }
 
 <STRING>\" {
@@ -85,7 +68,7 @@ WHITE_SPACE = {JUMP} | [ \t\f]
   return new Symbol(sym.STRING, yytext().substring(1, yytext().length() - 1)); // Devuelve el contenido entre comillas
 }
 
-//--------> Palabras Clave
+//--------> Keywords
 <YYINITIAL> SEARCH { return new Symbol(Sym.SEARCH, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Ss][Oo][Nn][Gg]_[Nn][Aa][Mm][Ee] { return new Symbol(Sym.SONG_NAME, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Aa][Rr][Tt][Ii][Ss][Tt] { return new Symbol(Sym.ARTIST, yyline, yycolumn, yytext()); }
@@ -94,7 +77,7 @@ WHITE_SPACE = {JUMP} | [ \t\f]
 <YYINITIAL> [Rr][Ee][Ll][Ee][Aa][Ss][Ee]_[Dd][Aa][Tt][Ee] { return new Symbol(Sym.RELEASE_DATE, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Nn][Uu][Mm][Bb][Ee][Rr] { return new Symbol(Sym.NUMBER, yyline, yycolumn, yytext()); }
 
-//--------> Operadores y Símbolos
+//--------> Operators & Symbols
 <YYINITIAL> "," { return new Symbol(Sym.COMMA, yyline, yycolumn, yytext()); }
 <YYINITIAL> "=" { return new Symbol(Sym.EQUALS, yyline, yycolumn, yytext()); }
 <YYINITIAL> ">" { return new Symbol(Sym.MORE_THAN, yyline, yycolumn, yytext()); }
@@ -102,18 +85,18 @@ WHITE_SPACE = {JUMP} | [ \t\f]
 <YYINITIAL> "<=" { return new Symbol(Sym.LESS_THAN_EQUAL, yyline, yycolumn, yytext()); }
 <YYINITIAL> ">=" { return new Symbol(Sym.MORE_THAN_EQUAL, yyline, yycolumn, yytext()); }
 
-//--------> Ignorar Null Text
-<YYINITIAL> NULL_TEXT  { /*Ignorar null text*/ System.err.println("Error: Texto nulo encontrado"); }
+//--------> White Spaces
+WHITE_SPACE { /* Ignore white spaces */ }
+NULL_TEXT  { /* Ignore white spaces */ }
+[ \t\r\n\f] {/* Ignore white spaces */}
 
-//--------> Espacios en Blanco
-<YYINITIAL> WHITE_SPACE | " " { /*Ignorar espacios en blanco*/ return new Symbol(Sym.WHITE_SPACE, yyline, yycolumn, yytext()); }
+//--------> Lexical Errors
+.  {
+    System.out.println("Lexical Error: " + yytext() + ", line: " + yyline + ", column: " + yycolumn);
+    TError data = new TError(yytext(), yyline, yycolumn, "Lexical Error", "Symbol does not exist in the language");
+    LexicalErrorTable.add(data);
 
-//--------> Errores Lexicos
-<YYINITIAL> . | [^ \t\n\r\f] {
-    System.out.println("Error lexico: " + yytext() + ", linea: " + yyline + ", columna: " + yycolumn);
-    TError data = new TError(yytext(), yyline, yycolumn, "Error lexico", "Simbolo no existe en el lenguaje");
-    TablaErroresLexicos.add(data);
-
-    // Cambiar a un estado diferente para ignorar caracteres hasta el final de la línea
+    // Switch to a different state to ignore characters until the end of the line
     yybegin(YYINITIAL);
 }
+
