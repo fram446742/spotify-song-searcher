@@ -57,8 +57,7 @@ import com.ucjc.utils.*;
 
 //------> Expresiones Regulares
 // Define the {NUM} macro
-NUM = {DIGIT}+
-DIGIT = [0-9]
+NUM = [0-9]+
 NULL_TEXT = ""
 JUMP = \r|\n|\r\n
 WHITE_SPACE = {JUMP} | [ \t\f]
@@ -70,7 +69,7 @@ WHITE_SPACE = {JUMP} | [ \t\f]
 /*--------------------3. Reglas lexicas--------------------*/
 //------> Simbolos
 //--------> Números
-<YYINITIAL> {NUM}+ { return new Symbol(Sym.NUM, yyline, yycolumn, yytext()); }
+<YYINITIAL> {NUM} { return new Symbol(Sym.NUM, yyline, yycolumn, yytext()); }
 
 //--------> Cadenas de Texto
 <YYINITIAL>\" {
