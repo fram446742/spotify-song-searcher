@@ -77,9 +77,13 @@ WHITE_SPACE = {JUMP} | [ \t\f]
   yybegin(STRING);
 }
 
+<STRING>[^\n]* {
+  // Puedes manejar aquí los caracteres dentro de la cadena
+}
+
 <STRING>\" {
   yybegin(YYINITIAL);
-  return new Symbol(Sym.STRING, yytext());
+  return new Symbol(sym.STRING, yytext().substring(1, yytext().length() - 1)); // Devuelve el contenido entre comillas
 }
 
 //--------> Palabras Clave

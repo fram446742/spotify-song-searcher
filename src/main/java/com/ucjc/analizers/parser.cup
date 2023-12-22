@@ -58,12 +58,12 @@ parser code {:
     public void syntax_error(Symbol s) {
     Object value = s.value;
     String lexema = (value != null) ? value.toString() : "null";
-    int fila = s.right;
-    int columna = s.left;
+    int fila = s.left;
+    int columna = s.right;
 
     System.out.println("!!!!!!! Error Sintactico Recuperado !!!!!!!");
     System.out.println("\t\tLexema: " + lexema);
-    System.out.println("\t\tFila: " + fila);
+    System.out.println("\t\tLinea: " + fila);
     System.out.println("\t\tColumna: " + columna);
 
     TError datos = new TError(lexema, fila, columna, "Error Sintactico", "Caracter no esperado");
@@ -73,12 +73,12 @@ parser code {:
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception {
     Object value = s.value;
     String lexema = (value != null) ? value.toString() : "null";
-    int fila = s.right;
-    int columna = s.left;
+    int fila = s.left;
+    int columna = s.right;
 
     System.out.println("!!!!!!! Error Sintactico, Panic Mode !!!!!!!");
     System.out.println("\t\tLexema: " + lexema);
-    System.out.println("\t\tFila: " + fila);
+    System.out.println("\t\tLinea: " + fila);
     System.out.println("\t\tColumna: " + columna);
 
     TError datos = new TError(lexema, fila, columna, "Error Sintactico", "Caracter no esperado");
