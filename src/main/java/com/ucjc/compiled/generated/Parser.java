@@ -8,8 +8,13 @@ package com.ucjc.compiled.generated;
 import java_cup.runtime.*;
 import java_cup.runtime.Symbol;
 import java.util.LinkedList;
-import com.ucjc.utils.TError;
+import com.ucjc.utils.*;
 import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -35,13 +40,14 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\026\000\002\002\004\000\002\014\003\000\002\003" +
-    "\004\000\002\004\003\000\002\004\003\000\002\004\003" +
-    "\000\002\004\003\000\002\004\003\000\002\004\003\000" +
-    "\002\011\004\000\002\005\004\000\002\006\004\000\002" +
-    "\007\004\000\002\012\005\000\002\010\004\000\002\002" +
-    "\003\000\002\002\003\000\002\002\003\000\002\002\003" +
-    "\000\002\002\003\000\002\013\004\000\002\015\004" });
+    "\000\030\000\002\002\004\000\002\013\003\000\002\002" +
+    "\004\000\002\002\003\000\002\003\003\000\002\003\003" +
+    "\000\002\003\003\000\002\003\003\000\002\003\003\000" +
+    "\002\003\003\000\002\010\004\000\002\004\004\000\002" +
+    "\005\004\000\002\006\004\000\002\011\005\000\002\011" +
+    "\005\000\002\007\004\000\002\014\003\000\002\014\003" +
+    "\000\002\014\003\000\002\014\003\000\002\014\003\000" +
+    "\002\012\004\000\002\015\004" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -49,24 +55,28 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\042\000\016\013\014\014\005\015\021\016\006\017" +
-    "\011\020\013\001\002\000\004\021\ufff9\001\002\000\004" +
-    "\011\023\001\002\000\004\011\023\001\002\000\004\002" +
-    "\000\001\002\000\004\021\ufffb\001\002\000\004\011\041" +
-    "\001\002\000\004\002\037\001\002\000\014\005\035\006" +
-    "\031\007\034\010\033\011\032\001\002\000\004\011\023" +
-    "\001\002\000\004\021\ufffd\001\002\000\004\021\026\001" +
-    "\002\000\004\021\ufffc\001\002\000\004\021\ufffe\001\002" +
-    "\000\004\011\023\001\002\000\004\021\ufffa\001\002\000" +
-    "\004\022\025\001\002\000\004\021\ufff5\001\002\000\004" +
-    "\021\uffed\001\002\000\004\002\uffff\001\002\000\004\021" +
-    "\ufff7\001\002\000\004\023\036\001\002\000\004\023\ufff1" +
-    "\001\002\000\004\023\uffee\001\002\000\004\023\uffef\001" +
-    "\002\000\004\023\ufff0\001\002\000\004\023\ufff2\001\002" +
-    "\000\004\021\ufff4\001\002\000\004\002\001\001\002\000" +
-    "\004\021\ufff8\001\002\000\004\023\042\001\002\000\004" +
-    "\021\uffec\001\002\000\004\021\ufff3\001\002\000\004\021" +
-    "\ufff6\001\002" });
+    "\000\043\000\016\006\014\007\005\010\022\011\006\012" +
+    "\011\013\013\001\002\000\006\002\ufff8\014\ufff8\001\002" +
+    "\000\004\024\023\001\002\000\004\024\023\001\002\000" +
+    "\004\002\000\001\002\000\006\002\ufffa\014\ufffa\001\002" +
+    "\000\004\024\042\001\002\000\004\002\040\001\002\000" +
+    "\014\020\035\021\031\022\034\023\033\024\032\001\002" +
+    "\000\004\024\023\001\002\000\006\002\ufffc\014\ufffc\001" +
+    "\002\000\006\002\ufffe\014\026\001\002\000\006\002\ufffb" +
+    "\014\ufffb\001\002\000\006\002\ufffd\014\ufffd\001\002\000" +
+    "\006\002\ufff9\014\ufff9\001\002\000\004\024\023\001\002" +
+    "\000\004\015\025\001\002\000\006\002\ufff4\014\ufff4\001" +
+    "\002\000\006\002\uffeb\014\uffeb\001\002\000\004\002\uffff" +
+    "\001\002\000\006\002\ufff6\014\ufff6\001\002\000\006\016" +
+    "\036\017\037\001\002\000\006\016\uffef\017\uffef\001\002" +
+    "\000\006\016\uffec\017\uffec\001\002\000\006\016\uffed\017" +
+    "\uffed\001\002\000\006\016\uffee\017\uffee\001\002\000\006" +
+    "\016\ufff0\017\ufff0\001\002\000\006\002\ufff2\014\ufff2\001" +
+    "\002\000\006\002\ufff3\014\ufff3\001\002\000\004\002\001" +
+    "\001\002\000\006\002\ufff7\014\ufff7\001\002\000\004\016" +
+    "\043\001\002\000\006\002\uffea\014\uffea\001\002\000\006" +
+    "\002\ufff1\014\ufff1\001\002\000\006\002\ufff5\014\ufff5\001" +
+    "\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -74,19 +84,20 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\042\000\024\003\006\004\015\005\014\006\016\007" +
-    "\007\010\003\011\017\012\021\014\011\001\001\000\002" +
-    "\001\001\000\004\013\043\001\001\000\004\013\042\001" +
-    "\001\000\002\001\001\000\002\001\001\000\004\015\037" +
-    "\001\001\000\002\001\001\000\004\002\027\001\001\000" +
-    "\004\013\026\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001\000\002\001\001\000\004\013\023\001" +
-    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\043\000\024\002\006\003\015\004\014\005\016\006" +
+    "\007\007\003\010\017\011\020\013\011\001\001\000\002" +
+    "\001\001\000\004\012\044\001\001\000\004\012\043\001" +
+    "\001\000\002\001\001\000\002\001\001\000\004\015\040" +
+    "\001\001\000\002\001\001\000\004\014\027\001\001\000" +
+    "\004\012\026\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
+    "\004\012\023\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001\000\002\001\001\000\002\001\001" });
+    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -126,7 +137,7 @@ public class Parser extends java_cup.runtime.lr_parser {
 
 
     // Import necessary packages and define additional code if needed
-    public String result = "bad result";
+    public String result = "";
     public String str = "";
     public String num = "";
 
@@ -179,7 +190,91 @@ public class Parser extends java_cup.runtime.lr_parser {
 
     }
 
-    // Define your data structures and methods here
+    public static String searchInSQLFile(String filePath, String target) {
+    String result = null;
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            if (line.contains(target)) {
+                result = line;
+                break; // Terminate the search after finding the first match
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    return result;
+    }
+
+    public static List<String> searchInDatabase(String jdbcUrl, String username, String password,
+                                            String tableName, String columnName, String targetValue, String comparisonOperator) {
+    List<String> results = new ArrayList<>();
+
+    if (jdbcUrl == null || username == null || password == null || tableName == null || columnName == null || comparisonOperator == null) {
+        // Add appropriate error handling or logging for invalid input parameters
+        return results;
+    }
+
+    try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
+        // Build the SQL query dynamically based on the comparison operator
+        String sql = "SELECT * FROM " + tableName + " WHERE " + columnName + " " + comparisonOperator + " ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            // Set the parameter value
+            statement.setString(1, targetValue);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    // Construct a string representation of the entire row and add it to the results
+                    StringBuilder row = new StringBuilder();
+                    ResultSetMetaData metaData = resultSet.getMetaData();
+                    int columnCount = metaData.getColumnCount();
+                    for (int i = 1; i <= columnCount; i++) {
+                        row.append(resultSet.getString(i));
+                        if (i < columnCount) {
+                            row.append(", ");
+                        }
+                    }
+                    results.add(row.toString());
+                }
+            }
+        }
+    } catch (SQLException e) {
+        // Log or handle the exception appropriately
+        e.printStackTrace();
+    }
+
+    return results;
+}
+
+
+public String genericSearch(String columnName, String target, String comparisonOperator) {
+    String jdbcUrl = "jdbc:mysql://sql8.freesqldatabase.com:3306/sql8672470";
+    String username = "sql8672470";
+    String password = "tjUFjunKny";
+    String tableName = "Spotify";
+
+    System.out.println("Target (value): " + target);
+    System.out.println("Column name (filter for the database): " + columnName);
+    System.out.println("Comparison operator: " + comparisonOperator);
+
+    List<String> foundValues = searchInDatabase(jdbcUrl, username, password, tableName, columnName, target, comparisonOperator);
+
+    if (!foundValues.isEmpty()) {
+        System.out.println("Values found: ");
+        for (String value : foundValues) {
+            System.out.println(value);
+        }
+        result = String.join(System.lineSeparator(), foundValues);
+        return result;
+    } else {
+        System.out.println("Word or number not found in the database.");
+        return null;
+    }
+}
+
+
 
 
 /** Cup generated class to encapsulate user supplied action code.*/
@@ -230,8 +325,11 @@ class CUP$Parser$actions {
 		int resleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int resright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String res = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		result = res;
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("QUERY",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+		 
+    result = res; 
+    System.out.println("QUERY: " + result);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("QUERY",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
@@ -242,67 +340,118 @@ class CUP$Parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		RESULT = a;
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Search",1, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Search",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 3: // Field ::= NumberField 
+          case 3: // Search ::= Field 
             {
               String RESULT =null;
-
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Field",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+		int aleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String a = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 
+    RESULT = a; 
+    System.out.println("Search: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Search",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 4: // Field ::= SongNameField 
+          case 4: // Field ::= NumberField 
             {
               String RESULT =null;
-
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Field",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+		int fld1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int fld1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String fld1 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 
+    RESULT = fld1; 
+    System.out.println("Field: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Field",1, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 5: // Field ::= ArtistField 
+          case 5: // Field ::= SongNameField 
             {
               String RESULT =null;
-
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Field",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+		int fld2left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int fld2right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String fld2 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 
+    RESULT = fld2; 
+    System.out.println("Field: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Field",1, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 6: // Field ::= AlbumField 
+          case 6: // Field ::= ArtistField 
             {
               String RESULT =null;
-
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Field",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+		int fld3left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int fld3right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String fld3 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 
+    RESULT = fld3; 
+    System.out.println("Field: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Field",1, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 7: // Field ::= MillionStreamsField 
+          case 7: // Field ::= AlbumField 
             {
               String RESULT =null;
-
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Field",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+		int fld4left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int fld4right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String fld4 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 
+    RESULT = fld4; 
+    System.out.println("Field: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Field",1, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 8: // Field ::= ReleaseDateField 
+          case 8: // Field ::= MillionStreamsField 
             {
               String RESULT =null;
-
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Field",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+		int fld5left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int fld5right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String fld5 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 
+    RESULT = fld5; 
+    System.out.println("Field: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Field",1, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 9: // NumberField ::= NUMBER CompareNum 
+          case 9: // Field ::= ReleaseDateField 
+            {
+              String RESULT =null;
+		int fld6left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int fld6right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String fld6 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 
+    RESULT = fld6; 
+    System.out.println("Field: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Field",1, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 10: // NumberField ::= NUMBER CompareNum 
             {
               String RESULT =null;
 		int numericValueleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
@@ -311,13 +460,16 @@ class CUP$Parser$actions {
 		int comparisonValueleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int comparisonValueright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Integer comparisonValue = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = numericValue + String.valueOf(comparisonValue); 
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("NumberField",7, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+		 
+    RESULT = genericSearch(numericValue, String.valueOf(comparisonValue), "="); 
+    System.out.println("Specific field: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("NumberField",6, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 10: // SongNameField ::= SONG_NAME CompareString 
+          case 11: // SongNameField ::= SONG_NAME CompareString 
             {
               String RESULT =null;
 		int songNameleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
@@ -326,13 +478,16 @@ class CUP$Parser$actions {
 		int comparisonStringleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int comparisonStringright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String comparisonString = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = songName + comparisonString; 
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("SongNameField",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+		 
+    RESULT = genericSearch(songName, comparisonString, "="); 
+    System.out.println("Specific field: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("SongNameField",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 11: // ArtistField ::= ARTIST CompareString 
+          case 12: // ArtistField ::= ARTIST CompareString 
             {
               String RESULT =null;
 		int artistNameleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
@@ -341,13 +496,16 @@ class CUP$Parser$actions {
 		int comparisonStringleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int comparisonStringright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String comparisonString = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = artistName + comparisonString; 
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ArtistField",4, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+		 
+    RESULT = genericSearch(artistName, comparisonString, "="); 
+    System.out.println("Specific field: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ArtistField",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 12: // AlbumField ::= ALBUM CompareString 
+          case 13: // AlbumField ::= ALBUM CompareString 
             {
               String RESULT =null;
 		int albumNameleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
@@ -356,13 +514,16 @@ class CUP$Parser$actions {
 		int comparisonStringleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int comparisonStringright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String comparisonString = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = albumName + comparisonString; 
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("AlbumField",5, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+		 
+    RESULT = genericSearch(albumName, comparisonString, "="); 
+    System.out.println("Specific field: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("AlbumField",4, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 13: // MillionStreamsField ::= MILLION_STREAMS ComparisonOperator NUM 
+          case 14: // MillionStreamsField ::= MILLION_STREAMS ComparisonOperator DECIMAL 
             {
               String RESULT =null;
 		int millionStreamsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
@@ -370,17 +531,38 @@ class CUP$Parser$actions {
 		String millionStreams = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		int comparisonOperatorleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int comparisonOperatorright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
-		Object comparisonOperator = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		String comparisonOperator = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		int numberleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int numberright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String number = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = millionStreams + comparisonOperator +  String.valueOf(number); 
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("MillionStreamsField",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("MillionStreamsField",7, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 14: // ReleaseDateField ::= RELEASE_DATE CompareString 
+          case 15: // MillionStreamsField ::= MILLION_STREAMS ComparisonOperator NUM 
+            {
+              String RESULT =null;
+		int millionStreamsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
+		int millionStreamsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
+		String millionStreams = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		int comparisonOperatorleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int comparisonOperatorright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		String comparisonOperator = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		int numberleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int numberright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String number = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 
+    RESULT = genericSearch(millionStreams, String.valueOf(number), comparisonOperator); 
+    System.out.println("Specific field: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("MillionStreamsField",7, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 16: // ReleaseDateField ::= RELEASE_DATE CompareString 
             {
               String RESULT =null;
 		int releaseDateleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
@@ -389,70 +571,88 @@ class CUP$Parser$actions {
 		int comparisonStringleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int comparisonStringright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String comparisonString = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = releaseDate + comparisonString; 
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ReleaseDateField",6, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+		 
+    RESULT = genericSearch(releaseDate, comparisonString, "="); 
+    System.out.println("Specific field: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ReleaseDateField",5, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 15: // ComparisonOperator ::= MORE_THAN 
+          case 17: // ComparisonOperator ::= MORE_THAN 
             {
-              Object RESULT =null;
-
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ComparisonOperator",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+              String RESULT =null;
+		int mtleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int mtright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String mt = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		RESULT = ">"; 
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ComparisonOperator",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 16: // ComparisonOperator ::= LESS_THAN 
+          case 18: // ComparisonOperator ::= LESS_THAN 
             {
-              Object RESULT =null;
-
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ComparisonOperator",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+              String RESULT =null;
+		int ltleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int ltright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String lt = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		RESULT = "<"; 
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ComparisonOperator",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 17: // ComparisonOperator ::= MORE_THAN_EQUAL 
+          case 19: // ComparisonOperator ::= MORE_THAN_EQUAL 
             {
-              Object RESULT =null;
-
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ComparisonOperator",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+              String RESULT =null;
+		int mteleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int mteright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String mte = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		RESULT = ">="; 
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ComparisonOperator",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 18: // ComparisonOperator ::= LESS_THAN_EQUAL 
+          case 20: // ComparisonOperator ::= LESS_THAN_EQUAL 
             {
-              Object RESULT =null;
-
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ComparisonOperator",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+              String RESULT =null;
+		int lteleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int lteright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String lte = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		RESULT = "<="; 
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ComparisonOperator",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 19: // ComparisonOperator ::= EQUALS 
+          case 21: // ComparisonOperator ::= EQUALS 
             {
-              Object RESULT =null;
-
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ComparisonOperator",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+              String RESULT =null;
+		int eleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String e = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		RESULT = "="; 
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("ComparisonOperator",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 20: // CompareString ::= EQUALS STRING 
+          case 22: // CompareString ::= EQUALS STRING 
             {
               String RESULT =null;
 		int stringValueleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int stringValueright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String stringValue = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 RESULT = stringValue; 
-              CUP$Parser$result = parser.getSymbolFactory().newSymbol("CompareString",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("CompareString",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 21: // CompareNum ::= EQUALS NUM 
+          case 23: // CompareNum ::= EQUALS NUM 
             {
               Integer RESULT =null;
 		int numberValueleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;

@@ -1,4 +1,22 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "sql8.freesqldatabase.com",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "FreeSQL",
+            "database": "sql8672470",
+            "username": "sql8672470",
+            "password": "tjUFjunKny"
+        }
+    ],
+    "commentTranslate.source": "Google",
+    "commentTranslate.targetLanguage": "en"
 }

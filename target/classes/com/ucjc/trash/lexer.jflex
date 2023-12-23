@@ -57,6 +57,37 @@ NULL_TEXT = ""
 <YYINITIAL> SEARCH { return new Symbol(Sym.SEARCH, yytext()); }
 <YYINITIAL> {NUM}+ { return new Symbol(Sym.NUM, yytext()); }
 <YYINITIAL> {STRING_LITERAL} { return new Symbol(Sym.STRING, yytext()); }
+
+//--------> Strings
+<YYINITIAL>"\"" {
+  yytext(); // Discard the leading quote
+  yybegin(STRING);
+}
+
+<STRING> "\""  {
+  // The collection of the text between quotes ends
+  String textInQuotes = yytext(); //Text in quotes is stored in a string
+  System.out.println("Text in quotes: " + textInQuotes);
+  // Return to initial state
+  yybegin(YYINITIAL);
+  return new Symbol(Sym.STRING, textInQuotes); // Returns the content in quotes
+
+}
+
+<STRING> [^\n]+ {
+// Continue collecting additional lines
+}
+
+<STRING> "\"\"" {
+       // Handle double quotes (empty string)
+        System.out.println("Lexical Error: Double quotes without content, line: " + yyline + ", column: " + yycolumn);
+        TError data = new TError("", yyline, yycolumn, "Lexical Error", "Empty string is not allowed");
+        LexicalErrorTable.add(data);
+        
+        // Vuelve al estado inicial
+        yybegin(YYINITIAL);
+}
+
 // <YYINITIAL> [a-zA-Z][a-zA-Z0-9]* { return new Symbol(Sym.WORD, yytext()); }
 
 <YYINITIAL> [Ss][Oo][Nn][Gg]_[Nn][Aa][Mm][Ee] { return new Symbol(Sym.SONG_NAME, yytext()); }
@@ -73,6 +104,15 @@ NULL_TEXT = ""
 <YYINITIAL> "<" { return new Symbol(Sym.LESS_THAN, yytext()); }
 <YYINITIAL> "<=" { return new Symbol(Sym.LESS_THAN_EQUAL, yytext()); }
 <YYINITIAL> ">=" { return new Symbol(Sym.MORE_THAN_EQUAL, yytext()); }
+
+//--------> Operators & Symbols
+<YYINITIAL> "," { return new Symbol(Sym.COMMA, yyline, yycolumn, yytext()); }
+<YYINITIAL> "=" { return new Symbol(Sym.EQUALS, yyline, yycolumn, yytext()); }
+<YYINITIAL> ">" { return new Symbol(Sym.MORE_THAN, yyline, yycolumn, yytext()); }
+<YYINITIAL> "<" { return new Symbol(Sym.LESS_THAN, yyline, yycolumn, yytext()); }
+<YYINITIAL> "<=" { return new Symbol(Sym.LESS_THAN_EQUAL, yyline, yycolumn, yytext()); }
+<YYINITIAL> ">=" { return new Symbol(Sym.MORE_THAN_EQUAL, yyline, yycolumn, yytext()); }
+
 // <YYINITIAL> "/" { return new Symbol(Sym.SLASH, yyline, yycolumn, yytext()); }
 // <YYINITIAL> "(" { return new Symbol(Sym.PARI, yytext()); }
 // <YYINITIAL> ")" { return new Symbol(Sym.PARD, yytext()); }

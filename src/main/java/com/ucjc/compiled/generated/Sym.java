@@ -8,33 +8,29 @@ package com.ucjc.compiled.generated;
 /** CUP generated class containing symbol constants. */
 public class Sym {
   /* terminals */
-  public static final int LESS_THAN_EQUAL = 6;
-  public static final int ALBUM = 11;
-  public static final int ARTIST = 10;
-  public static final int MORE_THAN = 3;
-  public static final int NUM = 17;
-  public static final int EQUALS = 7;
-  public static final int STRING = 16;
+  public static final int LESS_THAN_EQUAL = 17;
+  public static final int DECIMAL = 13;
+  public static final int ALBUM = 6;
+  public static final int ARTIST = 5;
+  public static final int MORE_THAN = 14;
+  public static final int NUM = 12;
+  public static final int EQUALS = 18;
+  public static final int STRING = 11;
   public static final int COMMA = 2;
-  public static final int MILLION_STREAMS = 14;
+  public static final int MILLION_STREAMS = 9;
   public static final int EOF = 0;
-  public static final int NUMBER = 13;
-  public static final int LESS_THAN = 4;
+  public static final int NUMBER = 8;
+  public static final int LESS_THAN = 15;
   public static final int error = 1;
-  public static final int MORE_THAN_EQUAL = 5;
-  public static final int RELEASE_DATE = 12;
-  public static final int SONG_NAME = 9;
-  public static final int SEARCH = 15;
-  public static final int WHITE_SPACE = 8;
+  public static final int MORE_THAN_EQUAL = 16;
+  public static final int RELEASE_DATE = 7;
+  public static final int SONG_NAME = 4;
+  public static final int SEARCH = 10;
+  public static final int WHITE_SPACE = 3;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
   "COMMA",
-  "MORE_THAN",
-  "LESS_THAN",
-  "MORE_THAN_EQUAL",
-  "LESS_THAN_EQUAL",
-  "EQUALS",
   "WHITE_SPACE",
   "SONG_NAME",
   "ARTIST",
@@ -44,7 +40,13 @@ public class Sym {
   "MILLION_STREAMS",
   "SEARCH",
   "STRING",
-  "NUM"
+  "NUM",
+  "DECIMAL",
+  "MORE_THAN",
+  "LESS_THAN",
+  "MORE_THAN_EQUAL",
+  "LESS_THAN_EQUAL",
+  "EQUALS"
   };
 }
 

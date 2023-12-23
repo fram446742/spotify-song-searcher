@@ -4,7 +4,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import com.ucjc.App;
+import com.ucjc.trash.App;
 
 public class AppTest {
 

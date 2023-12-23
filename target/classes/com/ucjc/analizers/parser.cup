@@ -6,8 +6,13 @@ package com.ucjc.compiled.generated;
 import java_cup.runtime.*;
 import java_cup.runtime.Symbol;
 import java.util.LinkedList;
-import com.ucjc.utils.TError;
+import com.ucjc.utils.*;
 import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /*--------------------2. Opciones y declaraciones--------------------*/
 
@@ -66,7 +71,91 @@ parser code {:
 
     }
 
-    // Define your data structures and methods here
+    public static String searchInSQLFile(String filePath, String target) {
+    String result = null;
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            if (line.contains(target)) {
+                result = line;
+                break; // Terminate the search after finding the first match
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    return result;
+    }
+
+    public static List<String> searchInDatabase(String jdbcUrl, String username, String password,
+                                            String tableName, String columnName, String targetValue, String comparisonOperator) {
+    List<String> results = new ArrayList<>();
+
+    if (jdbcUrl == null || username == null || password == null || tableName == null || columnName == null || comparisonOperator == null) {
+        // Add appropriate error handling or logging for invalid input parameters
+        return results;
+    }
+
+    try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
+        // Build the SQL query dynamically based on the comparison operator
+        String sql = "SELECT * FROM " + tableName + " WHERE " + columnName + " " + comparisonOperator + " ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            // Set the parameter value
+            statement.setString(1, targetValue);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    // Construct a string representation of the entire row and add it to the results
+                    StringBuilder row = new StringBuilder();
+                    ResultSetMetaData metaData = resultSet.getMetaData();
+                    int columnCount = metaData.getColumnCount();
+                    for (int i = 1; i <= columnCount; i++) {
+                        row.append(resultSet.getString(i));
+                        if (i < columnCount) {
+                            row.append(", ");
+                        }
+                    }
+                    results.add(row.toString());
+                }
+            }
+        }
+    } catch (SQLException e) {
+        // Log or handle the exception appropriately
+        e.printStackTrace();
+    }
+
+    return results;
+}
+
+
+public String genericSearch(String columnName, String target, String comparisonOperator) {
+    String jdbcUrl = "jdbc:mysql://sql8.freesqldatabase.com:3306/sql8672470";
+    String username = "sql8672470";
+    String password = "tjUFjunKny";
+    String tableName = "Spotify";
+
+    System.out.println("Target (value): " + target);
+    System.out.println("Column name (filter for the database): " + columnName);
+    System.out.println("Comparison operator: " + comparisonOperator);
+
+    List<String> foundValues = searchInDatabase(jdbcUrl, username, password, tableName, columnName, target, comparisonOperator);
+
+    if (!foundValues.isEmpty()) {
+        System.out.println("Values found: ");
+        for (String value : foundValues) {
+            System.out.println(value);
+        }
+        result = String.join(System.lineSeparator(), foundValues);
+        return result;
+    } else {
+        System.out.println("Word or number not found in the database.");
+        return null;
+    }
+}
+
+
 :};
 
 action code
@@ -74,55 +163,102 @@ action code
 :}
 
 /* Define terminal and non-terminal symbols */
-terminal  COMMA, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS, WHITE_SPACE;
-terminal String SONG_NAME, ARTIST, ALBUM, RELEASE_DATE, NUMBER, MILLION_STREAMS, SEARCH, STRING, NUM;
-non terminal ComparisonOperator;
-non terminal String Search, Field, SongNameField, ArtistField, AlbumField, ReleaseDateField, NumberField, MillionStreamsField, CompareString, QUERY;
+terminal  COMMA, WHITE_SPACE;
+terminal String SONG_NAME, ARTIST, ALBUM, RELEASE_DATE, NUMBER, MILLION_STREAMS, SEARCH, STRING, NUM, DECIMAL, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS;
+non terminal String Search, Field, SongNameField, ArtistField, AlbumField, ReleaseDateField, NumberField, MillionStreamsField, CompareString, QUERY, ComparisonOperator;
 non terminal Integer CompareNum;
 
-/* Grammar */
 precedence left EQUALS,
                MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL;
 
-/* Define the start symbol */
 start with QUERY;
 
-/* Define the grammar rules */
-/* Search Statement */
+QUERY ::= Search:res 
+  {: 
+    result = res; 
+    System.out.println("QUERY: " + result);
+  :};
 
-QUERY ::= Search:res {:result = res;:}
-         ;
+Search ::= Field:a SEARCH | Field:a 
+  {: 
+    RESULT = a; 
+    System.out.println("Search: " + RESULT);
+  :};
 
-Search ::= Field:a SEARCH {:RESULT = a;:}
-         ;
+Field ::= NumberField:fld1 
+        {: 
+    RESULT = fld1; 
+    System.out.println("Field: " + RESULT);
+  :}
+        | SongNameField:fld2
+          {: 
+    RESULT = fld2; 
+    System.out.println("Field: " + RESULT);
+  :}
+        | ArtistField:fld3
+          {: 
+    RESULT = fld3; 
+    System.out.println("Field: " + RESULT);
+  :}
+        | AlbumField:fld4
+          {: 
+    RESULT = fld4; 
+    System.out.println("Field: " + RESULT);
+  :}
+        | MillionStreamsField:fld5
+          {: 
+    RESULT = fld5; 
+    System.out.println("Field: " + RESULT);
+  :}
+        | ReleaseDateField:fld6
+          {: 
+    RESULT = fld6; 
+    System.out.println("Field: " + RESULT);
+  :}
+  ;
 
-/* Fields */
-Field ::= NumberField
-        | SongNameField
-        | ArtistField
-        | AlbumField
-        | MillionStreamsField
-        | ReleaseDateField
-        ;
+NumberField ::= NUMBER:numericValue CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch(numericValue, String.valueOf(comparisonValue), "="); 
+    System.out.println("Specific field: " + RESULT);
+  :};
 
-/* Specific Fields */
-NumberField ::= NUMBER:numericValue CompareNum:comparisonValue {: RESULT = numericValue + String.valueOf(comparisonValue); :};
+SongNameField ::= SONG_NAME:songName CompareString:comparisonString 
+  {: 
+    RESULT = genericSearch(songName, comparisonString, "="); 
+    System.out.println("Specific field: " + RESULT);
+  :};
 
-SongNameField ::= SONG_NAME:songName CompareString:comparisonString {: RESULT = songName + comparisonString; :};
+ArtistField ::= ARTIST:artistName CompareString:comparisonString 
+  {: 
+    RESULT = genericSearch(artistName, comparisonString, "="); 
+    System.out.println("Specific field: " + RESULT);
+  :};
 
-ArtistField ::= ARTIST:artistName CompareString:comparisonString {: RESULT = artistName + comparisonString; :};
+AlbumField ::= ALBUM:albumName CompareString:comparisonString 
+  {: 
+    RESULT = genericSearch(albumName, comparisonString, "="); 
+    System.out.println("Specific field: " + RESULT);
+  :};
 
-AlbumField ::= ALBUM:albumName CompareString:comparisonString {: RESULT = albumName + comparisonString; :};
+MillionStreamsField ::= MILLION_STREAMS:millionStreams ComparisonOperator:comparisonOperator DECIMAL:number | MILLION_STREAMS:millionStreams ComparisonOperator:comparisonOperator NUM:number
+  {: 
+    RESULT = genericSearch(millionStreams, String.valueOf(number), comparisonOperator); 
+    System.out.println("Specific field: " + RESULT);
+  :};
 
-MillionStreamsField ::= MILLION_STREAMS:millionStreams ComparisonOperator:comparisonOperator NUM:number {: RESULT = millionStreams + comparisonOperator +  String.valueOf(number); :};
 
-ReleaseDateField ::= RELEASE_DATE:releaseDate CompareString:comparisonString {: RESULT = releaseDate + comparisonString; :};
+ReleaseDateField ::= RELEASE_DATE:releaseDate CompareString:comparisonString 
+  {: 
+    RESULT = genericSearch(releaseDate, comparisonString, "="); 
+    System.out.println("Specific field: " + RESULT);
+  :};
 
-ComparisonOperator ::= MORE_THAN
-                     | LESS_THAN
-                     | MORE_THAN_EQUAL
-                     | LESS_THAN_EQUAL
-                     | EQUALS
+ComparisonOperator ::= MORE_THAN:mt {:RESULT = ">"; :}
+                     | LESS_THAN:lt {:RESULT = "<"; :}
+                     | MORE_THAN_EQUAL:mte {:RESULT = ">="; :}
+                     | LESS_THAN_EQUAL:lte {:RESULT = "<="; :}
+                     | EQUALS:e {:RESULT = "="; :}
                      ;
 
 CompareString ::= EQUALS STRING:stringValue {: RESULT = stringValue; :};

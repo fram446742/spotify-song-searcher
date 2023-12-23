@@ -1,7 +1,1 @@
-
-
-
-
-
-
-SONG_NAME = "Binding" SEARCH
+ARTIST = "Ed Sheeran" SEARCH

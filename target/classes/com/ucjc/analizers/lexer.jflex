@@ -1,16 +1,16 @@
-/*--------------------1. Codigo Usuario--------------------*/
-//------> Paquetes e importaciones
+/*--------------------1. User Code--------------------*/
+//------> Packages and imports
 package com.ucjc.compiled.generated;
 
 import java_cup.runtime.*;
 import java.util.LinkedList;
 import com.ucjc.utils.*;
 
-/*--------------------2. Opciones y declaraciones--------------------*/
+/*--------------------2. Options and declarations--------------------*/
 %%
 %{
 
-//------> Codigo de usuario en sintaxis java
+//------> User code in java syntax
 
     public static LinkedList<TError> LexicalErrorTable = new LinkedList<TError>();
 
@@ -26,7 +26,7 @@ import com.ucjc.utils.*;
 
 %}
 
-//------> Directivas
+//------> Directives
 %public
 %class Lexer
 %cupsym Sym
@@ -38,38 +38,41 @@ import com.ucjc.utils.*;
 %line
 
 
-//------> Expresiones Regulares
+//------> Regular expressions
 // Define the {NUM} macro
 NUM = [0-9]+
+DIGIT = [0-9]
 NULL_TEXT = ""
 JUMP = \r|\n|\r\n
 WHITE_SPACE = {JUMP} | [\t\f]
 
-//------> Estados
+//------> States
 %state YYINITIAL, STRING
 
 %%
-/*--------------------3. Reglas lexicas--------------------*/
-//------> Simbolos
-//--------> Números
+/*--------------------3. Lexical rules--------------------*/
+//------> Symbols
 <YYINITIAL> {NUM} { return new Symbol(Sym.NUM, yyline, yycolumn, yytext()); }
+<YYINITIAL> {NUM}\.{DIGIT}{1,3} { return new Symbol(Sym.DECIMAL, yyline, yycolumn, yytext()); }
 
-//--------> Cadenas de Texto
-<YYINITIAL>\" {
+
+
+//--------> Text Strings
+<YYINITIAL>"\'" {
   yybegin(STRING);
 }
 
-<STRING>[^\n]* {
+<STRING>[^\n]+ {
   // You can manage the characters inside the string here
 }
 
-<STRING>\" {
+<STRING>"\'" {
   yybegin(YYINITIAL);
-  return new Symbol(sym.STRING, yytext().substring(1, yytext().length() - 1)); // Devuelve el contenido entre comillas
+  return new Symbol(Sym.STRING, yytext()); // Returns the content in quotes
 }
 
 //--------> Keywords
-<YYINITIAL> SEARCH { return new Symbol(Sym.SEARCH, yyline, yycolumn, yytext()); }
+<YYINITIAL> [Ss][Ee][Aa][Rr][Cc][Hh] { return new Symbol(Sym.SEARCH, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Ss][Oo][Nn][Gg]_[Nn][Aa][Mm][Ee] { return new Symbol(Sym.SONG_NAME, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Aa][Rr][Tt][Ii][Ss][Tt] { return new Symbol(Sym.ARTIST, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Aa][Ll][Bb][Uu][Mm] { return new Symbol(Sym.ALBUM, yyline, yycolumn, yytext()); }
