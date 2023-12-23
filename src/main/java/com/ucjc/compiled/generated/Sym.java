@@ -8,21 +8,22 @@ package com.ucjc.compiled.generated;
 /** CUP generated class containing symbol constants. */
 public class Sym {
   /* terminals */
-  public static final int LESS_THAN_EQUAL = 17;
-  public static final int DECIMAL = 13;
+  public static final int LESS_THAN_EQUAL = 18;
+  public static final int DECIMAL = 14;
+  public static final int ALL = 11;
   public static final int ALBUM = 6;
   public static final int ARTIST = 5;
-  public static final int MORE_THAN = 14;
-  public static final int NUM = 12;
-  public static final int EQUALS = 18;
-  public static final int STRING = 11;
+  public static final int MORE_THAN = 15;
+  public static final int NUM = 13;
+  public static final int EQUALS = 19;
+  public static final int STRING = 12;
   public static final int COMMA = 2;
   public static final int MILLION_STREAMS = 9;
   public static final int EOF = 0;
   public static final int NUMBER = 8;
-  public static final int LESS_THAN = 15;
+  public static final int LESS_THAN = 16;
   public static final int error = 1;
-  public static final int MORE_THAN_EQUAL = 16;
+  public static final int MORE_THAN_EQUAL = 17;
   public static final int RELEASE_DATE = 7;
   public static final int SONG_NAME = 4;
   public static final int SEARCH = 10;
@@ -39,6 +40,7 @@ public class Sym {
   "NUMBER",
   "MILLION_STREAMS",
   "SEARCH",
+  "ALL",
   "STRING",
   "NUM",
   "DECIMAL",

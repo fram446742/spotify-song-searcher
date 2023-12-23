@@ -155,6 +155,62 @@ public String genericSearch(String columnName, String target, String comparisonO
     }
 }
 
+public static List<String> getAllFromDatabase(String jdbcUrl, String username, String password, String tableName) {
+    List<String> results = new ArrayList<>();
+
+    if (jdbcUrl == null || username == null || password == null || tableName == null) {
+        // Add appropriate error handling or logging for invalid input parameters
+        return results;
+    }
+
+    try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
+        // Build the SQL query to select all records from the table
+        String sql = "SELECT * FROM " + tableName;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    // Construct a string representation of the entire row and add it to the results
+                    StringBuilder row = new StringBuilder();
+                    ResultSetMetaData metaData = resultSet.getMetaData();
+                    int columnCount = metaData.getColumnCount();
+                    for (int i = 1; i <= columnCount; i++) {
+                        row.append(resultSet.getString(i));
+                        if (i < columnCount) {
+                            row.append(", ");
+                        }
+                    }
+                    results.add(row.toString());
+                }
+            }
+        }
+    } catch (SQLException e) {
+        // Log or handle the exception appropriately
+        e.printStackTrace();
+    }
+
+    return results;
+}
+
+
+public String getAllRecords() {
+    String jdbcUrl = "jdbc:mysql://sql8.freesqldatabase.com:3306/sql8672470";
+    String username = "sql8672470";
+    String password = "tjUFjunKny";
+    String tableName = "Spotify";
+    List<String> allValues = getAllFromDatabase(jdbcUrl, username, password, tableName);
+
+    if (!allValues.isEmpty()) {
+        System.out.println("All values in the database: ");
+        for (String value : allValues) {
+            System.out.println(value);
+        }
+        return String.join(System.lineSeparator(), allValues);
+    } else {
+        System.out.println("No records found in the database.");
+        return null;
+    }
+}
+
 
 :};
 
@@ -164,7 +220,7 @@ action code
 
 /* Define terminal and non-terminal symbols */
 terminal  COMMA, WHITE_SPACE;
-terminal String SONG_NAME, ARTIST, ALBUM, RELEASE_DATE, NUMBER, MILLION_STREAMS, SEARCH, STRING, NUM, DECIMAL, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS;
+terminal String SONG_NAME, ARTIST, ALBUM, RELEASE_DATE, NUMBER, MILLION_STREAMS, SEARCH, ALL, STRING, NUM, DECIMAL, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS;
 non terminal String Search, Field, SongNameField, ArtistField, AlbumField, ReleaseDateField, NumberField, MillionStreamsField, CompareString, QUERY, ComparisonOperator;
 non terminal Integer CompareNum;
 
@@ -179,11 +235,16 @@ QUERY ::= Search:res
     System.out.println("QUERY: " + result);
   :};
 
-Search ::= Field:a SEARCH | Field:a 
+Search ::= Field:a SEARCH | Field:a
   {: 
-    RESULT = a; 
+    RESULT = a;
     System.out.println("Search: " + RESULT);
-  :};
+  :}
+  | ALL
+  {:
+    RESULT = getAllRecords();
+  :}
+  ;
 
 Field ::= NumberField:fld1 
         {: 

@@ -40,14 +40,14 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\030\000\002\002\004\000\002\013\003\000\002\002" +
-    "\004\000\002\002\003\000\002\003\003\000\002\003\003" +
+    "\000\031\000\002\002\004\000\002\013\003\000\002\002" +
+    "\004\000\002\002\003\000\002\002\003\000\002\003\003" +
     "\000\002\003\003\000\002\003\003\000\002\003\003\000" +
-    "\002\003\003\000\002\010\004\000\002\004\004\000\002" +
-    "\005\004\000\002\006\004\000\002\011\005\000\002\011" +
-    "\005\000\002\007\004\000\002\014\003\000\002\014\003" +
+    "\002\003\003\000\002\003\003\000\002\010\004\000\002" +
+    "\004\004\000\002\005\004\000\002\006\004\000\002\011" +
+    "\005\000\002\011\005\000\002\007\004\000\002\014\003" +
     "\000\002\014\003\000\002\014\003\000\002\014\003\000" +
-    "\002\012\004\000\002\015\004" });
+    "\002\014\003\000\002\012\004\000\002\015\004" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -55,28 +55,28 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\043\000\016\006\014\007\005\010\022\011\006\012" +
-    "\011\013\013\001\002\000\006\002\ufff8\014\ufff8\001\002" +
-    "\000\004\024\023\001\002\000\004\024\023\001\002\000" +
-    "\004\002\000\001\002\000\006\002\ufffa\014\ufffa\001\002" +
-    "\000\004\024\042\001\002\000\004\002\040\001\002\000" +
-    "\014\020\035\021\031\022\034\023\033\024\032\001\002" +
-    "\000\004\024\023\001\002\000\006\002\ufffc\014\ufffc\001" +
-    "\002\000\006\002\ufffe\014\026\001\002\000\006\002\ufffb" +
-    "\014\ufffb\001\002\000\006\002\ufffd\014\ufffd\001\002\000" +
-    "\006\002\ufff9\014\ufff9\001\002\000\004\024\023\001\002" +
-    "\000\004\015\025\001\002\000\006\002\ufff4\014\ufff4\001" +
-    "\002\000\006\002\uffeb\014\uffeb\001\002\000\004\002\uffff" +
-    "\001\002\000\006\002\ufff6\014\ufff6\001\002\000\006\016" +
-    "\036\017\037\001\002\000\006\016\uffef\017\uffef\001\002" +
-    "\000\006\016\uffec\017\uffec\001\002\000\006\016\uffed\017" +
-    "\uffed\001\002\000\006\016\uffee\017\uffee\001\002\000\006" +
-    "\016\ufff0\017\ufff0\001\002\000\006\002\ufff2\014\ufff2\001" +
-    "\002\000\006\002\ufff3\014\ufff3\001\002\000\004\002\001" +
-    "\001\002\000\006\002\ufff7\014\ufff7\001\002\000\004\016" +
-    "\043\001\002\000\006\002\uffea\014\uffea\001\002\000\006" +
-    "\002\ufff1\014\ufff1\001\002\000\006\002\ufff5\014\ufff5\001" +
-    "\002" });
+    "\000\044\000\020\006\015\007\006\010\022\011\005\012" +
+    "\010\013\014\015\013\001\002\000\006\002\ufff7\014\ufff7" +
+    "\001\002\000\004\025\024\001\002\000\004\025\024\001" +
+    "\002\000\004\002\000\001\002\000\004\025\043\001\002" +
+    "\000\006\002\ufff9\014\ufff9\001\002\000\004\002\041\001" +
+    "\002\000\004\002\ufffd\001\002\000\014\021\036\022\032" +
+    "\023\035\024\034\025\033\001\002\000\004\025\024\001" +
+    "\002\000\006\002\ufffb\014\ufffb\001\002\000\006\002\ufffe" +
+    "\014\027\001\002\000\006\002\ufffa\014\ufffa\001\002\000" +
+    "\006\002\ufffc\014\ufffc\001\002\000\004\025\024\001\002" +
+    "\000\006\002\ufff8\014\ufff8\001\002\000\004\016\026\001" +
+    "\002\000\006\002\ufff3\014\ufff3\001\002\000\006\002\uffea" +
+    "\014\uffea\001\002\000\004\002\uffff\001\002\000\006\002" +
+    "\ufff5\014\ufff5\001\002\000\006\017\037\020\040\001\002" +
+    "\000\006\017\uffee\020\uffee\001\002\000\006\017\uffeb\020" +
+    "\uffeb\001\002\000\006\017\uffec\020\uffec\001\002\000\006" +
+    "\017\uffed\020\uffed\001\002\000\006\017\uffef\020\uffef\001" +
+    "\002\000\006\002\ufff1\014\ufff1\001\002\000\006\002\ufff2" +
+    "\014\ufff2\001\002\000\004\002\001\001\002\000\006\002" +
+    "\ufff6\014\ufff6\001\002\000\004\017\044\001\002\000\006" +
+    "\002\uffe9\014\uffe9\001\002\000\006\002\ufff4\014\ufff4\001" +
+    "\002\000\006\002\ufff0\014\ufff0\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -84,20 +84,20 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\043\000\024\002\006\003\015\004\014\005\016\006" +
-    "\007\007\003\010\017\011\020\013\011\001\001\000\002" +
-    "\001\001\000\004\012\044\001\001\000\004\012\043\001" +
-    "\001\000\002\001\001\000\002\001\001\000\004\015\040" +
-    "\001\001\000\002\001\001\000\004\014\027\001\001\000" +
-    "\004\012\026\001\001\000\002\001\001\000\002\001\001" +
+    "\000\044\000\024\002\006\003\016\004\015\005\017\006" +
+    "\010\007\003\010\020\011\022\013\011\001\001\000\002" +
+    "\001\001\000\004\012\045\001\001\000\004\012\044\001" +
+    "\001\000\002\001\001\000\004\015\041\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\004\014" +
+    "\030\001\001\000\004\012\027\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\004\012\023\001\001\000\002\001\001\000\002\001\001" +
+    "\004\012\024\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001" });
+    "\002\001\001\000\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -274,6 +274,62 @@ public String genericSearch(String columnName, String target, String comparisonO
     }
 }
 
+public static List<String> getAllFromDatabase(String jdbcUrl, String username, String password, String tableName) {
+    List<String> results = new ArrayList<>();
+
+    if (jdbcUrl == null || username == null || password == null || tableName == null) {
+        // Add appropriate error handling or logging for invalid input parameters
+        return results;
+    }
+
+    try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
+        // Build the SQL query to select all records from the table
+        String sql = "SELECT * FROM " + tableName;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    // Construct a string representation of the entire row and add it to the results
+                    StringBuilder row = new StringBuilder();
+                    ResultSetMetaData metaData = resultSet.getMetaData();
+                    int columnCount = metaData.getColumnCount();
+                    for (int i = 1; i <= columnCount; i++) {
+                        row.append(resultSet.getString(i));
+                        if (i < columnCount) {
+                            row.append(", ");
+                        }
+                    }
+                    results.add(row.toString());
+                }
+            }
+        }
+    } catch (SQLException e) {
+        // Log or handle the exception appropriately
+        e.printStackTrace();
+    }
+
+    return results;
+}
+
+
+public String getAllRecords() {
+    String jdbcUrl = "jdbc:mysql://sql8.freesqldatabase.com:3306/sql8672470";
+    String username = "sql8672470";
+    String password = "tjUFjunKny";
+    String tableName = "Spotify";
+    List<String> allValues = getAllFromDatabase(jdbcUrl, username, password, tableName);
+
+    if (!allValues.isEmpty()) {
+        System.out.println("All values in the database: ");
+        for (String value : allValues) {
+            System.out.println(value);
+        }
+        return String.join(System.lineSeparator(), allValues);
+    } else {
+        System.out.println("No records found in the database.");
+        return null;
+    }
+}
+
 
 
 
@@ -353,7 +409,7 @@ class CUP$Parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-    RESULT = a; 
+    RESULT = a;
     System.out.println("Search: " + RESULT);
   
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("Search",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -361,7 +417,18 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 4: // Field ::= NumberField 
+          case 4: // Search ::= ALL 
+            {
+              String RESULT =null;
+		
+    RESULT = getAllRecords();
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("Search",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 5: // Field ::= NumberField 
             {
               String RESULT =null;
 		int fld1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -376,7 +443,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 5: // Field ::= SongNameField 
+          case 6: // Field ::= SongNameField 
             {
               String RESULT =null;
 		int fld2left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -391,7 +458,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 6: // Field ::= ArtistField 
+          case 7: // Field ::= ArtistField 
             {
               String RESULT =null;
 		int fld3left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -406,7 +473,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 7: // Field ::= AlbumField 
+          case 8: // Field ::= AlbumField 
             {
               String RESULT =null;
 		int fld4left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -421,7 +488,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 8: // Field ::= MillionStreamsField 
+          case 9: // Field ::= MillionStreamsField 
             {
               String RESULT =null;
 		int fld5left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -436,7 +503,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 9: // Field ::= ReleaseDateField 
+          case 10: // Field ::= ReleaseDateField 
             {
               String RESULT =null;
 		int fld6left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -451,7 +518,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 10: // NumberField ::= NUMBER CompareNum 
+          case 11: // NumberField ::= NUMBER CompareNum 
             {
               String RESULT =null;
 		int numericValueleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
@@ -469,7 +536,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 11: // SongNameField ::= SONG_NAME CompareString 
+          case 12: // SongNameField ::= SONG_NAME CompareString 
             {
               String RESULT =null;
 		int songNameleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
@@ -487,7 +554,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 12: // ArtistField ::= ARTIST CompareString 
+          case 13: // ArtistField ::= ARTIST CompareString 
             {
               String RESULT =null;
 		int artistNameleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
@@ -505,7 +572,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 13: // AlbumField ::= ALBUM CompareString 
+          case 14: // AlbumField ::= ALBUM CompareString 
             {
               String RESULT =null;
 		int albumNameleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
@@ -523,7 +590,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 14: // MillionStreamsField ::= MILLION_STREAMS ComparisonOperator DECIMAL 
+          case 15: // MillionStreamsField ::= MILLION_STREAMS ComparisonOperator DECIMAL 
             {
               String RESULT =null;
 		int millionStreamsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
@@ -541,7 +608,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 15: // MillionStreamsField ::= MILLION_STREAMS ComparisonOperator NUM 
+          case 16: // MillionStreamsField ::= MILLION_STREAMS ComparisonOperator NUM 
             {
               String RESULT =null;
 		int millionStreamsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
@@ -562,7 +629,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 16: // ReleaseDateField ::= RELEASE_DATE CompareString 
+          case 17: // ReleaseDateField ::= RELEASE_DATE CompareString 
             {
               String RESULT =null;
 		int releaseDateleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
@@ -580,7 +647,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 17: // ComparisonOperator ::= MORE_THAN 
+          case 18: // ComparisonOperator ::= MORE_THAN 
             {
               String RESULT =null;
 		int mtleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -592,7 +659,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 18: // ComparisonOperator ::= LESS_THAN 
+          case 19: // ComparisonOperator ::= LESS_THAN 
             {
               String RESULT =null;
 		int ltleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -604,7 +671,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 19: // ComparisonOperator ::= MORE_THAN_EQUAL 
+          case 20: // ComparisonOperator ::= MORE_THAN_EQUAL 
             {
               String RESULT =null;
 		int mteleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -616,7 +683,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 20: // ComparisonOperator ::= LESS_THAN_EQUAL 
+          case 21: // ComparisonOperator ::= LESS_THAN_EQUAL 
             {
               String RESULT =null;
 		int lteleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -628,7 +695,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 21: // ComparisonOperator ::= EQUALS 
+          case 22: // ComparisonOperator ::= EQUALS 
             {
               String RESULT =null;
 		int eleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -640,7 +707,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 22: // CompareString ::= EQUALS STRING 
+          case 23: // CompareString ::= EQUALS STRING 
             {
               String RESULT =null;
 		int stringValueleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -652,7 +719,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 23: // CompareNum ::= EQUALS NUM 
+          case 24: // CompareNum ::= EQUALS NUM 
             {
               Integer RESULT =null;
 		int numberValueleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;

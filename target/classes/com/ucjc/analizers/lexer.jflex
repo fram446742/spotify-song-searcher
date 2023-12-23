@@ -24,6 +24,8 @@ import com.ucjc.utils.*;
       return LexicalErrorTable;
     }
 
+    public String strg;
+
 %}
 
 //------> Directives
@@ -47,7 +49,7 @@ JUMP = \r|\n|\r\n
 WHITE_SPACE = {JUMP} | [\t\f]
 
 //------> States
-%state YYINITIAL, STRING
+%state YYINITIAL
 
 %%
 /*--------------------3. Lexical rules--------------------*/
@@ -55,30 +57,18 @@ WHITE_SPACE = {JUMP} | [\t\f]
 <YYINITIAL> {NUM} { return new Symbol(Sym.NUM, yyline, yycolumn, yytext()); }
 <YYINITIAL> {NUM}\.{DIGIT}{1,3} { return new Symbol(Sym.DECIMAL, yyline, yycolumn, yytext()); }
 
-
-
-//--------> Text Strings
-<YYINITIAL>"\'" {
-  yybegin(STRING);
-}
-
-<STRING>[^\n]+ {
-  // You can manage the characters inside the string here
-}
-
-<STRING>"\'" {
-  yybegin(YYINITIAL);
-  return new Symbol(Sym.STRING, yytext()); // Returns the content in quotes
-}
-
 //--------> Keywords
 <YYINITIAL> [Ss][Ee][Aa][Rr][Cc][Hh] { return new Symbol(Sym.SEARCH, yyline, yycolumn, yytext()); }
+<YYINITIAL> [Aa][Ll][Ll] { return new Symbol(Sym.ALL, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Ss][Oo][Nn][Gg]_[Nn][Aa][Mm][Ee] { return new Symbol(Sym.SONG_NAME, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Aa][Rr][Tt][Ii][Ss][Tt] { return new Symbol(Sym.ARTIST, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Aa][Ll][Bb][Uu][Mm] { return new Symbol(Sym.ALBUM, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Mm][Ii][Ll][Ll][Ii][Oo][Nn]_[Ss][Tt][Rr][Ee][Aa][Mm][Ss] { return new Symbol(Sym.MILLION_STREAMS, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Rr][Ee][Ll][Ee][Aa][Ss][Ee]_[Dd][Aa][Tt][Ee] { return new Symbol(Sym.RELEASE_DATE, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Nn][Uu][Mm][Bb][Ee][Rr] { return new Symbol(Sym.NUMBER, yyline, yycolumn, yytext()); }
+
+//--------> Text Strings
+<YYINITIAL> \"[^\"]+\" { return new Symbol(Sym.STRING, yyline, yycolumn, yytext().substring(1, yytext().length() - 1)); }
 
 //--------> Operators & Symbols
 <YYINITIAL> "," { return new Symbol(Sym.COMMA, yyline, yycolumn, yytext()); }
