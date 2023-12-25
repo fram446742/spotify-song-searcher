@@ -7,6 +7,7 @@
   <groupId>com.ucjc</groupId>
   <artifactId>spotify-song-searcher</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
   <name>spotify-song-searcher</name>
   <url>https://github.com/fram446742/spotify-song-searcher</url>
@@ -15,9 +16,21 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
+    <mainClass>com.ucjc.app.ApplicationWindow</mainClass>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>11</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-media</artifactId>
+      <version>11</version>
+    </dependency>
 
     <dependency>
       <groupId>commons-dbutils</groupId>
@@ -25,13 +38,11 @@
       <version>1.8.1</version>
     </dependency>
 
-
     <dependency>
       <groupId>maven</groupId>
       <artifactId>maven-dependency-plugin</artifactId>
       <version>1.0</version>
     </dependency>
-
 
     <dependency>
       <groupId>nz.ac.waikato.cms.weka.thirdparty</groupId>
@@ -39,13 +50,11 @@
       <version>2015.03.26</version>
     </dependency>
 
-
     <dependency>
       <groupId>nz.ac.waikato.cms.weka.thirdparty</groupId>
       <artifactId>java-cup-11b</artifactId>
       <version>2015.03.26</version>
     </dependency>
-
 
     <dependency>
       <groupId>de.jflex</groupId>
@@ -67,12 +76,11 @@
     </dependency>
 
     <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.33</version>      <!-- Replace with the version you want to use -->
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>8.2.0</version>      <!-- Replace with the version you want to use -->
     </dependency>
   </dependencies>
-  
 
   <build>
     <pluginManagement>      <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
@@ -82,40 +90,120 @@
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.1.0</version>
         </plugin>
+
+        <!-- adds file to let you run program outside of IDE -->
+        <plugin>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>3.1.0</version>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <configuration>
+                <tasks>
+                  <echo file="${project.build.directory}/runme.bat">start jlink-image\bin\javaw -jar modules\${project.artifactId}-${project.version}.jar</echo>
+                </tasks>
+              </configuration>
+              <goals>
+                <goal>run</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
         <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.0.2</version>
         </plugin>
+
+        <!-- sets up the version of Java you are running -->
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.0</version>
+          <configuration>
+            <release>17</release>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>org.ow2.asm</groupId>
+              <artifactId>asm</artifactId>
+              <version>6.2.1</version>
+            </dependency>
+          </dependencies>
         </plugin>
+
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
         </plugin>
+
+        <!-- Adds the mainClass to the jar so it will run outside -->
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
+          <version>3.1.0</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <mainClass>${mainClass}</mainClass>
+              </manifest>
+            </archive>
+            <outputDirectory>${project.build.directory}/bin</outputDirectory>
+          </configuration>
         </plugin>
+
+        <!-- Makes the jLink setup so you can give it to your friends  -->
+        <plugin>
+          <groupId>org.moditect</groupId>
+          <artifactId>moditect-maven-plugin</artifactId>
+          <version>1.0.0.Beta2</version>
+          <executions>
+            <execution>
+              <id>create-runtime-image</id>
+              <phase>package</phase>
+              <goals>
+                <goal>create-runtime-image</goal>
+              </goals>
+              <configuration>
+                <modulePath>
+                  <path>${project.build.directory}/modules</path>
+                </modulePath>
+                <modules>
+                  <module>${project.groupId}</module>
+                </modules>
+                <launcher>
+                  <name>${project.groupId}</name>
+                </launcher>
+                <compression>2</compression>
+                <stripDebug>true</stripDebug>
+                <outputDirectory>${project.build.directory}/jlink-image</outputDirectory>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
           <version>2.5.2</version>
         </plugin>
+
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>2.8.2</version>
         </plugin>
+
         <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
         <plugin>
           <artifactId>maven-site-plugin</artifactId>
           <version>3.7.1</version>
         </plugin>
+
         <plugin>
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+
+        <!-- Copies the dependencies files to your program  -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
@@ -123,12 +211,24 @@
           <executions>
             <execution>
               <id>copy-dependencies</id>
+              <phase>install</phase>
+              <goals>
+                <goal>copy-dependencies</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>${project.build.directory}/modules</outputDirectory>
+                <includeScope>runtime</includeScope>
+              </configuration>
+            </execution>
+            <execution>
+              <id>copy-dependencies-to-lib</id>
               <phase>package</phase>
               <goals>
                 <goal>copy-dependencies</goal>
               </goals>
               <configuration>
-                <outputDirectory>./dependencies</outputDirectory>
+                <outputDirectory>${project.basedir}/lib</outputDirectory>
+                <includeScope>runtime</includeScope>
               </configuration>
             </execution>
           </executions>

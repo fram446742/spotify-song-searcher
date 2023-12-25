@@ -18,5 +18,6 @@
         }
     ],
     "commentTranslate.source": "Google",
-    "commentTranslate.targetLanguage": "en"
+    "commentTranslate.targetLanguage": "en",
+    "maven.view": "flat"
 }

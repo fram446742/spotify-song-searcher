@@ -1,7 +1,7 @@
 /*--------------------1. Codigo del Usuario---------------------*/
 
 //------> Paquetes e importaciones
-package com.ucjc.compiled.generated;
+package com.ucjc.generated;
 
 import java_cup.runtime.*;
 import java_cup.runtime.Symbol;
@@ -322,8 +322,8 @@ ComparisonOperator ::= MORE_THAN:mt {:RESULT = ">"; :}
                      | EQUALS:e {:RESULT = "="; :}
                      ;
 
-CompareString ::= EQUALS STRING:stringValue {: RESULT = stringValue; :};
+CompareString ::= EQUALS STRING:stringValue | STRING:stringValue {: RESULT = stringValue; :};
 
-CompareNum ::= EQUALS NUM:numberValue {: RESULT = Integer.parseInt(numberValue); :};
+CompareNum ::= EQUALS NUM:numberValue | NUM:numberValue  {: RESULT = Integer.parseInt(numberValue); :};
 
 

@@ -30,8 +30,8 @@ echo Library in use: %LIB_DIR%
 REM Change to the "analizers" directory
 cd %~dp0\..\analizers
 
-REM Create the "\compiled\generated" folder if it does not exist
-if not exist "..\compiled\generated" mkdir "..\compiled\generated"
+REM Create the "\generated" folder if it does not exist
+if not exist "..\generated" mkdir "..\generated"
 
 echo Current directory: %CD%
 
@@ -41,18 +41,18 @@ java -jar "%LIB_DIR%\jflex\jflex-full-1.9.1.jar" lexer.jflex
 REM Verify if the file Lexer.java was created before attempting to move it
 if exist "Lexer.java" (
     REM Verify if the destination file already exists
-    if exist "..\compiled\generated\Lexer.java" (
+    if exist "..\generated\Lexer.java" (
         choice /C YN /M "Destination file already exists. Do you want to replace it? (Y/N) "
         if errorlevel 2 (
             echo File not replaced.
         ) else (
-            move /Y "Lexer.java" "..\compiled\generated\" > nul
-            echo File replaced and moved to: ..\compiled\generated
+            move /Y "Lexer.java" "..\generated\" > nul
+            echo File replaced and moved to: ..\generated
         )
     ) else (
         REM If the destination file doesn't exist, simply move Lexer.java
-        move "Lexer.java" "..\compiled\generated\" > nul
-        echo File moved to: ..\compiled\generated
+        move "Lexer.java" "..\generated\" > nul
+        echo File moved to: ..\generated
     )
 ) else (
     echo Error: Lexer.java was not created.

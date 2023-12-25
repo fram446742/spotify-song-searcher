@@ -22,8 +22,8 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
-import com.ucjc.compiled.generated.Lexer;
-import com.ucjc.compiled.generated.Parser;
+import com.ucjc.generated.Lexer;
+import com.ucjc.generated.Parser;
 import com.ucjc.utils.TError;
 
 import javax.swing.border.EtchedBorder;
@@ -35,7 +35,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JList;
 import javax.swing.JTextPane;
 
-public class ApplicationWIndow {
+public class ApplicationWindow {
 
 	private JFrame frame;
 	private JTextField txtEnterYourSearch;
@@ -54,7 +54,7 @@ public class ApplicationWIndow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ApplicationWIndow window = new ApplicationWIndow();
+					ApplicationWindow window = new ApplicationWindow();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -66,7 +66,7 @@ public class ApplicationWIndow {
 	/**
 	 * Create the application.
 	 */
-	public ApplicationWIndow() {
+	public ApplicationWindow() {
 		initialize();
 	}
 
