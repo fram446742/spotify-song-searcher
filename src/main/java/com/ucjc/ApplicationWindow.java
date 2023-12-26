@@ -395,7 +395,7 @@ public class ApplicationWindow {
 		textPane.setForeground(Color.WHITE);
 		textPane.setOpaque(false);
 		textPane.setText("𝕊𝕡𝕠𝕥𝕚𝕗𝕪 𝕊𝕠𝕟𝕘 𝕊𝕖𝕒𝕣𝕔𝕙𝕖𝕣");
-		textPane.setBounds(1129, 653, 127, 19);
+		textPane.setBounds(1115, 653, 141, 19);
 		frame.getContentPane().add(textPane);
 
 		SwingUtilities.invokeLater(() -> {

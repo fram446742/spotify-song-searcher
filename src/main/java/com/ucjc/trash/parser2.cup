@@ -1,0 +1,152 @@
+/*--------------- 1ra Area: Codigo de Usuario -----------------------*/
+//-------> importaciones, paquetes
+package Analizadores;
+import java_cup.runtime.Symbol;
+import java.util.LinkedList;
+
+//------> Codigo para el parser,variables, metodos
+parser code
+{:
+    public String resultado="";
+    public static LinkedList<TError> TablaES = new LinkedList<TError>();
+
+    //Metodo al que se llama automaticamente ante algun error sintactico
+    public void syntax_error(Symbol s)
+    {
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+
+        System.out.println("!!!!!!! Error Sintactico Recuperado !!!!!!!");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+
+        TError datos = new TError(lexema,fila,columna,"Error Sintactico","Caracter no esperado");
+        TablaES.add(datos);
+
+
+    }
+
+    //Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+
+        System.out.println("!!!!!!! Error Sintactico, Panic Mode !!!!!!! ");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+
+        TError datos = new TError(lexema,fila,columna,"Error Sintactico","Caracter no esperado");
+        TablaES.add(datos);
+
+    }
+:}
+
+//------> Codigo para las acciones gramaticales
+action code
+{:
+:}
+
+/*--------------- 2da Area: Declaraciones -----------------------*/
+//------> declaracion de terminales
+terminal mas,menos,por,div,para,parc;
+terminal String num;
+
+//------> declaracion de no terminales
+non terminal String INICIO,E;
+
+//----> precedencia de menor a mayor
+precedence left mas, menos;
+precedence left por, div;
+
+start with INICIO;
+
+/*--------------- 3ra Area: Reglas Semanticas -----------------------*/
+INICIO::=E:a {: resultado=a; :};
+
+E::= E:a mas E:b {: int val1= Integer.parseInt(a);
+                    int val2= Integer.parseInt(b);
+                    int r = val1+val2;
+                    RESULT = String.valueOf(r); :}
+    |E:a menos E:b {: int val1= Integer.parseInt(a);
+                    int val2= Integer.parseInt(b);
+                    int r = val1-val2;
+                    RESULT = String.valueOf(r); :}
+    |E:a div E:b {: int val1= Integer.parseInt(a);
+                    int val2= Integer.parseInt(b);
+                    int r = val1/val2;
+                    RESULT = String.valueOf(r); :}
+    |E:a por E:b {: int val1= Integer.parseInt(a);
+                    int val2= Integer.parseInt(b);
+                    int r = val1*val2;
+                    RESULT = String.valueOf(r); :}
+    |para E:a {: RESULT = a; :} parc
+    |num:a {: RESULT = a; :};
+
+
+
+    
+/* Fields */
+Field ::= NUMBER:NumberField
+        | SONG_NAME:SongNameField
+        | ARTIST:ArtistField
+        | ALBUM:AlbumField
+        | MILLION_STREAMS:MillionStreamsField
+        | RELEASE_DATE:ReleaseDateField
+        | WORD
+        | COMMA
+        | SLASH
+        | STRING
+        ;
+
+NumberField ::= NUMBER:a CompareNum:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+              | NUMBER:a Space CompareNum:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+              ;
+
+SongNameField ::=
+    SONG_NAME:a CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  | SONG_NAME:a Space CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  ;
+
+ArtistField ::=
+    ARTIST:a CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  | ARTIST:a Space CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  ;
+
+AlbumField ::=
+    ALBUM:a CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  | ALBUM:a Space CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  ;
+
+MillionStreamsField ::=
+    MILLION_STREAMS:a ComparisonOperator:b NUM:c {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b) + "\u0020" + String.valueOf(c); :}
+  | MILLION_STREAMS:a Space ComparisonOperator:b Space NUM:c {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b) + "\u0020" + String.valueOf(c); :}
+  ;
+
+ReleaseDateField ::=
+    RELEASE_DATE:a CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  | RELEASE_DATE:a Space CompareString:b {: RESULT = String.valueOf(a) + "\u0020" + String.valueOf(b); :}
+  ;
+
+ComparisonOperator ::= MORE_THAN
+                     | LESS_THAN
+                     | MORE_THAN_EQUAL
+                     | LESS_THAN_EQUAL
+                     | EQUALS
+                     ;
+
+CompareString ::= EQUALS STRING
+                | Space EQUALS Space STRING
+                ;
+
+CompareNum ::= EQUALS NUM
+             | Space EQUALS Space NUM
+             ;
+
+Space ::= WHITE_SPACE
+        |
+        ;
