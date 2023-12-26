@@ -24,6 +24,11 @@ import com.ucjc.utils.*;
       return LexicalErrorTable;
     }
 
+    public LinkedList clearTable(){
+      LexicalErrorTable.clear();
+      return LexicalErrorTable;
+    }
+
     public String strg;
 
 %}
@@ -52,7 +57,6 @@ DIGIT = [0-9]
 /*--------------------3. Lexical rules--------------------*/
 //------> Symbols
 <YYINITIAL> {NUM} { return new Symbol(Sym.NUM, yyline, yycolumn, yytext()); }
-<YYINITIAL> {NUM}\.{DIGIT}{1,3} { return new Symbol(Sym.DECIMAL, yyline, yycolumn, yytext()); }
 
 //--------> Keywords
 <YYINITIAL> [Ss][Ee][Aa][Rr][Cc][Hh] | [Bb][Uu][Ss][Cc][Aa][Rr] { return new Symbol(Sym.SEARCH, yyline, yycolumn, yytext()); }
@@ -60,27 +64,28 @@ DIGIT = [0-9]
 <YYINITIAL> [Ss][Oo][Nn][Gg]([ _])?[Nn][Aa][Mm][Ee] | [Ss][Oo][Nn][Gg] | [Nn][Aa][Mm][Ee] | [Tt][Ii][Tt][Ll][Ee] | [Tt][IiÍí][Tt][Uu][Ll][Oo] | [Nn][Oo][Mm][Bb][Rr][Ee] | [Cc][Aa][Nn][Cc][Ii][OoÓó][Nn] { return new Symbol(Sym.SONG_NAME, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Aa][Rr][Tt][Ii][Ss][Tt] | [Aa][Rr][Tt][Ii][Ss][Tt][Aa] { return new Symbol(Sym.ARTIST, yyline, yycolumn, yytext()); }
 <YYINITIAL> [AaÁá][Ll][Bb][Uu][Mm] { return new Symbol(Sym.ALBUM, yyline, yycolumn, yytext()); }
-<YYINITIAL> [Mm][Ii][Ll][Ll][Ii][Oo][Nn]([ _])?[Ss][Tt][Rr][Ee][Aa][Mm][Ss] | [Ss][Tt][Rr][Ee][Aa][Mm][Ss] | [Mm][Ii][Ll][Ll][Oo][Nn][Ee][Ss]([ _])?[Dd][Ee]([ _])?[Rr][Ee][Pp][Rr][Oo][Dd][Uu][Cc][Cc][Ii][Oo][Nn][Ee][Ss] | [Nn][UuÚú][Mm][Ee][Rr][Oo]([ _])?[Dd][Ee]([ _])?[Rr][Ee][Pp][Rr][Oo][Dd][Uu][Cc][Cc][Ii][Oo][Nn][Ee][Ss] | [Cc][Aa][Nn][Tt][Ii][Dd][Aa][Dd]([ _])?[Dd][Ee]([ _])?[Rr][Ee][Pp][Rr][Oo][Dd][Uu][Cc][Cc][Ii][Oo][Nn][Ee][Ss] | [Rr][Ee][Pp][Rr][Oo][Dd][Uu][Cc][Cc][Ii][Oo][Nn][Ee][Ss] { return new Symbol(Sym.MILLION_STREAMS, yyline, yycolumn, yytext()); }
-<YYINITIAL> [Rr][Ee][Ll][Ee][Aa][Ss][Ee]([ _])?[Dd][Aa][Tt][Ee] | [Rr][Ee][Ll][Ee][Aa][Ss][Ee] | [Dd][Aa][Tt][Ee] | [Ff][Ee][Cc][Hh][Aa]([ _])?[Dd][Ee]([ _])?[Ss][Aa][Ll][Ii][Dd][Aa] | [Ff][Ee][Cc][Hh][Aa] | [Ss][Aa][Ll][Ii][Dd][Aa] { return new Symbol(Sym.RELEASE_DATE, yyline, yycolumn, yytext()); }
+<YYINITIAL> [Mm][Ii][Ll][Ll][Ii][Oo][Nn]([ _])?[Ss][Tt][Rr][Ee][Aa][Mm][Ss] | ([Mm][Ii][Ll][Ll][Oo][Nn][Ee][Ss])?([ _])?([Dd][Ee])?([ _])?[Rr][Ee][Pp][Rr][Oo][Dd][Uu][Cc][Cc][Ii][Oo][Nn][Ee][Ss] | ([Nn][UuÚú][Mm][Ee][Rr][Oo])?([ _])?([Dd][Ee])?([ _])?[Rr][Ee][Pp][Rr][Oo][Dd][Uu][Cc][Cc][Ii][Oo][Nn][Ee][Ss] { return new Symbol(Sym.MILLION_STREAMS, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Nn][Uu][Mm][Bb][Ee][Rr] | [Pp][Oo][Ss][Ii][Tt][Ii][Oo][Nn] | [Nn][UuÚú][Mm][Ee][Rr][Oo] | [Pp][Uu][Ee][Ss][Tt][Oo] | [Pp][Oo][Ss][Ii][Cc][Ii][OoÓó][Nn] { return new Symbol(Sym.NUMBER, yyline, yycolumn, yytext()); }
+
 
 //--------> Text Strings
 <YYINITIAL> \"[^\"]+\" { return new Symbol(Sym.STRING, yyline, yycolumn, yytext().substring(1, yytext().length() - 1)); }
 
 //--------> Other text
 <YYINITIAL> [A-Za-z]+ {/* Ignore other text*/}
+<YYINITIAL> [\p{L}\p{M}\p{P}&&[^\"=><.]]+ {/* Ignore other text*/}
 
 //--------> Operators & Symbols
-<YYINITIAL> "," { return new Symbol(Sym.COMMA, yyline, yycolumn, yytext()); }
-<YYINITIAL> "=" { return new Symbol(Sym.EQUALS, yyline, yycolumn, yytext()); }
-<YYINITIAL> ">" { return new Symbol(Sym.MORE_THAN, yyline, yycolumn, yytext()); }
-<YYINITIAL> "<" { return new Symbol(Sym.LESS_THAN, yyline, yycolumn, yytext()); }
-<YYINITIAL> "<=" { return new Symbol(Sym.LESS_THAN_EQUAL, yyline, yycolumn, yytext()); }
-<YYINITIAL> ">=" { return new Symbol(Sym.MORE_THAN_EQUAL, yyline, yycolumn, yytext()); }
+<YYINITIAL> "=" | [Ee][Qq][Uu][Aa][Ll]([Ss])? | [Ii][Gg][Uu][Aa][Ll]([ _])?([Aa])? { return new Symbol(Sym.EQUALS, yyline, yycolumn, yytext()); }
+<YYINITIAL> ">" | [Mm][Oo][Rr][Ee]([ _])?([Tt][Hh][Aa][Nn])? | [Mm][AaÁá][Ss]([ _])?([Dd][Ee])? | [Mm][AaÁá][Ss]([ _])?([Qq][Uu][Ee])? | [Mm][Aa][Yy][Oo][Rr]([Ee][Ss])?([ _])?([Qq][Uu][Ee])? | [Mm][Aa][Yy][Oo][Rr]([Ee][Ss])?([ _])?([Aa])? { return new Symbol(Sym.MORE_THAN, yyline, yycolumn, yytext()); }
+<YYINITIAL> "<" | [Ll][Ee][Ss][Ss]([ _])?([Tt][Hh][Aa][Nn])? | [Mm][Ee][Nn][Oo][Ss]([ _])?([Dd][Ee])? | [Mm][Ee][Nn][Oo][Ss]([ _])?([Qq][Uu][Ee])? | [Mm][Ee][Nn][Oo][Rr]([Ee][Ss])?([ _])?([Qq][Uu][Ee])? | [Mm][Ee][Nn][Oo][Rr]([Ee][Ss])?([ _])?([Aa])? { return new Symbol(Sym.LESS_THAN, yyline, yycolumn, yytext()); }
+<YYINITIAL> "<=" | [Ll][Ee][Ss][Ss]([ _])?([Tt][Hh][Aa][Nn])?([ _])?[Ee][Qq][Uu][Aa][Ll] | [Mm][Ee][Nn][Oo][SS]([ _])?[Ii][Gg][Uu][Aa][Ll]([ _])?([Qq][Uu][Ee])? | [Mm][Ee][Nn][Oo][Ss]([ _])?[Ii][Gg][Uu][Aa][Ll]([ _])?([Aa])? | [Mm][Ee][Nn][Oo][Rr]([Ee][Ss])?([ _])?[Ii][Gg][Uu][Aa][Ll]([Ee][Ss])?([ _])?([Qq][Uu][Ee])? | [Mm][Ee][Nn][Oo][Rr]([Ee][Ss])?([ _])?[Ii][Gg][Uu][Aa][Ll]([Ee][Ss])?([ _])?([Aa])? { return new Symbol(Sym.LESS_THAN_EQUAL, yyline, yycolumn, yytext()); }
+<YYINITIAL> ">=" | [Mm][Oo][Rr][Ee]([ _])?([Tt][Hh][Aa][Nn])?([ _])?[Ee][Qq][Uu][Aa][Ll] | [Mm][AaÁá][Ss]([ _])?[Ii][Gg][Uu][Aa][Ll]([ _])?([Qq][Uu][Ee])? | [Mm][AaÁá][Ss]([ _])?[Ii][Gg][Uu][Aa][Ll]([ _])?([Aa])? | [Mm][Aa][Yy][Oo][Rr]([Ee][Ss])?([ _])?[Ii][Gg][Uu][Aa][Ll]([Ee][Ss])?([ _])?([Qq][Uu][Ee])? | [Mm][Aa][Yy][Oo][Rr]([Ee][Ss])?([ _])?[Ii][Gg][Uu][Aa][Ll]([Ee][Ss])?([ _])?([Aa])? { return new Symbol(Sym.MORE_THAN_EQUAL, yyline, yycolumn, yytext()); }
 
 //--------> White Spaces and Ignored Text
-[ \t\f]+ | \r?\n | \r { /* Ignore white spaces and line breaks */ }
 [A-Za-z]+ { /* Ignore other text*/ }
+[ \t\f]+ | \r?\n | \r { /* Ignore white spaces and line breaks */ }
+[\p{L}\p{M}\p{P}&&[^\"=><.]]+ { /* Ignore other text*/ }
 
 //--------> Lexical Errors
 .  {

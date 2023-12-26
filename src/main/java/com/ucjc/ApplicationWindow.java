@@ -7,8 +7,7 @@ import javax.swing.JTextField;
 import javax.swing.ListModel;
 
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.StringReader;
+import java.io.*;
 import java.util.LinkedList;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
@@ -23,7 +22,9 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
 import com.ucjc.generated.Lexer;
+import com.ucjc.generated.Lexer2;
 import com.ucjc.generated.Parser;
+import com.ucjc.generated.Parser2;
 import com.ucjc.utils.TError;
 
 import javax.swing.border.EtchedBorder;
@@ -32,8 +33,19 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+
 import javax.swing.JList;
 import javax.swing.JTextPane;
+import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JPasswordField;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JCheckBox;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class ApplicationWindow {
 
@@ -46,6 +58,11 @@ public class ApplicationWindow {
 	private JScrollPane scrollPane_1;
 	private JScrollPane scrollPane_2;
 	private JTextArea help;
+	private JPanel panel_2;
+	private Boolean biggerDatabaseBoolean = false;
+	private JPanel panel_4;
+	private JScrollPane scrollPane_3;
+	private JTextPane errorLog_1;
 
 	/**
 	 * Launch the application.
@@ -75,6 +92,7 @@ public class ApplicationWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.getContentPane().setBackground(new Color(0, 0, 0));
 		frame.setBounds(100, 100, 1280, 720);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -83,7 +101,7 @@ public class ApplicationWindow {
 		panel_1.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Input",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel_1.setBounds(4, 33, 679, 67);
+		panel_1.setBounds(4, 37, 679, 64);
 		frame.getContentPane().add(panel_1);
 		panel_1.setLayout(null);
 
@@ -105,15 +123,15 @@ public class ApplicationWindow {
 		panel.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Output",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel.setBounds(4, 107, 679, 178);
+		panel.setBounds(4, 111, 679, 175);
 		frame.getContentPane().add(panel);
-		panel.setLayout(null);
+		panel.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 659, 156);
 		panel.add(scrollPane);
 
 		JList output = new JList();
+		scrollPane.setViewportView(output);
 		output.setToolTipText("Left Click to copy selected \r\nRight Click to copy all");
 		output.addMouseListener(new MouseAdapter() {
 			@SuppressWarnings("unchecked")
@@ -147,21 +165,19 @@ public class ApplicationWindow {
 			}
 		});
 
-		scrollPane.setViewportView(output);
-
 		panel_3 = new JPanel();
 		panel_3.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Error log",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel_3.setBounds(693, 107, 546, 178);
+		panel_3.setBounds(693, 296, 563, 174);
 		frame.getContentPane().add(panel_3);
-		panel_3.setLayout(null);
+		panel_3.setLayout(new BorderLayout(0, 0));
 
 		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 11, 526, 155);
 		panel_3.add(scrollPane_1);
 
 		JTextPane errorLog = new JTextPane();
+		errorLog.setText("=== Lexical Errors ===\r\n\r\n=== Grammatical Errors ===\r\n");
 		errorLog.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -185,27 +201,19 @@ public class ApplicationWindow {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String text = txtEnterYourSearch.getText();
-				Lexer lexer = new Lexer(new BufferedReader(new StringReader(text)));
-				Parser parser = new Parser(lexer);
 
-				try {
-					// Store the previous error counts
-					int prevLexicalErrorCount = parser.SyntaxErrorTable.size();
-					int prevGrammaticalErrorCount = lexer.LexicalErrorTable.size();
+				if (biggerDatabaseBoolean) {
+					System.out.println("Using Spotify_2023 table");
 
-					parser.parse();
+					Lexer2 lexer = new Lexer2(new BufferedReader(new StringReader(text)));
+					Parser2 parser = new Parser2(lexer);
 
-					String[] listData = (parser.result != null) ? parser.result.split(System.lineSeparator())
-							: new String[] { "null" };
-					output.setListData(listData);
+					try {
+						parser.parse();
 
-					// Get the current error counts
-					int currentLexicalErrorCount = parser.SyntaxErrorTable.size();
-					int currentGrammaticalErrorCount = lexer.LexicalErrorTable.size();
-
-					// Check if new entries exist before updating the error log
-					if (currentLexicalErrorCount > prevLexicalErrorCount
-							|| currentGrammaticalErrorCount > prevGrammaticalErrorCount) {
+						String[] listData = (parser.result != null) ? parser.result.split(System.lineSeparator())
+								: new String[] { "null" };
+						output.setListData(listData);
 						// Clear the JTextArea
 						errorLog.setText("");
 
@@ -235,32 +243,90 @@ public class ApplicationWindow {
 									.append(System.lineSeparator());
 						}
 
+						parser.clearTable();
+						lexer.clearTable();
+
 						errorLog.setText(combinedText.toString());
+
+					} catch (Exception ex) {
+						ex.printStackTrace();
 					}
 
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+				} else {
+					System.out.println("Using Spotify table");
 
+					Lexer lexer = new Lexer(new BufferedReader(new StringReader(text)));
+					Parser parser = new Parser(lexer);
+
+					try {
+						parser.parse();
+
+						String[] listData = (parser.result != null) ? parser.result.split(System.lineSeparator())
+								: new String[] { "null" };
+						output.setListData(listData);
+						// Clear the JTextArea
+						errorLog.setText("");
+
+						LinkedList<TError> lexicalErrors = parser.SyntaxErrorTable;
+						LinkedList<TError> grammaticalErrors = lexer.LexicalErrorTable;
+
+						StringBuilder combinedText = new StringBuilder();
+
+						// Display Lexical Errors
+						combinedText.append("=== Lexical Errors ===").append(System.lineSeparator());
+						for (TError lexicalError : lexicalErrors) {
+							combinedText.append("Lexical Error: ").append(lexicalError.getDescription())
+									.append(" at Line ").append(lexicalError.getLine())
+									.append(", Column ").append(lexicalError.getColumn())
+									.append(System.lineSeparator());
+						}
+
+						// Add a subdivision between Lexical and Grammatical Errors
+						combinedText.append(System.lineSeparator()).append("=== Grammatical Errors ===")
+								.append(System.lineSeparator());
+
+						// Display Grammatical Errors
+						for (TError grammaticalError : grammaticalErrors) {
+							combinedText.append("Grammatical Error: ").append(grammaticalError.getDescription())
+									.append(" at Line ").append(grammaticalError.getLine())
+									.append(", Column ").append(grammaticalError.getColumn())
+									.append(System.lineSeparator());
+						}
+
+						parser.clearTable();
+						lexer.clearTable();
+
+						errorLog.setText(combinedText.toString());
+
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+
+				}
 			}
 		});
 		btnNewButton.setBounds(570, 18, 99, 38);
 		panel_1.add(btnNewButton);
 
+		panel_2 = new JPanel();
+		panel_2.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				"Instructions", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel_2.setBounds(4, 296, 679, 376);
+		frame.getContentPane().add(panel_2);
+		panel_2.setLayout(new BorderLayout(0, 0));
+
 		scrollPane_2 = new JScrollPane();
+		scrollPane_2.setAutoscrolls(true);
+		panel_2.add(scrollPane_2, BorderLayout.CENTER);
 		scrollPane_2.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		scrollPane_2.setAlignmentY(Component.TOP_ALIGNMENT);
 		scrollPane_2.setAlignmentX(Component.LEFT_ALIGNMENT);
-		scrollPane_2.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-		scrollPane_2.setBounds(4, 296, 1252, 376);
-		frame.getContentPane().add(scrollPane_2);
-
-		SwingUtilities.invokeLater(() -> {
-			JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
-			verticalScrollBar.setValue(0);
-		});
+		scrollPane_2.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
 		help = new JTextArea();
+		scrollPane_2.setViewportView(help);
+		help.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		help.setAlignmentY(Component.TOP_ALIGNMENT);
 		help.setAlignmentX(Component.LEFT_ALIGNMENT);
 		help.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
@@ -269,14 +335,98 @@ public class ApplicationWindow {
 		help.setWrapStyleWord(true);
 		help.setTabSize(3);
 		help.setText(
-				"To use this search engine, follow these rules:\r\n\r\nAccepted Words/Values:\r\n•\tField names: SONG_NAME, ARTIST, ALBUM, RELEASE_DATE, NUMBER, MILLION_STREAMS\r\n•\tComparison operators: =, >, <, >=, <=\r\n•\tString values: Enclosed in double quotes.\r\n•\tNumerical values: Integer or decimal.\r\n\r\nHow to Form a Search:\r\n1.\tStart with a field (case-insensitive).\r\n2.\tSpecify the value:\r\n\t•\tFor SONG_NAME, ARTIST, ALBUM, RELEASE_DATE: Use '=' operator with double quotes for the string.\r\n\t•\tFor NUMBER and MILLION_STREAMS: Use any operator with a number (integer or decimal).\r\n\t\t•\tFor NUMBER, use an integer from 1 to 100.\r\n\t\t•\tFor MILLION_STREAMS and '=', be specific, as an exact match is necessary.\r\n\r\nExample:\r\n\r\nSongName=\"Blinding Lights\" \r\n\r\nThis query searches if the song \"Blinding Lights\" is within the top 100 most listened songs on Spotify.\r\n\r\nThis grammar enables users to construct queries for searching songs in the top 100 on Spotify based on various criteria.\r\n\r\nAdditional tip: If you specify \"ALL\" as the target value, the program will retrieve all records from the database.");
+				"To utilize the search engine effectively, adhere to the following rules:\r\n\r\nAccepted Input Criteria:\r\n•\tField Names: As declared in the database separators.\r\n•\tComparison Operators: =, >, <, >=, <=\r\n•\tString Values: Enclosed in double quotes.\r\n•\tNumerical Values: Integers exclusively.\r\n\r\nConstructing a Search:\r\nTo ensure the acceptance of your query, follow these syntax guidelines:\r\n•\tCommence with a Field: Begin with the specification of a field (case-insensitive).\r\n•\tSelect the Operator (if Numeric): For numeric queries, choose the appropriate operator. For non-numeric queries, omit this step.\r\n•\tSpecify the Value: Depending on the nature of the query, provide the value in adherence to the type (String or Number).\r\n\r\nExample:\r\nFor instance, consider the query:\r\n\r\nSongName \"Blinding Lights\" or I want the song called \"blinding lights\"  (note that in this case the words \"I\", \"want\", \"the\", \"called\" are ignored)\r\n\r\nThis query searches if the song \"Blinding Lights\" is listed on the database.\r\n\r\nThis syntax enables users to formulate precise queries for retrieving information about songs within the top 100 on Spotify, based on diverse criteria. Alternatively, users may opt to search for songs within another database containing 954 songs.\r\n\r\nAdditional tip: If you specify \"ALL\" as the target value, the program will retrieve all records from the database.");
 		help.setEditable(false);
-		scrollPane_2.setViewportView(help);
+
+		JCheckBox chckbxNewCheckBox = new JCheckBox("Use a bigger database?");
+		chckbxNewCheckBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				System.out.println("Changing table...");
+				biggerDatabaseBoolean = chckbxNewCheckBox.isSelected();
+
+				if (biggerDatabaseBoolean) {
+					errorLog_1.setText(
+							"We welcome you to our music database search system. To facilitate your experience, we provide the following search criteria:\r\n\r\nSONG_NAME: Name of the song. (String **some names may be corrupted**)\r\nARTIST: Name of the artist. (String **some names may be corrupted**)\r\nNUMBER: Number of the song on the database. (Integer)\r\nARTIST_COUNT: Number of artists associated with the song. (Integer)\r\nRELEASED_YEAR: Release year. (Integer)\r\nRELEASED_MONTH: Release month. (Integer)\r\nRELEASED_DAY: Release day. (Integer)\r\nSTREAMS: Total number of views. (Integer)\r\nBPM: Beats per minute. (Integer with 2 or 3 digits)\r\nKEY: Key of the song. (String: C, G, D, A, E, B, F, C#, G#, D#, A#, F#)\r\nMODE: Song mode. (Major or Minor)\r\nDANCEABILITY: Percentage of danceability. (Integer 0 to 100)\r\nVALENCE: Percentage of \"positiveness\" (Integer 0 to 100).\r\nENERGY: Percentage of energy. (Integer 0 to 100)\r\nACOUSTICNESS: Percentage of acoustics. (Integer 0 to 100)\r\nINSTRUMENTALNESS: Percentage of instrumentality. (Integer 0 to 100)\r\nLIVENESS: Percentage of liveliness. (Integer 0 to 100)\r\nSPEECHINESS: Percentage of speech. (Integer 0 to 100)\r\n\r\nPlease note that the IN_SPOTIFY_PLAYLISTS, IN_SPOTIFY_CHARTS, IN_APPLE_PLAYLISTS, IN_APPLE_CHARTS, IN_DEEZER_PLAYLISTS, IN_DEEZER_CHARTS, and IN_SHAZAM_CHARTS fields are not enabled for searches.");
+				} else {
+					errorLog_1.setText(
+							"We welcome you to our music database search system. To facilitate your experience, we provide the following search criteria:\r\n\r\nSONG_NAME: Name of the song. (String)\r\nARTIST: Name of the artist. (String)\r\nALBUM: Name of the album. (String)\r\nNUMBER: Number of the song on the database. (Integer 1 to 100)\r\nMILLION_STREAMS: Number of millions of views. (Integer from 0 to 4)\r\n\r\nPlease note that the RELEASE_DATE field is not enabled for searches.");
+				}
+
+				SwingUtilities.invokeLater(() -> {
+					JScrollBar verticalScrollBar2 = scrollPane_3.getVerticalScrollBar();
+					verticalScrollBar2.setValue(0);
+				});
+			}
+		});
+		chckbxNewCheckBox.setBounds(693, 53, 141, 31);
+		frame.getContentPane().add(chckbxNewCheckBox);
+
+		JTextArea txtrWarningThisDatabase = new JTextArea();
+		txtrWarningThisDatabase.setEditable(false);
+		txtrWarningThisDatabase.setFont(new Font("Roboto", Font.PLAIN, 13));
+		txtrWarningThisDatabase.setOpaque(false);
+		txtrWarningThisDatabase.setForeground(Color.WHITE);
+		txtrWarningThisDatabase.setLineWrap(true);
+		txtrWarningThisDatabase.setWrapStyleWord(true);
+		txtrWarningThisDatabase.setText(
+				"Warning, this database is bigger, but some values may be incomplete or incorrect due to the way they were compiled (kaggle).");
+		txtrWarningThisDatabase.setBounds(840, 48, 415, 38);
+		frame.getContentPane().add(txtrWarningThisDatabase);
+
+		panel_4 = new JPanel();
+		panel_4.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				"Database separators", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel_4.setBounds(693, 111, 563, 174);
+		frame.getContentPane().add(panel_4);
+		panel_4.setLayout(new BorderLayout(0, 0));
+
+		scrollPane_3 = new JScrollPane();
+		panel_4.add(scrollPane_3, BorderLayout.CENTER);
+
+		errorLog_1 = new JTextPane();
+		errorLog_1.setToolTipText("This shows the column separators from the database");
+		errorLog_1.setText(
+				"We welcome you to our music database search system. To facilitate your experience, we provide the following search criteria:\r\n\r\nSONG_NAME: Name of the song. (String)\r\nARTIST: Name of the artist. (String)\r\nALBUM: Name of the album. (String)\r\nNUMBER: Number of the song on the album. (Integer)\r\nMILLION_STREAMS: Number of millions of views. (Integer)\r\n\r\nPlease note that the RELEASE_DATE field is not enabled for searches.");
+		errorLog_1.setEditable(false);
+		scrollPane_3.setViewportView(errorLog_1);
+		
+		JTextPane textPane = new JTextPane();
+		textPane.setForeground(Color.WHITE);
+		textPane.setOpaque(false);
+		textPane.setText("𝕊𝕡𝕠𝕥𝕚𝕗𝕪 𝕊𝕠𝕟𝕘 𝕊𝕖𝕒𝕣𝕔𝕙𝕖𝕣");
+		textPane.setBounds(1129, 653, 127, 19);
+		frame.getContentPane().add(textPane);
+
+		SwingUtilities.invokeLater(() -> {
+			JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
+			JScrollBar verticalScrollBar1 = scrollPane_2.getVerticalScrollBar();
+			JScrollBar verticalScrollBar2 = scrollPane_3.getVerticalScrollBar();
+			verticalScrollBar.setValue(0);
+			verticalScrollBar1.setValue(0);
+			verticalScrollBar2.setValue(0);
+		});
 	}
 
 	private void copyToClipboard(String text) {
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		StringSelection selection = new StringSelection(text);
 		clipboard.setContents(selection, null);
+	}
+
+	// TODO
+	public class ConsoleCapture {
+		public static void main(String[] args) {
+			// Create a new PrintStream that writes to a ByteArrayOutputStream
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PrintStream customOut = new PrintStream(baos);
+
+			// Redirect System.out to the custom PrintStream
+			System.setOut(customOut);
+
+			// Retrieve the captured output
+			String capturedOutput = baos.toString();
+			System.out.println("Captured output:\n" + capturedOutput);
+		}
 	}
 }

@@ -36,7 +36,7 @@ if not exist "..\generated" mkdir "..\generated"
 echo Current Directory: %CD%
 
 REM Execute the Java Cup command in the current location
-java -jar "%LIB_DIR%\java-cup-11b.jar" -parser Parser -symbols Sym "parser.cup"
+java -jar "%LIB_DIR%\java-cup-11b.jar" -parser Parser -symbols Sym0 "parser.cup"
 
 REM Check if Parser.java file was created before attempting to move it
 if exist "Parser.java" (
@@ -59,24 +59,24 @@ if exist "Parser.java" (
     echo The generation process may have failed.
 )
 
-REM Check if Sym.java file was created before attempting to move it
-if exist "Sym.java" (
-    if exist "..\generated\Sym.java" (
-        REM Check and move Sym.java to the new location with ~
-        choice /C YN /M "Destination file 'Sym.java' already exists. Do you want to replace it? (Y/N) "
+REM Check if Sym0.java file was created before attempting to move it
+if exist "Sym0.java" (
+    if exist "..\generated\Sym0.java" (
+        REM Check and move Sym0.java to the new location with ~
+        choice /C YN /M "Destination file 'Sym0.java' already exists. Do you want to replace it? (Y/N) "
         if errorlevel 2 (
             echo File not replaced.
         ) else (
-            move /Y "Sym.java" "..\generated\" > nul
+            move /Y "Sym0.java" "..\generated\" > nul
             echo File replaced and moved to: ..\generated
         )
     ) else (
-        REM If the destination file doesn't exist, simply move Sym.java
-        move "Sym.java" "..\generated\" > nul
+        REM If the destination file doesn't exist, simply move Sym0.java
+        move "Sym0.java" "..\generated\" > nul
         echo File moved to: ..\generated
     )
 ) else (
-    echo Error: Sym.java was not created.
+    echo Error: Sym0.java was not created.
     echo The generation process may have failed.
 )
 
