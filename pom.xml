@@ -6,7 +6,7 @@
 
   <groupId>com.ucjc</groupId>
   <artifactId>spotify-song-searcher</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0-Beta</version>
   <packaging>jar</packaging>
 
   <name>spotify-song-searcher</name>

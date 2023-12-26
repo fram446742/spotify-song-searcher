@@ -339,6 +339,7 @@ public class ApplicationWindow {
 		help.setEditable(false);
 
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Use a bigger database?");
+		chckbxNewCheckBox.setToolTipText("Use a bigger database?");
 		chckbxNewCheckBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				System.out.println("Changing table...");
