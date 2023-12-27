@@ -5,16 +5,18 @@
 
 package com.ucjc.generated;
 
-import java_cup.runtime.*;
-import java_cup.runtime.Symbol;
-import java.util.LinkedList;
-import com.ucjc.utils.*;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import com.ucjc.utils.TError;
+import java_cup.runtime.Symbol;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -213,7 +215,7 @@ public class Parser2 extends java_cup.runtime.lr_parser {
 
     public static LinkedList<TError> SyntaxErrorTable = new LinkedList<TError>();
 
-    //Metodo al que se llama automaticamente ante algun error sintactico
+    //Method that is automatically called when there is a syntax error
     public void syntax_error(Symbol s) {
     Object value = s.value;
     String lexeme = (value != null) ? value.toString() : "null";
@@ -256,13 +258,6 @@ public class Parser2 extends java_cup.runtime.lr_parser {
         public LinkedList clearTable(){
       SyntaxErrorTable.clear();
       return SyntaxErrorTable;
-    }
-
-    public String modifyString(Object input) {
-    // Realiza las modificaciones deseadas
-    result = input.toString(); // Ejemplo: convierte a mayúsculas
-    return result;
-
     }
 
     public static List<String> searchInDatabase(String jdbcUrl, String username, String password,
@@ -339,9 +334,6 @@ public String genericSearch(String columnName, String target, String comparisonO
             }
             table.append(System.lineSeparator());
         }
-
-        // System.out.println("Table:");
-        // System.out.println(table.toString());
 
         return table.toString();
     } else {
@@ -436,9 +428,6 @@ public String getAllRecords() {
             }
             table.append(System.lineSeparator());
         }
-
-        // System.out.println("All records in the database:");
-        // System.out.println(table.toString());
 
         return table.toString();
     } else {
