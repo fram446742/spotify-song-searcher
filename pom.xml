@@ -88,8 +88,11 @@
               <phase>package</phase>
               <configuration>
                 <tasks>
-                  <echo file="${project.build.directory}/runme.bat">start jlink-image\bin\javaw -jar modules\${project.artifactId}-${project.version}.jar</echo>
+                  <echo file="${project.build.directory}/runme.bat">start javaw -jar ${project.build.directory}/bin/spotify-song-searcher-1.0-Beta.jar</echo>
                 </tasks>
+                <excludes>
+                  <exclude>jlink-image/**</exclude>
+                </excludes>
               </configuration>
               <goals>
                 <goal>run</goal>
@@ -138,36 +141,6 @@
             </archive>
             <outputDirectory>${project.build.directory}/bin</outputDirectory>
           </configuration>
-        </plugin>
-
-        <!-- Makes the jLink setup so you can give it to your friends  -->
-        <plugin>
-          <groupId>org.moditect</groupId>
-          <artifactId>moditect-maven-plugin</artifactId>
-          <version>1.1.0</version>
-          <executions>
-            <execution>
-              <id>create-runtime-image</id>
-              <phase>package</phase>
-              <goals>
-                <goal>create-runtime-image</goal>
-              </goals>
-              <configuration>
-                <modulePath>
-                  <path>${project.build.directory}/modules</path>
-                </modulePath>
-                <modules>
-                  <module>${project.groupId}</module>
-                </modules>
-                <launcher>
-                  <name>${project.groupId}</name>
-                </launcher>
-                <compression>2</compression>
-                <stripDebug>true</stripDebug>
-                <outputDirectory>${project.build.directory}/jlink-image</outputDirectory>
-              </configuration>
-            </execution>
-          </executions>
         </plugin>
 
         <plugin>
