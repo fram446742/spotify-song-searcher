@@ -83,7 +83,7 @@ DIGIT = [0-9]
 //--------> White Spaces and Ignored Text
 [A-Za-z]+ { /* Ignore other text*/ }
 [ \t\f]+ | \r?\n | \r { /* Ignore white spaces and line breaks */ }
-[\p{L}\p{M}\p{P}&&[^\"=><.]]+ { /* Ignore other text*/ }
+[\p{L}\p{S}\p{M}\p{P}&&[^\"=><]]+ { /* Ignore other text*/ }
 
 //--------> Lexical Errors
 .  {

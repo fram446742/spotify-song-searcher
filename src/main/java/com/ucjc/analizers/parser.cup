@@ -18,7 +18,7 @@ import com.ucjc.utils.TError;
 
 import java_cup.runtime.Symbol;
 
-/*--------------------2. Options and statements--------------------*/
+/*--------------------2. Options and Statements--------------------*/
 
 parser code {:
     // Import necessary packages and define additional code if needed
@@ -271,7 +271,12 @@ QUERY ::= Search:res
     System.out.println("QUERY: " + result);
   :};
 
-Search ::= Field:a SEARCH | Field:a
+Search ::= Field:a Search:b
+  {:
+    RESULT = a + b;
+    System.out.println("Search: " + RESULT);
+  :} 
+  | Field:a
   {: 
     RESULT = a;
     System.out.println("Search: " + RESULT);

@@ -59,22 +59,32 @@ public class Parser extends java_cup.runtime.lr_parser {
     unpackFromStrings(new String[] {
     "\000\036\000\016\004\013\005\004\006\006\007\021\010" +
     "\012\012\011\001\002\000\004\013\022\001\002\000\004" +
-    "\002\000\001\002\000\004\014\036\001\002\000\006\002" +
-    "\ufff9\011\ufff9\001\002\000\004\002\035\001\002\000\004" +
-    "\002\ufffd\001\002\000\016\014\uffed\015\033\016\027\017" +
-    "\032\020\031\021\030\001\002\000\004\013\022\001\002" +
-    "\000\006\002\ufffb\011\ufffb\001\002\000\006\002\ufffe\011" +
-    "\024\001\002\000\006\002\ufffa\011\ufffa\001\002\000\006" +
-    "\002\ufffc\011\ufffc\001\002\000\006\002\ufff8\011\ufff8\001" +
-    "\002\000\004\013\022\001\002\000\006\002\uffec\011\uffec" +
-    "\001\002\000\006\002\ufff4\011\ufff4\001\002\000\004\002" +
-    "\uffff\001\002\000\006\002\ufff6\011\ufff6\001\002\000\004" +
-    "\014\034\001\002\000\004\014\ufff1\001\002\000\004\014" +
-    "\uffee\001\002\000\004\014\uffef\001\002\000\004\014\ufff0" +
-    "\001\002\000\004\014\ufff2\001\002\000\006\002\ufff3\011" +
-    "\ufff3\001\002\000\004\002\001\001\002\000\006\002\uffeb" +
-    "\011\uffeb\001\002\000\006\002\ufff7\011\ufff7\001\002\000" +
-    "\006\002\ufff5\011\ufff5\001\002" });
+    "\002\000\001\002\000\004\014\036\001\002\000\020\002" +
+    "\ufff9\004\ufff9\005\ufff9\006\ufff9\007\ufff9\010\ufff9\012\ufff9" +
+    "\001\002\000\004\002\035\001\002\000\004\002\ufffd\001" +
+    "\002\000\016\014\uffed\015\033\016\027\017\032\020\031" +
+    "\021\030\001\002\000\004\013\022\001\002\000\020\002" +
+    "\ufffb\004\ufffb\005\ufffb\006\ufffb\007\ufffb\010\ufffb\012\ufffb" +
+    "\001\002\000\020\002\ufffe\004\013\005\004\006\006\007" +
+    "\021\010\012\012\011\001\002\000\020\002\ufffa\004\ufffa" +
+    "\005\ufffa\006\ufffa\007\ufffa\010\ufffa\012\ufffa\001\002\000" +
+    "\020\002\ufffc\004\ufffc\005\ufffc\006\ufffc\007\ufffc\010\ufffc" +
+    "\012\ufffc\001\002\000\020\002\ufff8\004\ufff8\005\ufff8\006" +
+    "\ufff8\007\ufff8\010\ufff8\012\ufff8\001\002\000\004\013\022" +
+    "\001\002\000\020\002\uffec\004\uffec\005\uffec\006\uffec\007" +
+    "\uffec\010\uffec\012\uffec\001\002\000\020\002\ufff4\004\ufff4" +
+    "\005\ufff4\006\ufff4\007\ufff4\010\ufff4\012\ufff4\001\002\000" +
+    "\004\002\uffff\001\002\000\020\002\ufff6\004\ufff6\005\ufff6" +
+    "\006\ufff6\007\ufff6\010\ufff6\012\ufff6\001\002\000\004\014" +
+    "\034\001\002\000\004\014\ufff1\001\002\000\004\014\uffee" +
+    "\001\002\000\004\014\uffef\001\002\000\004\014\ufff0\001" +
+    "\002\000\004\014\ufff2\001\002\000\020\002\ufff3\004\ufff3" +
+    "\005\ufff3\006\ufff3\007\ufff3\010\ufff3\012\ufff3\001\002\000" +
+    "\004\002\001\001\002\000\020\002\uffeb\004\uffeb\005\uffeb" +
+    "\006\uffeb\007\uffeb\010\uffeb\012\uffeb\001\002\000\020\002" +
+    "\ufff7\004\ufff7\005\ufff7\006\ufff7\007\ufff7\010\ufff7\012\ufff7" +
+    "\001\002\000\020\002\ufff5\004\ufff5\005\ufff5\006\ufff5\007" +
+    "\ufff5\010\ufff5\012\ufff5\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -87,13 +97,14 @@ public class Parser extends java_cup.runtime.lr_parser {
     "\001\001\000\002\001\001\000\004\014\036\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\004" +
     "\013\025\001\001\000\004\011\024\001\001\000\002\001" +
-    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001\000\004\011\022\001\001\000\002\001" +
+    "\001\000\020\002\023\003\014\004\013\005\015\006\006" +
+    "\007\016\010\017\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\004\011\022\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001" });
+    "\001\001\000\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -419,13 +430,19 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 2: // Search ::= Field SEARCH 
+          case 2: // Search ::= Field Search 
             {
               String RESULT =null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-
+		int bleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int bright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String b = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		
+    RESULT = a + b;
+    System.out.println("Search: " + RESULT);
+  
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("Search",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;

@@ -24,20 +24,7 @@
     <dependency>
       <groupId>com.github.vbmacher</groupId>
       <artifactId>java-cup-runtime</artifactId>
-      <version>11b-20160615-1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.github.vbmacher</groupId>
-      <artifactId>java-cup</artifactId>
-      <version>11b-20160615-1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.github.vbmacher</groupId>
-      <artifactId>cup-maven-plugin</artifactId>
-      <version>11b-20160615-1</version>
-      <type>maven-plugin</type>
+      <version>11b-20160615-3</version>
     </dependency>
 
     <dependency>
@@ -153,7 +140,8 @@
           <configuration>
             <archive>
               <manifest>
-                <mainClass>${mainClass}</mainClass>
+                <addClasspath>true</addClasspath>
+                <mainClass>com.ucjc.app.ApplicationWindow</mainClass>
               </manifest>
             </archive>
             <outputDirectory>${project.build.directory}/bin</outputDirectory>
@@ -194,7 +182,7 @@
                 <goal>copy-dependencies</goal>
               </goals>
               <configuration>
-                <outputDirectory>${project.build.directory}/modules</outputDirectory>
+                <outputDirectory>${project.build.directory}\modules</outputDirectory>
                 <includeScope>runtime</includeScope>
               </configuration>
             </execution>
@@ -205,7 +193,7 @@
                 <goal>copy-dependencies</goal>
               </goals>
               <configuration>
-                <outputDirectory>${project.basedir}/lib</outputDirectory>
+                <outputDirectory>${project.basedir}\lib</outputDirectory>
                 <includeScope>runtime</includeScope>
               </configuration>
             </execution>

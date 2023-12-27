@@ -37,7 +37,7 @@ echo Current Directory: %CD%
 
 REM Execute the Java Cup command in the current location
 @REM java -jar "%LIB_DIR%\java-cup-11b.jar" -parser Parser -symbols Sym0 "parser.cup"
-java -jar "%LIB_DIR%\java-cup-11b-20160615-3.jar" -parser Parser -symbols Sym0 "parser.cup"
+java -jar "%LIB_DIR%\java-cup-11b.jar" -parser Parser -symbols Sym0 "parser.cup"
 
 REM Check if Parser.java file was created before attempting to move it
 if exist "Parser.java" (
