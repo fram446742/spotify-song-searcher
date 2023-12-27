@@ -44,7 +44,6 @@ import com.ucjc.utils.*;
 %ignorecase
 %line
 
-
 //------> Regular expressions
 // Define the {NUM} macro
 NUM = [0-9]+
@@ -66,7 +65,6 @@ DIGIT = [0-9]
 <YYINITIAL> [AaÁá][Ll][Bb][Uu][Mm] { return new Symbol(Sym.ALBUM, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Mm][Ii][Ll][Ll][Ii][Oo][Nn]([ _])?[Ss][Tt][Rr][Ee][Aa][Mm][Ss] | ([Mm][Ii][Ll][Ll][Oo][Nn][Ee][Ss])?([ _])?([Dd][Ee])?([ _])?[Rr][Ee][Pp][Rr][Oo][Dd][Uu][Cc][Cc][Ii][Oo][Nn][Ee][Ss] | ([Nn][UuÚú][Mm][Ee][Rr][Oo])?([ _])?([Dd][Ee])?([ _])?[Rr][Ee][Pp][Rr][Oo][Dd][Uu][Cc][Cc][Ii][Oo][Nn][Ee][Ss] { return new Symbol(Sym.MILLION_STREAMS, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Nn][Uu][Mm][Bb][Ee][Rr] | [Pp][Oo][Ss][Ii][Tt][Ii][Oo][Nn] | [Nn][UuÚú][Mm][Ee][Rr][Oo] | [Pp][Uu][Ee][Ss][Tt][Oo] | [Pp][Oo][Ss][Ii][Cc][Ii][OoÓó][Nn] { return new Symbol(Sym.NUMBER, yyline, yycolumn, yytext()); }
-
 
 //--------> Text Strings
 <YYINITIAL> \"[^\"]+\" { return new Symbol(Sym.STRING, yyline, yycolumn, yytext().substring(1, yytext().length() - 1)); }

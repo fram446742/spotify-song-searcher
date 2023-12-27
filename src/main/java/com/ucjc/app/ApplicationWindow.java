@@ -1,51 +1,47 @@
-package com.ucjc;
+package com.ucjc.app;
 
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.ListModel;
-
-import java.awt.event.ActionListener;
-import java.io.*;
-import java.util.LinkedList;
-import java.awt.event.ActionEvent;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.JTextArea;
-import javax.swing.JScrollBar;
-import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
+import java.awt.Cursor;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.util.LinkedList;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 
 import com.ucjc.generated.Lexer;
 import com.ucjc.generated.Lexer2;
 import com.ucjc.generated.Parser;
 import com.ucjc.generated.Parser2;
 import com.ucjc.utils.TError;
-
-import javax.swing.border.EtchedBorder;
-
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-
-import javax.swing.JList;
-import javax.swing.JTextPane;
-import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JPasswordField;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JCheckBox;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
 
 public class ApplicationWindow {
 
@@ -114,6 +110,7 @@ public class ApplicationWindow {
 				}
 			}
 		});
+
 		txtEnterYourSearch.setToolTipText("Enter your search term");
 		txtEnterYourSearch.setBounds(10, 18, 550, 38);
 		panel_1.add(txtEnterYourSearch);
@@ -185,6 +182,7 @@ public class ApplicationWindow {
 				copyToClipboard(errors);
 			}
 		});
+
 		errorLog.setToolTipText("Error log: Click to copy");
 		errorLog.setEditable(false);
 		scrollPane_1.setViewportView(errorLog);
@@ -198,6 +196,7 @@ public class ApplicationWindow {
 				}
 			}
 		});
+
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String text = txtEnterYourSearch.getText();
@@ -305,6 +304,7 @@ public class ApplicationWindow {
 				}
 			}
 		});
+
 		btnNewButton.setBounds(570, 18, 99, 38);
 		panel_1.add(btnNewButton);
 
@@ -359,6 +359,7 @@ public class ApplicationWindow {
 				});
 			}
 		});
+
 		chckbxNewCheckBox.setBounds(693, 53, 141, 31);
 		frame.getContentPane().add(chckbxNewCheckBox);
 
@@ -391,7 +392,7 @@ public class ApplicationWindow {
 				"We welcome you to our music database search system. To facilitate your experience, we provide the following search criteria:\r\n\r\nSONG_NAME: Name of the song. (String)\r\nARTIST: Name of the artist. (String)\r\nALBUM: Name of the album. (String)\r\nNUMBER: Number of the song on the album. (Integer)\r\nMILLION_STREAMS: Number of millions of views. (Integer)\r\n\r\nPlease note that the RELEASE_DATE field is not enabled for searches.");
 		errorLog_1.setEditable(false);
 		scrollPane_3.setViewportView(errorLog_1);
-		
+
 		JTextPane textPane = new JTextPane();
 		textPane.setForeground(Color.WHITE);
 		textPane.setOpaque(false);
@@ -416,18 +417,18 @@ public class ApplicationWindow {
 	}
 
 	// TODO
-	public class ConsoleCapture {
-		public static void main(String[] args) {
-			// Create a new PrintStream that writes to a ByteArrayOutputStream
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			PrintStream customOut = new PrintStream(baos);
+	// public static class ConsoleCapture {
+	// public static void main(String[] args) {
+	// // Create a new PrintStream that writes to a ByteArrayOutputStream
+	// ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	// PrintStream customOut = new PrintStream(baos);
 
-			// Redirect System.out to the custom PrintStream
-			System.setOut(customOut);
+	// // Redirect System.out to the custom PrintStream
+	// System.setOut(customOut);
 
-			// Retrieve the captured output
-			String capturedOutput = baos.toString();
-			System.out.println("Captured output:\n" + capturedOutput);
-		}
-	}
+	// // Retrieve the captured output
+	// String capturedOutput = baos.toString();
+	// System.out.println("Captured output:\n" + capturedOutput);
+	// }
+	// }
 }

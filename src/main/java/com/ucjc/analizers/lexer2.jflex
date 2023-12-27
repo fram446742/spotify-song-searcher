@@ -44,7 +44,6 @@ import com.ucjc.utils.*;
 %ignorecase
 %line
 
-
 //------> Regular expressions
 // Define the {NUM} macro
 NUM = [0-9]+
@@ -65,7 +64,6 @@ DIGIT = [0-9]
 <YYINITIAL> [Ss][Oo][Nn][Gg]([ _])?[Nn][Aa][Mm][Ee] | [Ss][Oo][Nn][Gg] | [Nn][Aa][Mm][Ee] | [Tt][Ii][Tt][Ll][Ee] | [Tt][IiÍí][Tt][Uu][Ll][Oo] | [Nn][Oo][Mm][Bb][Rr][Ee] | [Cc][Aa][Nn][Cc][Ii][OoÓó][Nn] { return new Symbol(Sym.SONG_NAME, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Aa][Rr][Tt][Ii][Ss][Tt] | [Aa][Rr][Tt][Ii][Ss][Tt][Aa] { return new Symbol(Sym.ARTIST, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Nn][Uu][Mm][Bb][Ee][Rr] | [Pp][Oo][Ss][Ii][Tt][Ii][Oo][Nn] | [Nn][UuÚú][Mm][Ee][Rr][Oo] | [Pp][Uu][Ee][Ss][Tt][Oo] | [Pp][Oo][Ss][Ii][Cc][Ii][OoÓó][Nn] { return new Symbol(Sym.NUMBER, yyline, yycolumn, yytext()); }
-//--------> TODO
 <YYINITIAL> [Aa][Rr][Tt][Ii][Ss][Tt]([ _])?[Cc][Oo][Uu][Nn][Tt] | ([Nn][UuÚú][Mm][Ee][Rr][Oo])?([ _])?([Dd][Ee])?([ _])?[Aa][Rr][Tt][Ii][Ss][Tt][Aa][Ss] | ([Cc][Aa][Nn][Tt][Ii][Dd][Aa][Dd])?([ _])?([Dd][Ee])?([ _])?[Aa][Rr][Tt][Ii][Ss][Tt][Aa][Ss] { return new Symbol(Sym.ARTIST_COUNT, yyline, yycolumn, yytext()); }
 <YYINITIAL> ([Rr][Ee][Ll][Ee][Aa][Ss][Ee][Dd])?([ _])?[Yy][Ee][Aa][Rr] | [Aa][ÑñNn][Oo]([ _])?([Dd][Ee])?([ _])?([Ll][Aa][Nn][Zz][Aa][Mm][Ii][Ee][Nn][Tt][Oo])? { return new Symbol(Sym.RELEASED_YEAR, yyline, yycolumn, yytext()); }
 <YYINITIAL> ([Rr][Ee][Ll][Ee][Aa][Ss][Ee][Dd])?([ _])?[Mm][Oo][Nn][Tt][Hh] | [Mm][Ee][Ss]([ _])?([Dd][Ee])?([ _])?([Ll][Aa][Nn][Zz][Aa][Mm][Ii][Ee][Nn][Tt][Oo])? { return new Symbol(Sym.RELEASED_MONTH, yyline, yycolumn, yytext()); }
@@ -81,7 +79,6 @@ DIGIT = [0-9]
 <YYINITIAL> [Ii][Nn][Ss][Tt][Rr][Uu][Mm][Ee][Nn][Tt][Aa][Ll][Nn][Ee][Ss][Ss] | [Ii][Nn][Ss][Tt][Rr][Uu][Mm][Ee][Nn][Tt][Aa][Ll][Ii][Dd][Aa][Dd] { return new Symbol(Sym.INSTRUMENTALNESS, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Ll][Ii][Vv][Ee][Nn][Ee][Ss][Ss] | [Ee][Nn][Vv][Ii][Vv][Ee][Cc][Ii][Mm][Ii][Ee][Nn][Tt][Oo] | [Vv][Ii][Vv][Aa][Cc][Ii][Dd][Aa][Dd] { return new Symbol(Sym.LIVENESS, yyline, yycolumn, yytext()); }
 <YYINITIAL> [Ss][Pp][Ee][Ee][Cc][Hh][Ii][Nn][Ee][Ss][Ss] | [Hh][Aa][Bb][Ll][Aa] | [Hh][Aa][Bb][Ll][Aa][Dd][Uu][Rr][Ii][Aa] | ([Ss][Pp][Oo][Kk][Ee][Nn])?([ _])?[Ww][Oo][Rr][Dd]([Ss])?([ _])?([Pp][Ee][Rr][Cc][Ee][Nn][Tt][Aa][Gg][Ee])? | ([Pp][Oo][Rr][Cc][Ee][Nn][Tt][Aa][Jj][Ee])?([ _])?([Dd][Ee])?([ _])?[Pp][Aa][Ll][Aa][Bb][Rr][Aa][Ss]([ _])?([Hh][Aa][Bb][Ll][Aa][Dd][Aa][Ss])? { return new Symbol(Sym.SPEECHINESS, yyline, yycolumn, yytext()); }
-
 
 //--------> Text Strings
 <YYINITIAL> \"[^\"]+\" { return new Symbol(Sym.STRING, yyline, yycolumn, yytext().substring(1, yytext().length() - 1)); }

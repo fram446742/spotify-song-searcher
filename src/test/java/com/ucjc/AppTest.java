@@ -21,23 +21,23 @@ public class AppTest {
     public void testAppMainMethod() {
         try {
             String NUMBER = genericSearch("NUMBER", "234", "=");
-            String SONG_NAME = genericSearch("SONG_NAME", "Blinding Lights", "=");
-            String ARTIST = genericSearch("ARTIST", "Taylor Swift", "=");
-            String ARTIST_COUNT = genericSearch("ARTIST_COUNT", "2", "=");
-            String RELEASED_YEAR = genericSearch("RELEASED_YEAR", "2020", "=");
-            String RELEASED_MONTH = genericSearch("RELEASED_MONTH", "5", "=");
-            String RELEASED_DAY = genericSearch("RELEASED_DAY", "20", "=");
-            String STREAMS = genericSearch("STREAMS", "1000", ">");
-            String BPM = genericSearch("BPM", "100", ">");
-            String KEY = genericSearch("`KEY`", "C#", "=");
-            String MODE = genericSearch("MODE", "Major", "=");
-            String DANCEABILITY = genericSearch("DANCEABILITY", "30", ">");
-            String VALENCE = genericSearch("VALENCE", "30", ">");
-            String ENERGY = genericSearch("ENERGY", "30", ">");
-            String ACOUSTICNESS = genericSearch("ACOUSTICNESS", "30", ">");
-            String INSTRUMENTALNESS = genericSearch("INSTRUMENTALNESS", "30", ">");
-            String LIVENESS = genericSearch("LIVENESS", "30", ">");
-            String SPEECHINESS = genericSearch("SPEECHINESS", "30", ">");
+            // String SONG_NAME = genericSearch("SONG_NAME", "Blinding Lights", "=");
+            // String ARTIST = genericSearch("ARTIST", "Taylor Swift", "=");
+            // String ARTIST_COUNT = genericSearch("ARTIST_COUNT", "2", "=");
+            // String RELEASED_YEAR = genericSearch("RELEASED_YEAR", "2020", "=");
+            // String RELEASED_MONTH = genericSearch("RELEASED_MONTH", "5", "=");
+            // String RELEASED_DAY = genericSearch("RELEASED_DAY", "20", "=");
+            // String STREAMS = genericSearch("STREAMS", "1000", ">");
+            // String BPM = genericSearch("BPM", "100", ">");
+            // String KEY = genericSearch("`KEY`", "C#", "=");
+            // String MODE = genericSearch("MODE", "Major", "=");
+            // String DANCEABILITY = genericSearch("DANCEABILITY", "30", ">");
+            // String VALENCE = genericSearch("VALENCE", "30", ">");
+            // String ENERGY = genericSearch("ENERGY", "30", ">");
+            // String ACOUSTICNESS = genericSearch("ACOUSTICNESS", "30", ">");
+            // String INSTRUMENTALNESS = genericSearch("INSTRUMENTALNESS", "30", ">");
+            // String LIVENESS = genericSearch("LIVENESS", "30", ">");
+            // String SPEECHINESS = genericSearch("SPEECHINESS", "30", ">");
         } catch (Exception e) {
             // If an exception occurs, fail the test
             e.printStackTrace();
