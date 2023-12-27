@@ -36,7 +36,8 @@ if not exist "..\generated" mkdir "..\generated"
 echo Current Directory: %CD%
 
 REM Execute the Java Cup command in the current location
-java -jar "%LIB_DIR%\java-cup-11b.jar" -parser Parser2 -symbols Sym "parser2.cup"
+@REM java -jar "%LIB_DIR%\java-cup-11b.jar" -parser Parser2 -symbols Sym "parser2.cup"
+java -jar "%LIB_DIR%\java-cup-11b-20160615-3.jar" -parser Parser2 -symbols Sym "parser2.cup"
 
 REM Check if Parser2.java file was created before attempting to move it
 if exist "Parser2.java" (

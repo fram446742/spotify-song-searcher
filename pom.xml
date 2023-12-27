@@ -20,6 +20,26 @@
   </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>com.github.vbmacher</groupId>
+      <artifactId>java-cup-runtime</artifactId>
+      <version>11b-20160615-1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.vbmacher</groupId>
+      <artifactId>java-cup</artifactId>
+      <version>11b-20160615-1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.vbmacher</groupId>
+      <artifactId>cup-maven-plugin</artifactId>
+      <version>11b-20160615-1</version>
+      <type>maven-plugin</type>
+    </dependency>
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
@@ -88,11 +108,8 @@
               <phase>package</phase>
               <configuration>
                 <tasks>
-                  <echo file="${project.build.directory}/runme.bat">start javaw -jar ${project.build.directory}/bin/spotify-song-searcher-1.0-Beta.jar</echo>
+                  <echo file="${project.build.directory}/runme.bat">start java -jar ${project.build.directory}/bin/spotify-song-searcher-1.0-Beta.jar</echo>
                 </tasks>
-                <excludes>
-                  <exclude>jlink-image/**</exclude>
-                </excludes>
               </configuration>
               <goals>
                 <goal>run</goal>
