@@ -81,6 +81,12 @@ parser code {:
         return results;
     }
 
+    try {
+      Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    }
+
     try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
         // Build the SQL query dynamically based on the comparison operator
         String sql = "SELECT * FROM " + tableName + " WHERE " + columnName + " " + comparisonOperator + " ?";
@@ -158,6 +164,12 @@ public String genericSearch(String columnName, String target, String comparisonO
 private static List<String> getColumnNames(String jdbcUrl, String username, String password, String tableName) {
     List<String> columnNames = new ArrayList<>();
 
+    try {
+      Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    }
+
     try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
         DatabaseMetaData metaData = connection.getMetaData();
         try (ResultSet resultSet = metaData.getColumns(null, null, tableName, null)) {
@@ -180,6 +192,12 @@ public static List<String> getAllFromDatabase(String jdbcUrl, String username, S
     if (jdbcUrl == null || username == null || password == null || tableName == null) {
         // Add appropriate error handling or logging for invalid input parameters
         return results;
+    }
+
+    try {
+      Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
     }
 
     try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
