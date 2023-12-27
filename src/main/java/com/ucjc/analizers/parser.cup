@@ -1,20 +1,24 @@
-/*--------------------1. Codigo del Usuario---------------------*/
+/*--------------------1. User Code---------------------*/
 
-//------> Paquetes e importaciones
-package com.ucjc.compiled.generated;
+//------> Packages and imports
+package com.ucjc.generated;
 
-import java_cup.runtime.*;
-import java_cup.runtime.Symbol;
-import java.util.LinkedList;
-import com.ucjc.utils.*;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-/*--------------------2. Opciones y declaraciones--------------------*/
+import com.ucjc.utils.TError;
+
+import java_cup.runtime.Symbol;
+
+/*--------------------2. Options and statements--------------------*/
 
 parser code {:
     // Import necessary packages and define additional code if needed
@@ -24,7 +28,7 @@ parser code {:
 
     public static LinkedList<TError> SyntaxErrorTable = new LinkedList<TError>();
 
-    //Metodo al que se llama automaticamente ante algun error sintactico
+    //Method that is automatically called when there is a syntax error
     public void syntax_error(Symbol s) {
     Object value = s.value;
     String lexeme = (value != null) ? value.toString() : "null";
@@ -55,7 +59,6 @@ parser code {:
     SyntaxErrorTable.add(data);
     }
 
-
     public int error_count() {
         return SyntaxErrorTable.size();
     }
@@ -64,29 +67,9 @@ parser code {:
       return SyntaxErrorTable;
     }
 
-    public String modifyString(Object input) {
-    // Realiza las modificaciones deseadas
-    result = input.toString(); // Ejemplo: convierte a mayúsculas
-    return result;
-
-    }
-
-    public static String searchInSQLFile(String filePath, String target) {
-    String result = null;
-
-    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-        String line;
-        while ((line = reader.readLine()) != null) {
-            if (line.contains(target)) {
-                result = line;
-                break; // Terminate the search after finding the first match
-            }
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-
-    return result;
+        public LinkedList clearTable(){
+      SyntaxErrorTable.clear();
+      return SyntaxErrorTable;
     }
 
     public static List<String> searchInDatabase(String jdbcUrl, String username, String password,
@@ -129,7 +112,6 @@ parser code {:
     return results;
 }
 
-
 public String genericSearch(String columnName, String target, String comparisonOperator) {
     String jdbcUrl = "jdbc:mysql://sql8.freesqldatabase.com:3306/sql8672470";
     String username = "sql8672470";
@@ -140,20 +122,57 @@ public String genericSearch(String columnName, String target, String comparisonO
     System.out.println("Column name (filter for the database): " + columnName);
     System.out.println("Comparison operator: " + comparisonOperator);
 
-    List<String> foundValues = searchInDatabase(jdbcUrl, username, password, tableName, columnName, target, comparisonOperator);
+    // Get column names from the database
+    List<String> columnNames = getColumnNames(jdbcUrl, username, password, tableName);
 
-    if (!foundValues.isEmpty()) {
-        System.out.println("Values found: ");
-        for (String value : foundValues) {
-            System.out.println(value);
+    if (!columnNames.isEmpty()) {
+        // Build a table with column names and values
+        StringBuilder table = new StringBuilder();
+
+        // Add column names as headers
+        for (String colName : columnNames) {
+            table.append(String.format("%-20s", colName)); // Adjust the width as needed
         }
-        result = String.join(System.lineSeparator(), foundValues);
-        return result;
+        table.append(System.lineSeparator());
+
+        // Retrieve values based on the provided search criteria
+        List<String> foundValues = searchInDatabase(jdbcUrl, username, password, tableName, columnName, target, comparisonOperator);
+
+        // Add values for each row
+        for (String value : foundValues) {
+            String[] rowValues = value.split(", ");
+            for (String rowValue : rowValues) {
+                table.append(String.format("%-20s", rowValue)); // Adjust the width as needed
+            }
+            table.append(System.lineSeparator());
+        }
+
+        return table.toString();
     } else {
-        System.out.println("Word or number not found in the database.");
+        System.out.println("Unable to retrieve column names from the database.");
         return null;
     }
 }
+
+// Helper method to retrieve column names from the database
+private static List<String> getColumnNames(String jdbcUrl, String username, String password, String tableName) {
+    List<String> columnNames = new ArrayList<>();
+
+    try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet resultSet = metaData.getColumns(null, null, tableName, null)) {
+            while (resultSet.next()) {
+                String columnName = resultSet.getString("COLUMN_NAME");
+                columnNames.add(columnName);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); // Log or handle the exception appropriately
+    }
+
+    return columnNames;
+}
+
 
 public static List<String> getAllFromDatabase(String jdbcUrl, String username, String password, String tableName) {
     List<String> results = new ArrayList<>();
@@ -197,14 +216,32 @@ public String getAllRecords() {
     String username = "sql8672470";
     String password = "tjUFjunKny";
     String tableName = "Spotify";
+
     List<String> allValues = getAllFromDatabase(jdbcUrl, username, password, tableName);
 
     if (!allValues.isEmpty()) {
-        System.out.println("All values in the database: ");
-        for (String value : allValues) {
-            System.out.println(value);
+        // Get column names from the database
+        List<String> columnNames = getColumnNames(jdbcUrl, username, password, tableName);
+
+        // Build a table with column names and values
+        StringBuilder table = new StringBuilder();
+
+        // Add column names as headers
+        for (String colName : columnNames) {
+            table.append(String.format("%-20s", colName)); // Adjust the width as needed
         }
-        return String.join(System.lineSeparator(), allValues);
+        table.append(System.lineSeparator());
+
+        // Add values for each row
+        for (String value : allValues) {
+            String[] rowValues = value.split(", ");
+            for (String rowValue : rowValues) {
+                table.append(String.format("%-20s", rowValue)); // Adjust the width as needed
+            }
+            table.append(System.lineSeparator());
+        }
+
+        return table.toString();
     } else {
         System.out.println("No records found in the database.");
         return null;
@@ -219,10 +256,9 @@ action code
 :}
 
 /* Define terminal and non-terminal symbols */
-terminal  COMMA, WHITE_SPACE;
-terminal String SONG_NAME, ARTIST, ALBUM, RELEASE_DATE, NUMBER, MILLION_STREAMS, SEARCH, ALL, STRING, NUM, DECIMAL, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS;
-non terminal String Search, Field, SongNameField, ArtistField, AlbumField, ReleaseDateField, NumberField, MillionStreamsField, CompareString, QUERY, ComparisonOperator;
-non terminal Integer CompareNum;
+terminal String SONG_NAME, ARTIST, NUMBER, ALBUM, MILLION_STREAMS, SEARCH, ALL, STRING, NUM, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS;
+non terminal String Search, Field, SongNameField, ArtistField, AlbumField, NumberField, MillionStreamsField, CompareString, QUERY, ComparisonOperator;
+non terminal Object CompareNum;
 
 precedence left EQUALS,
                MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL;
@@ -243,6 +279,7 @@ Search ::= Field:a SEARCH | Field:a
   | ALL
   {:
     RESULT = getAllRecords();
+    System.out.println("Getting everything... " + RESULT);
   :}
   ;
 
@@ -271,59 +308,57 @@ Field ::= NumberField:fld1
     RESULT = fld5; 
     System.out.println("Field: " + RESULT);
   :}
-        | ReleaseDateField:fld6
-          {: 
-    RESULT = fld6; 
-    System.out.println("Field: " + RESULT);
-  :}
   ;
 
 NumberField ::= NUMBER:numericValue CompareNum:comparisonValue 
   {: 
-    RESULT = genericSearch(numericValue, String.valueOf(comparisonValue), "="); 
+    RESULT = genericSearch("NUMBER", String.valueOf(comparisonValue), "="); 
     System.out.println("Specific field: " + RESULT);
   :};
 
 SongNameField ::= SONG_NAME:songName CompareString:comparisonString 
   {: 
-    RESULT = genericSearch(songName, comparisonString, "="); 
+    RESULT = genericSearch("SONG_NAME", comparisonString, "="); 
     System.out.println("Specific field: " + RESULT);
+    System.out.println("SONG_NAME: " + songName);
   :};
 
 ArtistField ::= ARTIST:artistName CompareString:comparisonString 
   {: 
-    RESULT = genericSearch(artistName, comparisonString, "="); 
+    RESULT = genericSearch("ARTIST", comparisonString, "="); 
     System.out.println("Specific field: " + RESULT);
   :};
 
 AlbumField ::= ALBUM:albumName CompareString:comparisonString 
   {: 
-    RESULT = genericSearch(albumName, comparisonString, "="); 
+    RESULT = genericSearch("ALBUM", comparisonString, "="); 
     System.out.println("Specific field: " + RESULT);
   :};
 
-MillionStreamsField ::= MILLION_STREAMS:millionStreams ComparisonOperator:comparisonOperator DECIMAL:number | MILLION_STREAMS:millionStreams ComparisonOperator:comparisonOperator NUM:number
+MillionStreamsField ::= MILLION_STREAMS:millionStreams ComparisonOperator:comparisonOperator NUM:number
   {: 
-    RESULT = genericSearch(millionStreams, String.valueOf(number), comparisonOperator); 
+    RESULT = genericSearch("MILLION_STREAMS", String.valueOf(number), comparisonOperator); 
     System.out.println("Specific field: " + RESULT);
   :};
 
-
-ReleaseDateField ::= RELEASE_DATE:releaseDate CompareString:comparisonString 
-  {: 
-    RESULT = genericSearch(releaseDate, comparisonString, "="); 
-    System.out.println("Specific field: " + RESULT);
-  :};
 
 ComparisonOperator ::= MORE_THAN:mt {:RESULT = ">"; :}
                      | LESS_THAN:lt {:RESULT = "<"; :}
                      | MORE_THAN_EQUAL:mte {:RESULT = ">="; :}
                      | LESS_THAN_EQUAL:lte {:RESULT = "<="; :}
                      | EQUALS:e {:RESULT = "="; :}
+                     | {:RESULT = "="; :}
                      ;
 
-CompareString ::= EQUALS STRING:stringValue {: RESULT = stringValue; :};
+CompareString ::= STRING:stringValue {: 
+  RESULT = stringValue; 
+    System.out.println("Comparison field: " + stringValue);
 
-CompareNum ::= EQUALS NUM:numberValue {: RESULT = Integer.parseInt(numberValue); :};
+:};
+
+CompareNum ::= NUM:numberValue {: 
+  RESULT = Integer.parseInt(numberValue); 
+  System.out.println("Comparison field: " + numberValue);
+:};
 
 

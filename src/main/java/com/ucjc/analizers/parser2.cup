@@ -1,0 +1,515 @@
+/*--------------------1. User Code---------------------*/
+
+//------> Packages and imports
+package com.ucjc.generated;
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.ucjc.utils.TError;
+
+import java_cup.runtime.Symbol;
+
+/*--------------------2. Options and Statements--------------------*/
+
+parser code {:
+    // Import necessary packages and define additional code if needed
+    public String result = "";
+    public String str = "";
+    public String num = "";
+
+    public static LinkedList<TError> SyntaxErrorTable = new LinkedList<TError>();
+
+    //Method that is automatically called when there is a syntax error
+    public void syntax_error(Symbol s) {
+    Object value = s.value;
+    String lexeme = (value != null) ? value.toString() : "null";
+    int line = s.left;
+    int column = s.right;
+
+    System.out.println("!!!!!!! Syntax Error Recovered !!!!!!!");
+    System.out.println("\t\tLexeme: " + lexeme);
+    System.out.println("\t\tLine: " + line);
+    System.out.println("\t\tColumn: " + column);
+
+    TError data = new TError(lexeme, line, column, "Syntax Error", "Unexpected character");
+    SyntaxErrorTable.add(data);
+    }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception {
+    Object value = s.value;
+    String lexeme = (value != null) ? value.toString() : "null";
+    int line = s.left;
+    int column = s.right;
+
+    System.out.println("!!!!!!! Syntax Error, Panic Mode !!!!!!!");
+    System.out.println("\t\tLexeme: " + lexeme);
+    System.out.println("\t\tLine: " + line);
+    System.out.println("\t\tColumn: " + column);
+
+    TError data = new TError(lexeme, line, column, "Syntax Error", "Unexpected character");
+    SyntaxErrorTable.add(data);
+    }
+
+
+    public int error_count() {
+        return SyntaxErrorTable.size();
+    }
+
+    public LinkedList getTable(){
+      return SyntaxErrorTable;
+    }
+
+        public LinkedList clearTable(){
+      SyntaxErrorTable.clear();
+      return SyntaxErrorTable;
+    }
+
+    public static List<String> searchInDatabase(String jdbcUrl, String username, String password,
+                                            String tableName, String columnName, String targetValue, String comparisonOperator) {
+    List<String> results = new ArrayList<>();
+
+    if (jdbcUrl == null || username == null || password == null || tableName == null || columnName == null || comparisonOperator == null) {
+        // Add appropriate error handling or logging for invalid input parameters
+        return results;
+    }
+
+    try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
+        // Build the SQL query dynamically based on the comparison operator
+        String sql = "SELECT * FROM " + tableName + " WHERE " + columnName + " " + comparisonOperator + " ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            // Set the parameter value
+            statement.setString(1, targetValue);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    // Construct a string representation of the entire row and add it to the results
+                    StringBuilder row = new StringBuilder();
+                    ResultSetMetaData metaData = resultSet.getMetaData();
+                    int columnCount = metaData.getColumnCount();
+                    for (int i = 1; i <= columnCount; i++) {
+                        row.append(resultSet.getString(i));
+                        if (i < columnCount) {
+                            row.append(", ");
+                        }
+                    }
+                    results.add(row.toString());
+                }
+            }
+        }
+    } catch (SQLException e) {
+        // Log or handle the exception appropriately
+        e.printStackTrace();
+    }
+
+    return results;
+}
+
+public String genericSearch(String columnName, String target, String comparisonOperator) {
+    String jdbcUrl = "jdbc:mysql://sql8.freesqldatabase.com:3306/sql8672470";
+    String username = "sql8672470";
+    String password = "tjUFjunKny";
+    String tableName = "Spotify_2023";
+
+    System.out.println("Target (value): " + target);
+    System.out.println("Column name (filter for the database): " + columnName);
+    System.out.println("Comparison operator: " + comparisonOperator);
+
+    // Get column names from the database
+    List<String> columnNames = getColumnNames(jdbcUrl, username, password, tableName);
+
+    if (!columnNames.isEmpty()) {
+        // Build a table with column names and values
+        StringBuilder table = new StringBuilder();
+
+        // Add column names as headers
+        for (String colName : columnNames) {
+            table.append(String.format("%-20s", colName)); // Adjust the width as needed
+        }
+        table.append(System.lineSeparator());
+
+        // Retrieve values based on the provided search criteria
+        List<String> foundValues = searchInDatabase(jdbcUrl, username, password, tableName, columnName, target, comparisonOperator);
+
+        // Add values for each row
+        for (String value : foundValues) {
+            String[] rowValues = value.split(", ");
+            for (String rowValue : rowValues) {
+                table.append(String.format("%-20s", rowValue)); // Adjust the width as needed
+            }
+            table.append(System.lineSeparator());
+        }
+
+        return table.toString();
+    } else {
+        System.out.println("Unable to retrieve column names from the database.");
+        return null;
+    }
+}
+
+// Helper method to retrieve column names from the database
+private static List<String> getColumnNames(String jdbcUrl, String username, String password, String tableName) {
+    List<String> columnNames = new ArrayList<>();
+
+    try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet resultSet = metaData.getColumns(null, null, tableName, null)) {
+            while (resultSet.next()) {
+                String columnName = resultSet.getString("COLUMN_NAME");
+                columnNames.add(columnName);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); // Log or handle the exception appropriately
+    }
+
+    return columnNames;
+}
+
+
+public static List<String> getAllFromDatabase(String jdbcUrl, String username, String password, String tableName) {
+    List<String> results = new ArrayList<>();
+
+    if (jdbcUrl == null || username == null || password == null || tableName == null) {
+        // Add appropriate error handling or logging for invalid input parameters
+        return results;
+    }
+
+    try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
+        // Build the SQL query to select all records from the table
+        String sql = "SELECT * FROM " + tableName;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    // Construct a string representation of the entire row and add it to the results
+                    StringBuilder row = new StringBuilder();
+                    ResultSetMetaData metaData = resultSet.getMetaData();
+                    int columnCount = metaData.getColumnCount();
+                    for (int i = 1; i <= columnCount; i++) {
+                        row.append(resultSet.getString(i));
+                        if (i < columnCount) {
+                            row.append(", ");
+                        }
+                    }
+                    results.add(row.toString());
+                }
+            }
+        }
+    } catch (SQLException e) {
+        // Log or handle the exception appropriately
+        e.printStackTrace();
+    }
+
+    return results;
+}
+
+
+public String getAllRecords() {
+    String jdbcUrl = "jdbc:mysql://sql8.freesqldatabase.com:3306/sql8672470";
+    String username = "sql8672470";
+    String password = "tjUFjunKny";
+    String tableName = "Spotify_2023";
+    
+    List<String> allValues = getAllFromDatabase(jdbcUrl, username, password, tableName);
+
+    if (!allValues.isEmpty()) {
+        // Get column names from the database
+        List<String> columnNames = getColumnNames(jdbcUrl, username, password, tableName);
+
+        // Build a table with column names and values
+        StringBuilder table = new StringBuilder();
+
+        // Add column names as headers
+        for (String colName : columnNames) {
+            table.append(String.format("%-20s", colName)); // Adjust the width as needed
+        }
+        table.append(System.lineSeparator());
+
+        // Add values for each row
+        for (String value : allValues) {
+            String[] rowValues = value.split(", ");
+            for (String rowValue : rowValues) {
+                table.append(String.format("%-20s", rowValue)); // Adjust the width as needed
+            }
+            table.append(System.lineSeparator());
+        }
+
+        return table.toString();
+    } else {
+        System.out.println("No records found in the database.");
+        return null;
+    }
+}
+
+
+:};
+
+action code
+{:
+:}
+
+/* Define terminal and non-terminal symbols */
+terminal String SONG_NAME, ARTIST, NUMBER, ALBUM, MILLION_STREAMS, SEARCH, ALL, STRING, NUM, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS, ARTIST_COUNT, RELEASED_YEAR, RELEASED_MONTH, RELEASED_DAY, STREAMS, BPM, KEY, MODE, DANCEABILITY, VALENCE, ENERGY, ACOUSTICNESS, INSTRUMENTALNESS, LIVENESS, SPEECHINESS, NULL;
+non terminal String Search, Field, SongNameField, ArtistField, AlbumField, NumberField, MillionStreamsField, CompareString, QUERY, ComparisonOperator, ArtistCountField, ReleasedYearField, ReleasedMonthField, ReleasedDayField, StreamsField, BpmField, KeyField, ModeField, DanceabilityField, ValenceField, EnergyField, AcousticnessField, InstrumentalnessField, LivenessField, SpeechinessField;
+non terminal Object CompareNum;
+
+precedence left EQUALS,
+               MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL;
+
+start with QUERY;
+
+QUERY ::= Search:res 
+  {: 
+    result = res; 
+    System.out.println("QUERY: " + result);
+  :};
+
+Search ::= Field:a SEARCH | Field:a
+  {: 
+    RESULT = a;
+    System.out.println("Search: " + RESULT);
+  :}
+  | ALL
+  {:
+    RESULT = getAllRecords();
+    System.out.println("Getting everything... " + RESULT);
+  :}
+  ;
+
+Field ::= NumberField:fld1 
+        {: 
+    RESULT = fld1; 
+    System.out.println("Field: NumberField");
+  :}
+        | SongNameField:fld2
+          {: 
+    RESULT = fld2; 
+    System.out.println("Field: SongNameField");
+  :}
+        | ArtistField:fld3
+          {: 
+    RESULT = fld3; 
+    System.out.println("Field: ArtistField");
+  :}
+        | ArtistCountField:fld4
+          {: 
+    RESULT = fld4; 
+    System.out.println("Field: ArtistCountField");
+  :}
+        | ReleasedYearField:fld5
+          {: 
+    RESULT = fld5; 
+    System.out.println("Field: ReleasedYearField");
+  :}
+        | ReleasedMonthField:fld6
+          {: 
+    RESULT = fld6; 
+    System.out.println("Field: ReleasedMonthField");
+  :}
+        | ReleasedDayField:fld7
+          {: 
+    RESULT = fld7; 
+    System.out.println("Field: ReleasedDayField");
+  :}
+        | StreamsField:fld8
+          {: 
+    RESULT = fld8; 
+    System.out.println("Field: StreamsField");
+  :}
+        | BpmField:fld9
+          {: 
+    RESULT = fld9; 
+    System.out.println("Field: BpmField");
+  :}
+        | KeyField:fld10
+          {: 
+    RESULT = fld10; 
+    System.out.println("Field: KeyField");
+  :}
+        | ModeField:fld11
+          {: 
+    RESULT = fld11; 
+    System.out.println("Field: ModeField");
+  :}
+        | DanceabilityField:fld12
+          {: 
+    RESULT = fld12; 
+    System.out.println("Field: DanceabilityField");
+  :}
+        | ValenceField:fld13
+          {: 
+    RESULT = fld13; 
+    System.out.println("Field: ValenceField");
+  :}
+        | EnergyField:fld14
+          {: 
+    RESULT = fld14; 
+    System.out.println("Field: EnergyField");
+  :}
+        | AcousticnessField:fld15
+          {: 
+    RESULT = fld15; 
+    System.out.println("Field: AcousticnessField");
+  :}
+        | InstrumentalnessField:fld16
+          {: 
+    RESULT = fld16; 
+    System.out.println("Field: InstrumentalnessField");
+  :}
+        | LivenessField:fld17
+          {: 
+    RESULT = fld17; 
+    System.out.println("Field: LivenessField");
+  :}
+        | SpeechinessField:fld18
+          {: 
+    RESULT = fld18; 
+    System.out.println("Field: SpeechinessField");
+  :}
+  ;
+
+NumberField ::= NUMBER:numericValue CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("NUMBER", String.valueOf(comparisonValue), "="); 
+    System.out.println("Specific field: NUMBER");
+  :};
+
+SongNameField ::= SONG_NAME:songName CompareString:comparisonString 
+  {: 
+    RESULT = genericSearch("SONG_NAME", comparisonString, "="); 
+    System.out.println("Specific field: SONG_NAME");
+  :};
+
+ArtistField ::= ARTIST:artistName CompareString:comparisonString 
+  {: 
+    RESULT = genericSearch("ARTIST", comparisonString, "="); 
+    System.out.println("Specific field: ARTIST");
+  :};
+
+  ArtistCountField ::= ARTIST_COUNT:artistCount ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("ARTIST_COUNT", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: ARTIST_COUNT");
+  :};
+
+ReleasedYearField ::= RELEASED_YEAR:releasedYear ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("RELEASED_YEAR", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: RELEASED_YEAR");
+  :};
+
+ReleasedMonthField ::= RELEASED_MONTH:releasedMonth ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("RELEASED_MONTH", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: RELEASED_MONTH");
+  :};
+
+ReleasedDayField ::= RELEASED_DAY:releasedDay ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("RELEASED_DAY", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: RELEASED_DAY");
+  :};
+
+StreamsField ::= STREAMS:streams ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("STREAMS", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: STREAMS");
+  :};
+
+BpmField ::= BPM:bpm ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("BPM", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: BPM");
+  :};
+
+KeyField ::= KEY:key CompareString:comparisonString 
+  {: 
+    RESULT = genericSearch("`KEY`", comparisonString, "="); 
+    System.out.println("Specific field: KEY");
+  :};
+
+ModeField ::= MODE:mode CompareString:comparisonString 
+  {: 
+    RESULT = genericSearch("MODE", comparisonString, "="); 
+    System.out.println("Specific field: MODE");
+  :};
+
+DanceabilityField ::= DANCEABILITY:danceability ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("DANCEABILITY", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: DANCEABILITY");
+  :};
+
+ValenceField ::= VALENCE:valence ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("VALENCE", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: VALENCE");
+  :};
+
+EnergyField ::= ENERGY:energy ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("ENERGY", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: ENERGY");
+  :};
+
+AcousticnessField ::= ACOUSTICNESS:acousticness ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("ACOUSTICNESS", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: ACOUSTICNESS");
+  :};
+
+InstrumentalnessField ::= INSTRUMENTALNESS:instrumentalness ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("INSTRUMENTALNESS", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: INSTRUMENTALNESS");
+  :};
+
+LivenessField ::= LIVENESS:liveness ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("LIVENESS", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: LIVENESS");
+  :};
+
+SpeechinessField ::= SPEECHINESS:speechiness ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("SPEECHINESS", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: SPEECHINESS");
+  :};
+
+
+ComparisonOperator ::= MORE_THAN:mt {:RESULT = ">"; :}
+                     | LESS_THAN:lt {:RESULT = "<"; :}
+                     | MORE_THAN_EQUAL:mte {:RESULT = ">="; :}
+                     | LESS_THAN_EQUAL:lte {:RESULT = "<="; :}
+                     | EQUALS:e {:RESULT = "="; :}
+                     | {:RESULT = "="; :}
+                     ;
+
+CompareString ::= STRING:stringValue {: 
+  RESULT = stringValue; 
+    System.out.println("Comparison field: STRING");
+
+:}
+| NULL:nll {: 
+  RESULT = "NULL"; 
+  System.out.println("Comparison field: STRING-NULL");
+:};
+
+CompareNum ::= NUM:numberValue {: 
+  RESULT = Integer.parseInt(numberValue); 
+  System.out.println("Comparison field: NUM");
+:}
+| NULL:nll {: 
+  RESULT = "NULL"; 
+  System.out.println("Comparison field: NUM-NULL");
+:};
+
+
