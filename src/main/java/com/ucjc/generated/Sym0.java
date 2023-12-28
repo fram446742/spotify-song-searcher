@@ -8,21 +8,21 @@ package com.ucjc.generated;
 /** CUP generated class containing symbol constants. */
 public class Sym0 {
   /* terminals */
-  public static final int NUM = 10;
+  public static final int NUM = 9;
   public static final int ARTIST = 3;
-  public static final int LESS_THAN_EQUAL = 14;
-  public static final int MORE_THAN = 11;
+  public static final int LESS_THAN_EQUAL = 13;
+  public static final int MORE_THAN = 10;
   public static final int NUMBER = 4;
-  public static final int ALL = 8;
-  public static final int LESS_THAN = 12;
+  public static final int NULL = 15;
+  public static final int ALL = 7;
+  public static final int LESS_THAN = 11;
   public static final int MILLION_STREAMS = 6;
-  public static final int STRING = 9;
+  public static final int STRING = 8;
   public static final int EOF = 0;
   public static final int SONG_NAME = 2;
   public static final int error = 1;
-  public static final int MORE_THAN_EQUAL = 13;
-  public static final int EQUALS = 15;
-  public static final int SEARCH = 7;
+  public static final int MORE_THAN_EQUAL = 12;
+  public static final int EQUALS = 14;
   public static final int ALBUM = 5;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -32,7 +32,6 @@ public class Sym0 {
   "NUMBER",
   "ALBUM",
   "MILLION_STREAMS",
-  "SEARCH",
   "ALL",
   "STRING",
   "NUM",
@@ -40,7 +39,8 @@ public class Sym0 {
   "LESS_THAN",
   "MORE_THAN_EQUAL",
   "LESS_THAN_EQUAL",
-  "EQUALS"
+  "EQUALS",
+  "NULL"
   };
 }
 

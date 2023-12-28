@@ -274,7 +274,7 @@ action code
 :}
 
 /* Define terminal and non-terminal symbols */
-terminal String SONG_NAME, ARTIST, NUMBER, ALBUM, MILLION_STREAMS, SEARCH, ALL, STRING, NUM, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS, ARTIST_COUNT, RELEASED_YEAR, RELEASED_MONTH, RELEASED_DAY, STREAMS, BPM, KEY, MODE, DANCEABILITY, VALENCE, ENERGY, ACOUSTICNESS, INSTRUMENTALNESS, LIVENESS, SPEECHINESS, NULL;
+terminal String SONG_NAME, ARTIST, NUMBER, ALBUM, MILLION_STREAMS, ALL, STRING, NUM, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS, ARTIST_COUNT, RELEASED_YEAR, RELEASED_MONTH, RELEASED_DAY, STREAMS, BPM, KEY, MODE, DANCEABILITY, VALENCE, ENERGY, ACOUSTICNESS, INSTRUMENTALNESS, LIVENESS, SPEECHINESS, NULL;
 non terminal String Search, Field, SongNameField, ArtistField, AlbumField, NumberField, MillionStreamsField, CompareString, QUERY, ComparisonOperator, ArtistCountField, ReleasedYearField, ReleasedMonthField, ReleasedDayField, StreamsField, BpmField, KeyField, ModeField, DanceabilityField, ValenceField, EnergyField, AcousticnessField, InstrumentalnessField, LivenessField, SpeechinessField;
 non terminal Object CompareNum;
 
@@ -289,11 +289,11 @@ QUERY ::= Search:res
     System.out.println("QUERY: " + result);
   :};
 
-Search ::= Field:a Search:b 
+Search ::= Field:a Search:b
   {:
     RESULT = a + b;
     System.out.println("Search: " + RESULT);
-  :}
+  :} 
   | Field:a
   {: 
     RESULT = a;
@@ -406,13 +406,15 @@ NumberField ::= NUMBER:numericValue CompareNum:comparisonValue
 
 SongNameField ::= SONG_NAME:songName CompareString:comparisonString 
   {: 
-    RESULT = genericSearch("SONG_NAME", comparisonString, "="); 
+    String searchStringSng = "%" + comparisonString + "%";
+    RESULT = genericSearch("SONG_NAME", searchStringSng, "LIKE"); 
     System.out.println("Specific field: SONG_NAME");
   :};
 
 ArtistField ::= ARTIST:artistName CompareString:comparisonString 
   {: 
-    RESULT = genericSearch("ARTIST", comparisonString, "="); 
+    String searchStringArt = "%" + comparisonString + "%";
+    RESULT = genericSearch("ARTIST", searchStringArt, "LIKE"); 
     System.out.println("Specific field: ARTIST");
   :};
 
@@ -426,15 +428,30 @@ ReleasedYearField ::= RELEASED_YEAR:releasedYear ComparisonOperator:comparisonOp
   {: 
     RESULT = genericSearch("RELEASED_YEAR", String.valueOf(comparisonValue), comparisonOperator); 
     System.out.println("Specific field: RELEASED_YEAR");
+  :}
+  | ComparisonOperator:comparisonOperator CompareNum:comparisonValue RELEASED_YEAR:releasedYear 
+  {: 
+    RESULT = genericSearch("RELEASED_YEAR", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: RELEASED_YEAR");
   :};
 
 ReleasedMonthField ::= RELEASED_MONTH:releasedMonth ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
   {: 
     RESULT = genericSearch("RELEASED_MONTH", String.valueOf(comparisonValue), comparisonOperator); 
     System.out.println("Specific field: RELEASED_MONTH");
+  :}
+  | ComparisonOperator:comparisonOperator CompareNum:comparisonValue RELEASED_MONTH:releasedMonth 
+  {: 
+    RESULT = genericSearch("RELEASED_MONTH", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: RELEASED_MONTH");
   :};
 
 ReleasedDayField ::= RELEASED_DAY:releasedDay ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("RELEASED_DAY", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: RELEASED_DAY");
+  :}
+  | ComparisonOperator:comparisonOperator CompareNum:comparisonValue RELEASED_DAY:releasedDay 
   {: 
     RESULT = genericSearch("RELEASED_DAY", String.valueOf(comparisonValue), comparisonOperator); 
     System.out.println("Specific field: RELEASED_DAY");
@@ -460,11 +477,17 @@ KeyField ::= KEY:key CompareString:comparisonString
 
 ModeField ::= MODE:mode CompareString:comparisonString 
   {: 
-    RESULT = genericSearch("MODE", comparisonString, "="); 
+    String searchStringMde = "%" + comparisonString + "%";
+    RESULT = genericSearch("MODE", searchStringMde, "LIKE"); 
     System.out.println("Specific field: MODE");
   :};
 
 DanceabilityField ::= DANCEABILITY:danceability ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("DANCEABILITY", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: DANCEABILITY");
+  :}
+  | ComparisonOperator:comparisonOperator CompareNum:comparisonValue DANCEABILITY:danceability 
   {: 
     RESULT = genericSearch("DANCEABILITY", String.valueOf(comparisonValue), comparisonOperator); 
     System.out.println("Specific field: DANCEABILITY");
@@ -474,9 +497,19 @@ ValenceField ::= VALENCE:valence ComparisonOperator:comparisonOperator CompareNu
   {: 
     RESULT = genericSearch("VALENCE", String.valueOf(comparisonValue), comparisonOperator); 
     System.out.println("Specific field: VALENCE");
+  :}
+  | ComparisonOperator:comparisonOperator CompareNum:comparisonValue VALENCE:valence 
+  {: 
+    RESULT = genericSearch("VALENCE", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: VALENCE");
   :};
 
 EnergyField ::= ENERGY:energy ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("ENERGY", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: ENERGY");
+  :}
+  | ComparisonOperator:comparisonOperator CompareNum:comparisonValue ENERGY:energy 
   {: 
     RESULT = genericSearch("ENERGY", String.valueOf(comparisonValue), comparisonOperator); 
     System.out.println("Specific field: ENERGY");
@@ -486,9 +519,19 @@ AcousticnessField ::= ACOUSTICNESS:acousticness ComparisonOperator:comparisonOpe
   {: 
     RESULT = genericSearch("ACOUSTICNESS", String.valueOf(comparisonValue), comparisonOperator); 
     System.out.println("Specific field: ACOUSTICNESS");
+  :}
+  | ComparisonOperator:comparisonOperator CompareNum:comparisonValue ACOUSTICNESS:acousticness 
+  {: 
+    RESULT = genericSearch("ACOUSTICNESS", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: ACOUSTICNESS");
   :};
 
 InstrumentalnessField ::= INSTRUMENTALNESS:instrumentalness ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("INSTRUMENTALNESS", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: INSTRUMENTALNESS");
+  :}
+  | ComparisonOperator:comparisonOperator CompareNum:comparisonValue INSTRUMENTALNESS:instrumentalness 
   {: 
     RESULT = genericSearch("INSTRUMENTALNESS", String.valueOf(comparisonValue), comparisonOperator); 
     System.out.println("Specific field: INSTRUMENTALNESS");
@@ -498,9 +541,19 @@ LivenessField ::= LIVENESS:liveness ComparisonOperator:comparisonOperator Compar
   {: 
     RESULT = genericSearch("LIVENESS", String.valueOf(comparisonValue), comparisonOperator); 
     System.out.println("Specific field: LIVENESS");
+  :}
+  | ComparisonOperator:comparisonOperator CompareNum:comparisonValue LIVENESS:liveness 
+  {: 
+    RESULT = genericSearch("LIVENESS", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: LIVENESS");
   :};
 
 SpeechinessField ::= SPEECHINESS:speechiness ComparisonOperator:comparisonOperator CompareNum:comparisonValue 
+  {: 
+    RESULT = genericSearch("SPEECHINESS", String.valueOf(comparisonValue), comparisonOperator); 
+    System.out.println("Specific field: SPEECHINESS");
+  :}
+  | ComparisonOperator:comparisonOperator CompareNum:comparisonValue SPEECHINESS:speechiness 
   {: 
     RESULT = genericSearch("SPEECHINESS", String.valueOf(comparisonValue), comparisonOperator); 
     System.out.println("Specific field: SPEECHINESS");
@@ -517,21 +570,22 @@ ComparisonOperator ::= MORE_THAN:mt {:RESULT = ">"; :}
 
 CompareString ::= STRING:stringValue {: 
   RESULT = stringValue; 
-    System.out.println("Comparison field: STRING");
-
+    System.out.println("Comparison field: " + stringValue);
 :}
 | NULL:nll {: 
   RESULT = "NULL"; 
   System.out.println("Comparison field: STRING-NULL");
-:};
+:}
+;
 
 CompareNum ::= NUM:numberValue {: 
   RESULT = Integer.parseInt(numberValue); 
-  System.out.println("Comparison field: NUM");
+  System.out.println("Comparison field: " + numberValue);
 :}
 | NULL:nll {: 
   RESULT = "NULL"; 
   System.out.println("Comparison field: NUM-NULL");
-:};
+:}
+;
 
 

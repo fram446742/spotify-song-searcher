@@ -42,14 +42,15 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\027\000\002\002\004\000\002\012\003\000\002\002" +
+    "\000\032\000\002\002\004\000\002\012\003\000\002\002" +
     "\004\000\002\002\003\000\002\002\003\000\002\003\003" +
     "\000\002\003\003\000\002\003\003\000\002\003\003\000" +
     "\002\003\003\000\002\007\004\000\002\004\004\000\002" +
-    "\005\004\000\002\006\004\000\002\010\005\000\002\013" +
-    "\003\000\002\013\003\000\002\013\003\000\002\013\003" +
-    "\000\002\013\003\000\002\013\002\000\002\011\003\000" +
-    "\002\014\003" });
+    "\005\004\000\002\006\004\000\002\010\005\000\002\010" +
+    "\005\000\002\013\003\000\002\013\003\000\002\013\003" +
+    "\000\002\013\003\000\002\013\003\000\002\013\002\000" +
+    "\002\011\003\000\002\011\003\000\002\014\003\000\002" +
+    "\014\003" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -57,34 +58,55 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\036\000\016\004\013\005\004\006\006\007\021\010" +
-    "\012\012\011\001\002\000\004\013\022\001\002\000\004" +
-    "\002\000\001\002\000\004\014\036\001\002\000\020\002" +
-    "\ufff9\004\ufff9\005\ufff9\006\ufff9\007\ufff9\010\ufff9\012\ufff9" +
-    "\001\002\000\004\002\035\001\002\000\004\002\ufffd\001" +
-    "\002\000\016\014\uffed\015\033\016\027\017\032\020\031" +
-    "\021\030\001\002\000\004\013\022\001\002\000\020\002" +
-    "\ufffb\004\ufffb\005\ufffb\006\ufffb\007\ufffb\010\ufffb\012\ufffb" +
-    "\001\002\000\020\002\ufffe\004\013\005\004\006\006\007" +
-    "\021\010\012\012\011\001\002\000\020\002\ufffa\004\ufffa" +
-    "\005\ufffa\006\ufffa\007\ufffa\010\ufffa\012\ufffa\001\002\000" +
-    "\020\002\ufffc\004\ufffc\005\ufffc\006\ufffc\007\ufffc\010\ufffc" +
-    "\012\ufffc\001\002\000\020\002\ufff8\004\ufff8\005\ufff8\006" +
-    "\ufff8\007\ufff8\010\ufff8\012\ufff8\001\002\000\004\013\022" +
-    "\001\002\000\020\002\uffec\004\uffec\005\uffec\006\uffec\007" +
-    "\uffec\010\uffec\012\uffec\001\002\000\020\002\ufff4\004\ufff4" +
-    "\005\ufff4\006\ufff4\007\ufff4\010\ufff4\012\ufff4\001\002\000" +
-    "\004\002\uffff\001\002\000\020\002\ufff6\004\ufff6\005\ufff6" +
-    "\006\ufff6\007\ufff6\010\ufff6\012\ufff6\001\002\000\004\014" +
-    "\034\001\002\000\004\014\ufff1\001\002\000\004\014\uffee" +
-    "\001\002\000\004\014\uffef\001\002\000\004\014\ufff0\001" +
-    "\002\000\004\014\ufff2\001\002\000\020\002\ufff3\004\ufff3" +
-    "\005\ufff3\006\ufff3\007\ufff3\010\ufff3\012\ufff3\001\002\000" +
-    "\004\002\001\001\002\000\020\002\uffeb\004\uffeb\005\uffeb" +
-    "\006\uffeb\007\uffeb\010\uffeb\012\uffeb\001\002\000\020\002" +
-    "\ufff7\004\ufff7\005\ufff7\006\ufff7\007\ufff7\010\ufff7\012\ufff7" +
-    "\001\002\000\020\002\ufff5\004\ufff5\005\ufff5\006\ufff5\007" +
-    "\ufff5\010\ufff5\012\ufff5\001\002" });
+    "\000\043\000\032\004\025\005\011\006\020\007\010\010" +
+    "\017\011\007\013\uffec\014\015\015\022\016\023\017\006" +
+    "\020\016\001\002\000\034\002\ufff8\004\ufff8\005\ufff8\006" +
+    "\ufff8\007\ufff8\010\ufff8\011\ufff8\013\ufff8\014\ufff8\015\ufff8" +
+    "\016\ufff8\017\ufff8\020\ufff8\001\002\000\034\002\ufff9\004" +
+    "\ufff9\005\ufff9\006\ufff9\007\ufff9\010\ufff9\011\ufff9\013\ufff9" +
+    "\014\ufff9\015\ufff9\016\ufff9\017\ufff9\020\ufff9\001\002\000" +
+    "\004\013\uffee\001\002\000\004\002\ufffd\001\002\000\006" +
+    "\012\031\021\032\001\002\000\006\012\031\021\032\001" +
+    "\002\000\034\002\ufffe\004\025\005\011\006\020\007\010" +
+    "\010\017\011\007\013\uffec\014\015\015\022\016\023\017" +
+    "\006\020\016\001\002\000\004\013\041\001\002\000\004" +
+    "\002\000\001\002\000\004\013\ufff1\001\002\000\004\013" +
+    "\uffed\001\002\000\016\013\uffec\014\015\015\022\016\023" +
+    "\017\006\020\016\001\002\000\006\013\035\021\036\001" +
+    "\002\000\034\002\ufffb\004\ufffb\005\ufffb\006\ufffb\007\ufffb" +
+    "\010\ufffb\011\ufffb\013\ufffb\014\ufffb\015\ufffb\016\ufffb\017" +
+    "\ufffb\020\ufffb\001\002\000\004\013\ufff0\001\002\000\004" +
+    "\013\uffef\001\002\000\034\002\ufffc\004\ufffc\005\ufffc\006" +
+    "\ufffc\007\ufffc\010\ufffc\011\ufffc\013\ufffc\014\ufffc\015\ufffc" +
+    "\016\ufffc\017\ufffc\020\ufffc\001\002\000\006\012\031\021" +
+    "\032\001\002\000\004\002\030\001\002\000\034\002\ufffa" +
+    "\004\ufffa\005\ufffa\006\ufffa\007\ufffa\010\ufffa\011\ufffa\013" +
+    "\ufffa\014\ufffa\015\ufffa\016\ufffa\017\ufffa\020\ufffa\001\002" +
+    "\000\004\002\001\001\002\000\034\002\uffeb\004\uffeb\005" +
+    "\uffeb\006\uffeb\007\uffeb\010\uffeb\011\uffeb\013\uffeb\014\uffeb" +
+    "\015\uffeb\016\uffeb\017\uffeb\020\uffeb\001\002\000\034\002" +
+    "\uffea\004\uffea\005\uffea\006\uffea\007\uffea\010\uffea\011\uffea" +
+    "\013\uffea\014\uffea\015\uffea\016\uffea\017\uffea\020\uffea\001" +
+    "\002\000\034\002\ufff6\004\ufff6\005\ufff6\006\ufff6\007\ufff6" +
+    "\010\ufff6\011\ufff6\013\ufff6\014\ufff6\015\ufff6\016\ufff6\017" +
+    "\ufff6\020\ufff6\001\002\000\034\002\ufff7\004\ufff7\005\ufff7" +
+    "\006\ufff7\007\ufff7\010\ufff7\011\ufff7\013\ufff7\014\ufff7\015" +
+    "\ufff7\016\ufff7\017\ufff7\020\ufff7\001\002\000\034\002\uffe9" +
+    "\004\uffe9\005\uffe9\006\uffe9\007\uffe9\010\uffe9\011\uffe9\013" +
+    "\uffe9\014\uffe9\015\uffe9\016\uffe9\017\uffe9\020\uffe9\001\002" +
+    "\000\034\002\uffe8\004\uffe8\005\uffe8\006\uffe8\007\uffe8\010" +
+    "\uffe8\011\uffe8\013\uffe8\014\uffe8\015\uffe8\016\uffe8\017\uffe8" +
+    "\020\uffe8\001\002\000\004\013\040\001\002\000\034\002" +
+    "\ufff3\004\ufff3\005\ufff3\006\ufff3\007\ufff3\010\ufff3\011\ufff3" +
+    "\013\ufff3\014\ufff3\015\ufff3\016\ufff3\017\ufff3\020\ufff3\001" +
+    "\002\000\004\010\042\001\002\000\034\002\ufff2\004\ufff2" +
+    "\005\ufff2\006\ufff2\007\ufff2\010\ufff2\011\ufff2\013\ufff2\014" +
+    "\ufff2\015\ufff2\016\ufff2\017\ufff2\020\ufff2\001\002\000\004" +
+    "\002\uffff\001\002\000\034\002\ufff5\004\ufff5\005\ufff5\006" +
+    "\ufff5\007\ufff5\010\ufff5\011\ufff5\013\ufff5\014\ufff5\015\ufff5" +
+    "\016\ufff5\017\ufff5\020\ufff5\001\002\000\034\002\ufff4\004" +
+    "\ufff4\005\ufff4\006\ufff4\007\ufff4\010\ufff4\011\ufff4\013\ufff4" +
+    "\014\ufff4\015\ufff4\016\ufff4\017\ufff4\020\ufff4\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -92,19 +114,21 @@ public class Parser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\036\000\022\002\004\003\014\004\013\005\015\006" +
-    "\006\007\016\010\017\012\007\001\001\000\004\011\037" +
-    "\001\001\000\002\001\001\000\004\014\036\001\001\000" +
-    "\002\001\001\000\002\001\001\000\002\001\001\000\004" +
-    "\013\025\001\001\000\004\011\024\001\001\000\002\001" +
-    "\001\000\020\002\023\003\014\004\013\005\015\006\006" +
-    "\007\016\010\017\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001\000\004\011\022\001\001\000\002" +
+    "\000\043\000\024\002\013\003\011\004\020\005\026\006" +
+    "\004\007\023\010\003\012\025\013\012\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\001\000\004\011\044\001\001\000\004\011\043\001\001" +
+    "\000\022\002\042\003\011\004\020\005\026\006\004\007" +
+    "\023\010\003\013\012\001\001\000\002\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\004\013" +
+    "\036\001\001\000\004\014\033\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
+    "\004\011\032\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001" });
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -596,7 +620,8 @@ class CUP$Parser$actions {
 		int comparisonStringright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String comparisonString = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-    RESULT = genericSearch("SONG_NAME", comparisonString, "="); 
+    String searchStringSng = "%" + comparisonString + "%";
+    RESULT = genericSearch("SONG_NAME", searchStringSng, "LIKE"); 
     System.out.println("Specific field: " + RESULT);
     System.out.println("SONG_NAME: " + songName);
   
@@ -615,7 +640,8 @@ class CUP$Parser$actions {
 		int comparisonStringright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String comparisonString = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-    RESULT = genericSearch("ARTIST", comparisonString, "="); 
+    String searchStringArt = "%" + comparisonString + "%";
+    RESULT = genericSearch("ARTIST", searchStringArt, "LIKE"); 
     System.out.println("Specific field: " + RESULT);
   
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("ArtistField",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -633,7 +659,8 @@ class CUP$Parser$actions {
 		int comparisonStringright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String comparisonString = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-    RESULT = genericSearch("ALBUM", comparisonString, "="); 
+    String searchStringAlb = "%" + comparisonString + "%";
+    RESULT = genericSearch("ALBUM", searchStringAlb, "LIKE"); 
     System.out.println("Specific field: " + RESULT);
   
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("AlbumField",4, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -662,7 +689,28 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 15: // ComparisonOperator ::= MORE_THAN 
+          case 15: // MillionStreamsField ::= ComparisonOperator NUM MILLION_STREAMS 
+            {
+              String RESULT =null;
+		int comparisonOperatorleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
+		int comparisonOperatorright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
+		String comparisonOperator = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		int numberleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int numberright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		String number = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		int millionStreamsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int millionStreamsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String millionStreams = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 
+    RESULT = genericSearch("MILLION_STREAMS", String.valueOf(number), comparisonOperator); 
+    System.out.println("Specific field: " + RESULT);
+  
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("MillionStreamsField",6, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 16: // ComparisonOperator ::= MORE_THAN 
             {
               String RESULT =null;
 		int mtleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -674,7 +722,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 16: // ComparisonOperator ::= LESS_THAN 
+          case 17: // ComparisonOperator ::= LESS_THAN 
             {
               String RESULT =null;
 		int ltleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -686,7 +734,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 17: // ComparisonOperator ::= MORE_THAN_EQUAL 
+          case 18: // ComparisonOperator ::= MORE_THAN_EQUAL 
             {
               String RESULT =null;
 		int mteleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -698,7 +746,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 18: // ComparisonOperator ::= LESS_THAN_EQUAL 
+          case 19: // ComparisonOperator ::= LESS_THAN_EQUAL 
             {
               String RESULT =null;
 		int lteleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -710,7 +758,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 19: // ComparisonOperator ::= EQUALS 
+          case 20: // ComparisonOperator ::= EQUALS 
             {
               String RESULT =null;
 		int eleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -722,7 +770,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 20: // ComparisonOperator ::= 
+          case 21: // ComparisonOperator ::= 
             {
               String RESULT =null;
 		RESULT = "="; 
@@ -731,7 +779,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 21: // CompareString ::= STRING 
+          case 22: // CompareString ::= STRING 
             {
               String RESULT =null;
 		int stringValueleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -741,13 +789,27 @@ class CUP$Parser$actions {
   RESULT = stringValue; 
     System.out.println("Comparison field: " + stringValue);
 
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("CompareString",7, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 23: // CompareString ::= NULL 
+            {
+              String RESULT =null;
+		int nllleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int nllright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String nll = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 
+  RESULT = "NULL"; 
+  System.out.println("Comparison field: STRING-NULL");
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("CompareString",7, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 22: // CompareNum ::= NUM 
+          case 24: // CompareNum ::= NUM 
             {
               Object RESULT =null;
 		int numberValueleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
@@ -756,6 +818,21 @@ class CUP$Parser$actions {
 		 
   RESULT = Integer.parseInt(numberValue); 
   System.out.println("Comparison field: " + numberValue);
+
+              CUP$Parser$result = parser.getSymbolFactory().newSymbol("CompareNum",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
+            }
+          return CUP$Parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 25: // CompareNum ::= NULL 
+            {
+              Object RESULT =null;
+		int nllleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int nllright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		String nll = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 
+  RESULT = "NULL"; 
+  System.out.println("Comparison field: NUM-NULL");
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("CompareNum",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }

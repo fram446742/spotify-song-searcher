@@ -274,7 +274,7 @@ action code
 :}
 
 /* Define terminal and non-terminal symbols */
-terminal String SONG_NAME, ARTIST, NUMBER, ALBUM, MILLION_STREAMS, SEARCH, ALL, STRING, NUM, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS;
+terminal String SONG_NAME, ARTIST, NUMBER, ALBUM, MILLION_STREAMS, ALL, STRING, NUM, MORE_THAN, LESS_THAN, MORE_THAN_EQUAL, LESS_THAN_EQUAL, EQUALS, NULL;
 non terminal String Search, Field, SongNameField, ArtistField, AlbumField, NumberField, MillionStreamsField, CompareString, QUERY, ComparisonOperator;
 non terminal Object CompareNum;
 
@@ -341,24 +341,32 @@ NumberField ::= NUMBER:numericValue CompareNum:comparisonValue
 
 SongNameField ::= SONG_NAME:songName CompareString:comparisonString 
   {: 
-    RESULT = genericSearch("SONG_NAME", comparisonString, "="); 
+    String searchStringSng = "%" + comparisonString + "%";
+    RESULT = genericSearch("SONG_NAME", searchStringSng, "LIKE"); 
     System.out.println("Specific field: " + RESULT);
     System.out.println("SONG_NAME: " + songName);
   :};
 
 ArtistField ::= ARTIST:artistName CompareString:comparisonString 
   {: 
-    RESULT = genericSearch("ARTIST", comparisonString, "="); 
+    String searchStringArt = "%" + comparisonString + "%";
+    RESULT = genericSearch("ARTIST", searchStringArt, "LIKE"); 
     System.out.println("Specific field: " + RESULT);
   :};
 
 AlbumField ::= ALBUM:albumName CompareString:comparisonString 
   {: 
-    RESULT = genericSearch("ALBUM", comparisonString, "="); 
+    String searchStringAlb = "%" + comparisonString + "%";
+    RESULT = genericSearch("ALBUM", searchStringAlb, "LIKE"); 
     System.out.println("Specific field: " + RESULT);
   :};
 
 MillionStreamsField ::= MILLION_STREAMS:millionStreams ComparisonOperator:comparisonOperator NUM:number
+  {: 
+    RESULT = genericSearch("MILLION_STREAMS", String.valueOf(number), comparisonOperator); 
+    System.out.println("Specific field: " + RESULT);
+  :}
+  | ComparisonOperator:comparisonOperator NUM:number MILLION_STREAMS:millionStreams
   {: 
     RESULT = genericSearch("MILLION_STREAMS", String.valueOf(number), comparisonOperator); 
     System.out.println("Specific field: " + RESULT);
@@ -376,12 +384,21 @@ ComparisonOperator ::= MORE_THAN:mt {:RESULT = ">"; :}
 CompareString ::= STRING:stringValue {: 
   RESULT = stringValue; 
     System.out.println("Comparison field: " + stringValue);
-
-:};
+:}
+| NULL:nll {: 
+  RESULT = "NULL"; 
+  System.out.println("Comparison field: STRING-NULL");
+:}
+;
 
 CompareNum ::= NUM:numberValue {: 
   RESULT = Integer.parseInt(numberValue); 
   System.out.println("Comparison field: " + numberValue);
-:};
+:}
+| NULL:nll {: 
+  RESULT = "NULL"; 
+  System.out.println("Comparison field: NUM-NULL");
+:}
+;
 
 
