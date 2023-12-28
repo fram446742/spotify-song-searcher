@@ -37,6 +37,8 @@ The project uses Java 11 or higher, JFlex 1.9.1, CUP 0.11b and Maven 3.9.6. To r
 >
 > If you want a more detailed insight of the syntaxis used please refer to:
 >
+> `src/main/java/com/ucjc/analizers/lexer.jflex`.
+>
 > `src/main/java/com/ucjc/analizers/parser.cup`.
 >
 > Enjoy the results!
