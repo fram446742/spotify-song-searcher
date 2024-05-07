@@ -19,6 +19,13 @@
     <mainClass>com.ucjc.app.ApplicationWindow</mainClass>
   </properties>
 
+   <distributionManagement>
+    <repository>
+      <id>spotify-song-searcher</id>
+      <url>https://github.com/fram446742/spotify-song-searcher</url>
+    </repository>
+  </distributionManagement>
+
   <dependencies>
 
     <dependency>
